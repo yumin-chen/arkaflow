@@ -1,6 +1,8 @@
+#include "stdafx.h"
 #include "AppDelegate.h"
 #include "EngineHelper.h"
 #include "WelcomeScene.h"
+#include "Palette.h"
 
 USING_NS_CC;
 
@@ -26,9 +28,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	E::calculateScreen();
 
+	E::settings.colorAccent = C_CYAN;
+	E::setColorAccent(E::settings.colorAccent);
+
     director->setAnimationInterval(1.0 / 60);
 
-    auto scene = Welcome::createScene();
+    auto scene = S_Welcome::createScene();
 
     director->runWithScene(scene);
 

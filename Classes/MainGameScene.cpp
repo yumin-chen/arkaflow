@@ -1,14 +1,20 @@
+#include "stdafx.h"
 #include "MainGameScene.h"
+#include "BallButton.h"
 
 USING_NS_CC;
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286
-#define BORDER_WIDTH 24
+#define BORDER_WIDTH 24;
 
-Scene* MainGame::createScene()
+#define	TAG_BTM_BG	1000
+#define	TAG_SHADOW	1001
+
+
+Scene* S_MainGame::createScene()
 {
     auto scene = Scene::create();
     
-    auto layer = MainGame::create();
+    auto layer = S_MainGame::create();
 
     scene->addChild(layer);
 
@@ -16,11 +22,11 @@ Scene* MainGame::createScene()
 }
 
 // on "init" you need to initialize your instance
-bool MainGame::init()
+bool S_MainGame::init()
 {
     // super init 
 
-    if ( !LayerColor::initWithColor(C4B(COLOR_200)) )
+    if ( !LayerColor::initWithColor(C4B(E::C200)) )
     {
         return false;
     }
@@ -29,29 +35,30 @@ bool MainGame::init()
 	this->setScale(E::scale);
 	this->setContentSize(Size(E::visibleWidth, E::visibleHeight));
 	this->setAnchorPoint(Vec2(0, 0));
+
+	// create solid color background
+	auto bg = BallButton::create(&E::C50);
+	bg->setScale(0.3f);
+	bg->setPosition(E::visibleWidth/2, 128+(-9/15.0f)*128);
+	bg->setTag(TAG_BTM_BG);
+	// add the wheel to the layer
+	this->addChild(bg, 0);
+
+	// create solid color background
+	auto bgTop = LayerColor::create(C4B(E::C200));
+	bgTop->setContentSize(Size(E::visibleWidth, E::visibleHeight*0.7));
+	bgTop->setPosition(0, E::visibleHeight*0.3);
+	// add the wheel to the layer
+	this->addChild(bgTop, 0);
 	
 	// create the shadow
     auto shadow = Sprite::create("shadow.png");
     shadow->setScale(1.0f);
-	shadow->setPosition(E::visibleWidth/2, 240/2);
+	shadow->setAnchorPoint(Vec2(0, 1));
+	shadow->setPosition(0, E::visibleHeight * 0.3);
+	shadow->setTag(TAG_SHADOW);
+	shadow->setOpacity(0);
     this->addChild(shadow, 0);
-
-	// create solid color background
-	auto bgTop = LayerColor::create(C4B(COLOR_200));
-	bgTop->setContentSize(Size(E::visibleWidth, E::visibleHeight*0.7));
-	bgTop->setPosition(0, E::visibleHeight*0.3);
-	// add the wheel to the layer
-	this->addChild(bgTop, 1);
-
-	// create solid color background
-	auto bg = Sprite::create("ball.png");
-	bg->setScale(0.3f);
-	bg->setPosition(E::visibleWidth/2, 128+(-7/15.0f)*128);
-	bg->setTag(TAG_BTM_BG);
-	bg->setColor(C3B(COLOR_50));
-	// add the wheel to the layer
-	this->addChild(bg, 0);
-	//bg->setGlobalZOrder(_globalZOrder);
     
     auto label = LabelTTF::create("Slippery Wheels", "Arial", 24);
     
@@ -83,20 +90,21 @@ bool MainGame::init()
     return true;
 }
 
-inline float MainGame::angleMinus90(float angle){
+inline float S_MainGame::angleMinus90(float angle){
 	return (int(angle*180/PI + 270)%360*PI/180);
 }
 
-inline float MainGame::anglePlus90(float angle){
+inline float S_MainGame::anglePlus90(float angle){
 	return (int(angle*180/PI + 90)%360*PI/180);
 }
 
 #define ANI_SCALING_BG	30.0f
-void MainGame::update( float dt )
+void S_MainGame::update( float dt )
 {
 	static int tick = 0;
 	if(tick <= ANI_SCALING_BG){
 		this->getChildByTag(TAG_BTM_BG)->setScale(1 + (tick/ANI_SCALING_BG)*3.0f);
+		this->getChildByTag(TAG_SHADOW)->setOpacity((tick/ANI_SCALING_BG)*255);
 	}
 
 	//m_wheel.sprite->setRotation(tick *6);
@@ -158,33 +166,7 @@ void MainGame::update( float dt )
 	tick ++;
 }
 
-void MainGame::onDrawPrimitives(const cocos2d::Mat4 &transform, uint32_t flags)
-{
-    //kmGLPushMatrix();
-    //kmGLLoadMatrix(&transform);
-
-    //DrawPrimitives::drawLine(ccp(0,0), ccp(100, 100));
-	
-	//DrawPrimitives::drawSolidRect(Vec2(0, 240), Vec2(E::visibleWidth, 0), C4F(COLOR_50));
-	
-	
-	//this->getChildByTag(TAG_BTM_BG)->draw();
-
-
-DrawPrimitives::drawSolidRect(Vec2(0, E::visibleHeight *0.3f * E::scale), Vec2(E::visibleWidth * E::scale, E::visibleHeight * E::scale), C4F(COLOR_100));
-
-	//kmGLPopMatrix();  
-}
-
-void MainGame::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags)
-{
-	cocos2d::LayerColor::draw(renderer, transform, flags);
-	//m_drawPrimitives.init(_globalZOrder + 1);
-    //m_drawPrimitives.func = CC_CALLBACK_0(MainGame::onDrawPrimitives, this, transform, flags);
-    //renderer->addCommand(&m_drawPrimitives);
-}
-
-void MainGame::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
+void S_MainGame::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
 {
     // Back button pressed
     if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE) {

@@ -27,15 +27,21 @@
     <ClCompile Include="..\Classes\MainGameScene.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SettingsScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\stdafx.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BallButton.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Palette.h">
       <Filter>Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\EngineHelper.h">
@@ -45,6 +51,15 @@
       <Filter>Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MainGameScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SettingsScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\stdafx.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BallButton.h">
       <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>
