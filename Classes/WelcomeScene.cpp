@@ -31,7 +31,7 @@ Scene* S_Welcome::createScene()
 bool S_Welcome::init()
 {
 	// super init 
-	if ( !LayerColor::initWithColor(C4B(E::C200)) )
+	if ( !LayerColor::initWithColor(C4B(E::C100)) )
 	{
 		return false;
 	}
@@ -44,7 +44,7 @@ bool S_Welcome::init()
 	this->setAnchorPoint(Vec2(0, 0));
 
 	// create solid color background
-	auto bg = BallButton::create(&E::C50);
+	auto bg = BallButton::create(E::C50);
 	bg->setScale(0.3f);
 	bg->setPosition(E::visibleWidth/2, 128);
 	bg->setTag(TAG_BACKGROUND);
@@ -53,7 +53,7 @@ bool S_Welcome::init()
 
 	
 
-	auto newGameBg = BallButton::create(&E::C700);
+	auto newGameBg = BallButton::create(E::C700);
 	newGameBg->setScale(0.2f);
 	newGameBg->setPosition(E::visibleWidth/2 -(newGameBg->getContentSize().width*0.5f + 24)/2, 32);
 	newGameBg->setTag(TAG_NEW_GAME_BG);
@@ -64,7 +64,7 @@ bool S_Welcome::init()
 	sNewIcon->setAnchorPoint(Vec2(0, 0));
 	//newGameBg->addChild(sNewIcon);
 
-	auto settingsBg = BallButton::create(&E::C700);
+	auto settingsBg = BallButton::create(E::C700);
 	settingsBg->setScale(0.2f);
 	settingsBg->setPosition(E::visibleWidth/2 +(settingsBg->getContentSize().width*0.5f + 24)/2, 32);
 	settingsBg->setTag(TAG_SETTINGS_BG);
@@ -86,13 +86,13 @@ bool S_Welcome::init()
 
 	
 
-	auto sNewNormal = BallButton::create(&E::C700);
+	auto sNewNormal = BallButton::create(E::C700);
 
-	auto sNewSelected = BallButton::create(&E::C200);
+	auto sNewSelected = BallButton::create(E::C200);
 
-	auto sSettingsNormal = BallButton::create(&E::C700);
+	auto sSettingsNormal = BallButton::create(E::C700);
 
-	auto sSettingsSelected = BallButton::create(&E::C200);
+	auto sSettingsSelected = BallButton::create(E::C200);
 
 	auto newGame = MenuItemSprite::create(
 		sNewNormal,
@@ -172,7 +172,7 @@ void S_Welcome::update( float dt )
 	}
 	if(m_tick >= ANIMATION_MOVING_DURATION && m_tick <= ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_1){
 		this->getChildByTag(TAG_BACKGROUND)->setPositionY(256+((m_tick-ANIMATION_MOVING_DURATION)/(ANIMATION_SCALING_DURATION_1))*128);
-		this->getChildByTag(TAG_BACKGROUND)->setScale(0.3f + ((m_tick-ANIMATION_MOVING_DURATION)/(ANIMATION_SCALING_DURATION_1))*4.0f);
+		this->getChildByTag(TAG_BACKGROUND)->setScale(0.3f + ((m_tick-ANIMATION_MOVING_DURATION)/(ANIMATION_SCALING_DURATION_1))*5.0f);
 	}
 	if(m_tick >= ANIMATION_MOVING_DURATION && m_tick <= ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_2){
 		this->getChildByTag(TAG_MENU)->setVisible(false);

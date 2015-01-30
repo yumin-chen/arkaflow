@@ -2,6 +2,7 @@
 #define __MAIN_GAME_SCENE_H__
 
 #include "EngineHelper.h"
+#include "SmartString.h"
 
 struct WheelAttr{
 	cocos2d::Sprite* sprite;
@@ -21,6 +22,18 @@ public:
     void update( float dt );
 
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
+
+	bool onTouchBegan(Touch* touch, Event* event);
+
+	void onTouchMoved(Touch* touch, Event* event);
+
+	void onTouchEnded(Touch* touch, Event* event);
+
+	void menuCallback(cocos2d::Ref* pSender);
+
+	float getWheelRadius();
+
+	void restartGame();
     
     CREATE_FUNC(S_MainGame);
 
@@ -28,8 +41,19 @@ private:
 	inline float angleMinus90(float angle);
 
 	inline float anglePlus90(float angle);
+	
+	void initAnim();
+	void updateAnim();
+	int m_close;
+	
+	long m_tick;
+	long m_tick2;
+	bool m_isGameOver;
+	bool m_isRestarting;
 
 	WheelAttr m_wheel; 
+
+	SmartString* m_smartstring;
 };
 
 #endif // __MAIN_GAME_SCENE_H__

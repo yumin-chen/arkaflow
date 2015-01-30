@@ -14,6 +14,10 @@ USING_NS_CC;
 #define	TAG_OK			2005
 #define TAG_CANCEL		2006
 #define	TAG_BG_TOP		2007
+#define	TAG_OK_NORMAL	2008
+#define	TAG_OK_SELECTED	2009
+#define	TAG_CC_NORMAL	2010
+#define	TAG_CC_SELECTED	2011
 #define TAG_COLOR_MENU  2100
 
 Scene* S_Settings::createScene()
@@ -34,7 +38,7 @@ bool S_Settings::init()
 	m_tick = 0;
 	// super init 
 
-	if ( !LayerColor::initWithColor(C4B(E::C200)) )
+	if ( !LayerColor::initWithColor(C4B(E::C100)) )
 	{
 		return false;
 	}
@@ -45,7 +49,7 @@ bool S_Settings::init()
 	this->setAnchorPoint(Vec2(0, 0));
 
 	// create solid color background
-	auto bg = BallButton::create(&E::C50);
+	auto bg = BallButton::create(E::C50);
 	bg->setScale(0.3f);
 	bg->setPosition(E::visibleWidth/2, 128+(-9/15.0f)*128);
 	bg->setTag(TAG_BTM_BG);
@@ -53,7 +57,7 @@ bool S_Settings::init()
 	this->addChild(bg, 0);
 
 	// create solid color background
-	auto bgTop = LayerColor::create(C4B(E::C200));
+	auto bgTop = LayerColor::create(C4B(E::C100));
 	bgTop->setTag(TAG_BG_TOP);
 	bgTop->setContentSize(Size(E::visibleWidth, E::visibleHeight - BTM_HEIGHT));
 	bgTop->setPosition(0, BTM_HEIGHT);
@@ -64,6 +68,7 @@ bool S_Settings::init()
 	auto shadow = Sprite::create("shadow.png");
 	shadow->setScale(1.0f);
 	shadow->setAnchorPoint(Vec2(0, 1));
+	shadow->setScaleX(E::visibleWidth / DESIGNED_WIDTH);
 	shadow->setPosition(0, BTM_HEIGHT);
 	shadow->setTag(TAG_SHADOW);
 	shadow->setOpacity(0);
@@ -72,7 +77,7 @@ bool S_Settings::init()
 
 
 
-	auto okBtnBg = BallButton::create(&E::C700);
+	auto okBtnBg = BallButton::create(E::C700);
 	okBtnBg->setScale(0.2f);
 	okBtnBg->setPosition(E::visibleWidth/2 -(okBtnBg->getContentSize().width*0.4f + 24)/2, 32-48);
 	okBtnBg->setTag(TAG_OK_BG);
@@ -82,7 +87,7 @@ bool S_Settings::init()
 	sOkIcon->setColor(C3B(E::C50));
 	sOkIcon->setAnchorPoint(Vec2(0, 0));
 
-	auto cancelBg = BallButton::create(&E::C700);
+	auto cancelBg = BallButton::create(E::C700);
 	cancelBg->setScale(0.2f);
 	cancelBg->setPosition(E::visibleWidth/2 +(cancelBg->getContentSize().width*0.4f + 24)/2, 32-48);
 	cancelBg->setTag(TAG_CC_BG);
@@ -92,18 +97,28 @@ bool S_Settings::init()
 	sCancelIcon->setColor(C3B(E::C50));
 	sCancelIcon->setAnchorPoint(Vec2(0, 0));
 
+
+	m_OkNormal = BallButton::create(E::C700);
+
+	m_OkSelected = BallButton::create(E::C200);
+
 	auto OkItem = MenuItemSprite::create(
-		BallButton::create(&E::C700),
-		BallButton::create(&E::C200),
+		m_OkNormal,
+		m_OkSelected,
 		CC_CALLBACK_1(S_Settings::menuCallback, this));
 
 	OkItem->setScale(0.4f);
 	OkItem->setTag(TAG_OK);
 	OkItem->addChild(sOkIcon);
 
+	m_CancelNormal = BallButton::create(E::C700);
+
+	m_CancelSelected = BallButton::create(E::C200);
+
+
 	auto cancelItem = MenuItemSprite::create(
-		BallButton::create(&E::C700),
-		BallButton::create(&E::C200),
+		m_CancelNormal,
+		m_CancelSelected,
 		CC_CALLBACK_1(S_Settings::menuCallback, this));
 
 	cancelItem->setScale(0.4f);
@@ -124,13 +139,13 @@ bool S_Settings::init()
 	BallButton* CPalette[16];
 	m_tempColorAccent = E::settings.colorAccent;
 	for(int i = 0; i < 16; i ++){
-				E::setColorAccent(i);
-		pltNormalColors[i] = E::C500;
-		pltselectedColors[i] = E::C200;
-		CPalette[i] = BallButton::create(&pltNormalColors[i], &pltselectedColors[i], CC_CALLBACK_1(S_Settings::menuCallback, this));
+		E::setColorAccent(i);
+		CPalette[i] = BallButton::create(E::C500, E::C200, CC_CALLBACK_1(S_Settings::menuCallback, this));
 		CPalette[i]->setScale(0.3f);
+		CPalette[i]->setAnchorPoint(Vec2(0, 0));
 		CPalette[i]->setTag(TAG_COLOR_MENU+i);
-		CPalette[i]->setPosition(80 + (80) * (i % 5), E::visibleHeight * 0.9 - 64 - (80) * (i / 5));
+#define PALETTE_ITEM_WIDTH (80 + (E::visibleWidth - DESIGNED_WIDTH) * 0.1)
+		CPalette[i]->setPosition((E::visibleWidth - PALETTE_ITEM_WIDTH * 5) / 2  + PALETTE_ITEM_WIDTH * (i % 5), E::visibleHeight * 0.9 - 64 - (80) * (i / 5));
 		this->addChild(CPalette[i]);
 	}
 	E::setColorAccent(m_tempColorAccent);
@@ -214,8 +229,12 @@ void S_Settings::menuCallback(Ref* pSender)
 	if(tag >= TAG_COLOR_MENU && tag <= TAG_COLOR_MENU + 15){
 		m_tempColorAccent = tag - TAG_COLOR_MENU;
 		E::setColorAccent(m_tempColorAccent);
-		BallButton::s_updateColors();
+		m_OkNormal->setColor(C3B(E::C700));
+		m_OkSelected->setColor(C3B(E::C200));
+		m_CancelNormal->setColor(C3B(E::C700));
+		m_CancelSelected->setColor(C3B(E::C200));
 		this->getChildByTag(TAG_BG_TOP)->setColor(C3B(E::C200));
+		this->getChildByTag(TAG_BTM_BG)->setColor(C3B(E::C50));
 		this->setColor(C3B(E::C200));
 	}
 	switch(tag)

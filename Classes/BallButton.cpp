@@ -5,22 +5,17 @@
 #define NORMAL 0
 #define SELECTED 1
 
-static std::vector<BallButton*> v;
-
-BallButton::BallButton() {v.push_back(this);}
+BallButton::BallButton() {}
 
 BallButton::~BallButton() {
+	/*
 	cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(listener);
-	std::vector<BallButton*>::iterator it;
-	for (it = v.begin(); it != v.end(); it++){
-		if(*it == this){
-			v.erase(it);
-			return;
-		}
-	}
+	listener->release();
+	listener = nullptr;
+	*/
 }
 
-BallButton* BallButton::create(const int* normalColor, const int* selectedColor, const cocos2d::ccMenuCallback& callback)
+BallButton* BallButton::create(const int normalColor, const int selectedColor, const cocos2d::ccMenuCallback& callback)
 {
 	BallButton* pSprite = new BallButton();
 
@@ -30,9 +25,9 @@ BallButton* BallButton::create(const int* normalColor, const int* selectedColor,
 		pSprite->normalColor = normalColor;
 		pSprite->selectedColor = selectedColor;
 		pSprite->m_callback = callback;
-		pSprite->setColor(cocos2d::C3B(*pSprite->normalColor));
+		pSprite->setColor(cocos2d::C3B(pSprite->normalColor));
 		pSprite->state = NORMAL;
-		if(selectedColor != nullptr || callback != nullptr){
+		if(selectedColor != 0 || callback != nullptr){
 			pSprite->addEvents();
 		}
 		return pSprite;
@@ -51,6 +46,9 @@ void BallButton::addEvents()
 
 	listener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event)
 	{   
+		if(!m_isEnabled){
+			return false;
+		}
 		cocos2d::Vec2 p = touch->getLocation();
 		cocos2d::Rect rect = this->getBoundingBox();
 		rect.origin.x *= E::scale;
@@ -62,14 +60,17 @@ void BallButton::addEvents()
 		{
 			this->state = SELECTED;
 			_updateColor();
-			return true; // to indicate that we have consumed it.
+			return true; // event consumed
 		}
 
-		return false; // we did not consume this event, pass thru.
+		return false; // event past thru
 	};
 
 	listener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event)
 	{
+		if(!m_isEnabled){
+			return;
+		}
 		this->state = NORMAL;
 		_updateColor();
 		if( m_callback )
@@ -77,22 +78,19 @@ void BallButton::addEvents()
 			m_callback(this);
 		}
 	};
-
-	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);
+	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
 void BallButton::_updateColor(){
 	if(this->state == NORMAL){
-		this->setColor(cocos2d::C3B(*this->normalColor));
+		this->setColor(cocos2d::C3B(this->normalColor));
 	}
 	else{
-		this->setColor(cocos2d::C3B(*this->selectedColor));
+		this->setColor(cocos2d::C3B(this->selectedColor));
 	}
 }
 
-void BallButton::s_updateColors(){
-	std::vector<BallButton*>::iterator it;
-	for (it = v.begin(); it != v.end(); it++){
-		(*it)->_updateColor();
-	}
+void BallButton::setVisible(bool visibility){
+	Sprite::setVisible(visibility);
+	m_isEnabled = visibility;
 }
