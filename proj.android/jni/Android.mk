@@ -18,6 +18,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/SettingsScene.cpp \
                    ../../Classes/MainGameAnim.cpp \
                    ../../Classes/BallButton.cpp \
+                   ../../Classes/MainBall.cpp \
+                   ../../Classes/EnemyAI.cpp \
                    ../../Classes/SmartString.cpp \
                    ../../Classes/stdafx.cpp \
 

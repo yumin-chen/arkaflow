@@ -148,13 +148,14 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BallButton.cpp" />
+    <ClCompile Include="..\Classes\EnemyAI.cpp" />
     <ClCompile Include="..\Classes\EngineHelper.cpp" />
+    <ClCompile Include="..\Classes\MainBall.cpp" />
     <ClCompile Include="..\Classes\MainGameAnim.cpp" />
     <ClCompile Include="..\Classes\MainGameScene.cpp" />
     <ClCompile Include="..\Classes\SettingsScene.cpp" />
     <ClCompile Include="..\Classes\SmartString.cpp" />
     <ClCompile Include="..\Classes\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\Classes\WelcomeScene.cpp" />
@@ -164,6 +165,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BallButton.h" />
     <ClInclude Include="..\Classes\EngineHelper.h" />
+    <ClInclude Include="..\Classes\MainBall.h" />
     <ClInclude Include="..\Classes\MainGameScene.h" />
     <ClInclude Include="..\Classes\SettingsScene.h" />
     <ClInclude Include="..\Classes\SmartString.h" />

@@ -6,6 +6,7 @@
 using namespace cocos2d;
 
 SmartString::SmartString() {
+	isEnemy = false;
 }
 
 SmartString::~SmartString() {
@@ -60,7 +61,7 @@ void SmartString::setPositionY(float y){
 	_updatePosition();
 }
 void SmartString::setStartingPoint(const Vec2& p){
-	m_startingPoint = p/ E::scale;
+	m_startingPoint = p;
 	this->setWidth(0);
 	this->setPosition(Vec2(m_startingPoint.x - getRadius(), m_startingPoint.y));
 	this->setVisible(true);
@@ -68,7 +69,7 @@ void SmartString::setStartingPoint(const Vec2& p){
 	m_isGoing = false;
 }
 void SmartString::setEndingPoint(const Vec2& p){
-	setWidth((p.x/ E::scale - m_startingPoint.x));
+	setWidth((p.x - m_startingPoint.x));
 }
 void SmartString::setWidth(int w){
 	m_width = w;
@@ -109,16 +110,17 @@ void SmartString::go(){
 	m_tick = 0;
 	m_isGoing = true;
 }
-#define ANI_MOVING 20.0f
+
+
 #define ANI_OPACING 10.0f
 void SmartString::_update(){
 	if(m_isGoing){
-		setPositionY(getPositionY() + m_speed * 4);
+		setPositionY(getPositionY() + m_speed * SS_SPEEDRATIO * (1 - int(isEnemy) * 2));
 		m_tick++;
-		if(m_tick > ANI_MOVING && m_tick <= ANI_MOVING + ANI_OPACING){
-			this->setOpacity(255 - 255 * (m_tick-ANI_MOVING)/ANI_OPACING);
+		if(m_tick > SS_ANI_MOVING && m_tick <= SS_ANI_MOVING + ANI_OPACING){
+			this->setOpacity(255 - 255 * (m_tick-SS_ANI_MOVING)/ANI_OPACING);
 		}
-		if(m_tick == ANI_MOVING + ANI_OPACING)
+		if(m_tick == SS_ANI_MOVING + ANI_OPACING)
 		{
 			m_isGoing = false;
 			this->setVisible(false);
@@ -131,7 +133,7 @@ float SmartString::getRadius(){
 float SmartString::getMaxWidth(){
 	return getRadius() * 12;
 }
-int SmartString::checkCollision(const Vec2& p, float radius){
+int SmartString::checkCollision(const Vec2& p, float radius, MainBall *wheel){
 	if(!m_isGoing)
 		return 0;
 	Vec2 posNow = getPosition();
@@ -140,26 +142,51 @@ int SmartString::checkCollision(const Vec2& p, float radius){
 #define WHEEL_SC	0.7265625f
 radius*=WHEEL_SC;
 float stRadius=getRadius()*STRING_SC;
+int ret = 0;
 	// left collision
 	if(p.getDistance(posNow) <= radius + stRadius && p.x < posNow.x){
 		//m_isGoing = false;
-		return 1;
+		ret = 1;
 	}
 
 	Vec2 endingPoint = Vec2(posNow.x + m_width, posNow.y);
 	// right collision
 	if(p.getDistance(endingPoint) <= radius + stRadius && p.x > endingPoint.x){
 		//m_isGoing = false;
-		return 2;
+		ret = 2;
 	}
 
 	// up collision
 	if(p.x >= posNow.x && p.x <= endingPoint.x && p.y > posNow.y && p.y - posNow.y < radius + stRadius){
 		//m_isGoing = false;
-		return 3;
+		ret = 3;
 	}
 
-	return 0;
+	// down collision
+	if(p.x >= posNow.x && p.x <= endingPoint.x && p.y < posNow.y && posNow.y - p.y < radius + stRadius){
+		//m_isGoing = false;
+		ret = 4;
+	}
+
+	if(ret != 0){
+		wheel->angle = 0;
+		if(getWidth()>1)
+			wheel->angle =(wheel->position.x - 
+				(m_startingPoint.x+getRadius()+getWidth()/2)
+				)/getWidth() * 90.0f *PI/180.0f;
+		wheel->rotatedAngle = wheel->angle;
+		wheel->speed =wheel->speed*0.5+getSpeed();
+		if(ret == 4){
+			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
+			wheel->rotatedAngle = wheel->angle;
+		}
+		if(wheel->isReal){
+			m_isGoing = false;
+			this->setVisible(false);
+		}
+	}
+
+	return ret;
 }
 float SmartString::getSpeed(){
 	return m_speed;

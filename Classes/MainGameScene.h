@@ -3,14 +3,8 @@
 
 #include "EngineHelper.h"
 #include "SmartString.h"
+#include "MainBall.h"
 
-struct WheelAttr{
-	cocos2d::Sprite* sprite;
-	float speed; // the absolute speed
-	float angle; // the moving direction angle
-	float rotate; // used to calculate the rotated angle, this value is best between (-4, 4)
-	float rotatedAngle; // influence the direction angle
-};
 
 class S_MainGame : public cocos2d::LayerColor
 {
@@ -34,25 +28,31 @@ public:
 	float getWheelRadius();
 
 	void restartGame();
+
     
     CREATE_FUNC(S_MainGame);
 
 private:
-	inline float angleMinus90(float angle);
 
-	inline float anglePlus90(float angle);
 	
 	void initAnim();
 	void updateAnim();
+	void updateEnemyAI();
+	void checkCollision(MainBall* wheel);
+	void pause();
 	int m_close;
 	
 	long m_tick;
 	long m_tick2;
 	bool m_isGameOver;
 	bool m_isRestarting;
+	bool m_bGuide;
 
-	WheelAttr m_wheel; 
+	
 
+	MainBall* m_wheel; 
+
+	SmartString* m_smartstring_enemy;
 	SmartString* m_smartstring;
 };
 

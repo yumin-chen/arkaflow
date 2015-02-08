@@ -16,7 +16,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 		//glview = GLView::createWithRect("Slippery Wheels", Rect(0, 0, 320, 640), 1);
-        glview = GLView::createWithRect("Slippery Wheels", Rect(0, 0, 800, 640), 1);
+        glview = GLView::createWithRect("Slippery Wheels", Rect(0, 0, 1280, 640), 1);
 		//glview = GLView::createWithRect("Slippery Wheel", Rect(0, 0, DESIGNED_WIDTH, DESIGNED_HEIGHT), 1);
         director->setOpenGLView(glview);
 		//glview->setDesignResolutionSize(DESIGNED_WIDTH, DESIGNED_HEIGHT, ResolutionPolicy::NO_BORDER);

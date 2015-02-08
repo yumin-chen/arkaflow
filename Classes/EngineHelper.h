@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+#define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286
+
 #define DESIGNED_WIDTH 480
 #define DESIGNED_HEIGHT 640
 
@@ -46,6 +48,7 @@ public:
 
 	static struct sys_settings settings;
 
+
 	// For Color Palette
 	static void setColorAccent(int ID);
 	static int C50;
@@ -65,4 +68,13 @@ public:
 };
 
 
+inline float angleMinus90(float angle){
+	return float((int(angle*180/PI + 270)%360*PI/180));
+}
+
+inline float anglePlus90(float angle){
+	return float((int(angle*180/PI + 90)%360*PI/180));
+}
+
 #endif // _ENGINE_HELPER_H_
+

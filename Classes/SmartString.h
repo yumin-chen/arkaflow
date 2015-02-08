@@ -2,8 +2,11 @@
 #define _SMARTSTRING_H_
 
 #include "cocos2d.h"
+#include "MainBall.h"
 using namespace cocos2d;
 
+#define SS_SPEEDRATIO 4
+#define SS_ANI_MOVING 20.0f
 class SmartString : public cocos2d::Sprite
 {
     public:
@@ -23,7 +26,9 @@ class SmartString : public cocos2d::Sprite
 		float getMaxWidth();
 		float getSpeed();
 		float getWidth();
-		int checkCollision(const Vec2& p, float radius);
+		bool isEnemy;
+		Vec2 m_startingPoint;
+		int checkCollision(const Vec2& p, float radius,  MainBall *wheel);
 
     private:
 		cocos2d::Sprite* m_middle;
@@ -34,7 +39,6 @@ class SmartString : public cocos2d::Sprite
 		long m_tick;
 		int m_width;
 		float m_speed;
-		Vec2 m_startingPoint;
 
 };
 
