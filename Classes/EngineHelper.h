@@ -2,6 +2,7 @@
 #define  _ENGINE_HELPER_H_
 
 #include "cocos2d.h"
+#include <SimpleAudioEngine.h>
 
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286
 
@@ -28,7 +29,9 @@
 #define C_DEEPORANGE	15
 
 #define C4B(color) Color4B((color & 0xFF0000) >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF, 255)
+#define C4B_(color, alpha) Color4B((color & 0xFF0000) >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF, alpha)
 #define C4F(color) Color4F(((color & 0xFF0000) >> 16)/255.0f, ((color & 0x00FF00) >> 8)/255.0f, (color & 0x0000FF)/255.0f, 1.0f)
+#define C4F_(color, alpha) Color4F(((color & 0xFF0000) >> 16)/255.0f, ((color & 0x00FF00) >> 8)/255.0f, (color & 0x0000FF)/255.0f, alpha)
 #define C3B(color) Color3B((color & 0xFF0000) >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF)
 
 struct sys_settings{
@@ -45,6 +48,8 @@ public:
 	static float originY;
 	static void calculateScreen();
 	static void setRandomColor(cocos2d::Node *n);
+	static void playEffect(const char* pszFilePath);
+	static void playBgMusic();
 
 	static struct sys_settings settings;
 
@@ -75,6 +80,37 @@ inline float angleMinus90(float angle){
 inline float anglePlus90(float angle){
 	return float((int(angle*180/PI + 90)%360*PI/180));
 }
+
+typedef struct{
+	std::function<bool(cocos2d::Touch*, cocos2d::Event*)> onTouchBegan;
+    std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchMoved;
+    std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchEnded;
+    std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchCancelled;
+} TouchEventsFunc;
+
+
+
+namespace stdPatchForMinGW
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
+
+// define audio extension
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define AEX ".ogg"
+#define stdp stdPatchForMinGW
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#define AEX ".wav"
+#define stdp std
+#else
+#define AEX ".mp3"
+#define stdp std
+#endif
 
 #endif // _ENGINE_HELPER_H_
 

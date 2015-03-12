@@ -29,6 +29,20 @@ void E::calculateScreen(){
 	E::originY = (E::visibleHeight - DESIGNED_HEIGHT)/2;
 }
 
+void E::playEffect(const char* pszFilePath){
+	char *fp = new char[strlen(pszFilePath) + 10];
+	strcpy (fp, "audio/");
+	strcat (fp, pszFilePath);
+	strcat (fp, AEX);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(fp);
+}
+
+void E::playBgMusic(){
+	std::ostringstream os;
+	os << "audio/bgmusic" << 1 + rand() % 2 << AEX;
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(os.str().c_str());
+}
+
 
 int E::C50;
 int E::C100;
