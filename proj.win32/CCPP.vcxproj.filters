@@ -7,8 +7,8 @@
     <Filter Include="resource">
       <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes">
-      <UniqueIdentifier>{495f7732-17e2-42cb-b8e6-8d27511de778}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -16,37 +16,40 @@
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BallButton.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\EngineHelper.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MainGameAnim.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MainGameScene.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SettingsScene.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SmartString.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\stdafx.cpp">
-      <Filter>Classes</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\WelcomeScene.cpp">
-      <Filter>Classes</Filter>
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BallButton.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BaseScene.cpp">
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\EnemyAI.cpp">
-      <Filter>Classes</Filter>
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EngineHelper.cpp">
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\MainBall.cpp">
-      <Filter>Classes</Filter>
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MainGameAnim.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MainGameScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SettingsScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SmartString.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\stdafx.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,31 +57,37 @@
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BallButton.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\EngineHelper.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MainGameScene.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SettingsScene.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SmartString.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\stdafx.h">
-      <Filter>Classes</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\WelcomeScene.h">
-      <Filter>Classes</Filter>
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BallButton.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BaseScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EngineHelper.h">
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MainBall.h">
-      <Filter>Classes</Filter>
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MainGameScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Palette.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SettingsScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SmartString.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\stdafx.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
