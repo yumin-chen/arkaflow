@@ -7,11 +7,8 @@ USING_NS_CC;
 Scene* S_MainGame::createScene()
 {
 	auto scene = Scene::create();
-
 	auto layer = S_MainGame::create();
-
 	scene->addChild(layer);
-
 	return scene;
 }
 
@@ -22,15 +19,10 @@ bool S_MainGame::init()
 	m_tick = 0;
 	// super init 
 
-	if ( !LayerColor::initWithColor(C4B(E::C100)) )
+	if ( !BaseScene::init(E::C100) )
 	{
 		return false;
 	}
-
-
-	this->setScale(E::scale);
-	this->setContentSize(Size(E::visibleWidth, E::visibleHeight));
-	this->setAnchorPoint(Vec2(0, 0));
 
 	initAnim();
 
@@ -44,7 +36,6 @@ bool S_MainGame::init()
 	this->addChild(wheel, 10);
 
 	m_wheel->sprite = wheel;
-	restartGame();
 
 	m_smartstring = SmartString::create();
 	this->addChild(m_smartstring, 11);
@@ -53,13 +44,8 @@ bool S_MainGame::init()
 	this->addChild(m_smartstring_enemy, 11);
 	m_smartstring_enemy->isEnemy = true;
 
-	auto listener = cocos2d::EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
-	listener->onTouchBegan = CC_CALLBACK_2(S_MainGame::onTouchBegan, this);
-	listener->onTouchMoved = CC_CALLBACK_2(S_MainGame::onTouchMoved, this);
-	listener->onTouchEnded = CC_CALLBACK_2(S_MainGame::onTouchEnded, this);
-
-	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+	
+	restartGame();
 
 	// set up the scheduled callbacks
 	this->scheduleUpdate();
@@ -93,6 +79,7 @@ void S_MainGame::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *e
 
 bool S_MainGame::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
+	BaseScene::onTouchBegan(touch, event);
 	m_bGuide = false;
 	cocos2d::Vec2 p = touch->getLocation() / E::scale;
 
@@ -106,26 +93,25 @@ bool S_MainGame::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 }
 
 void S_MainGame::onTouchMoved(Touch* touch, Event* event){
-	//this->ccTouchBegan(touch, event);
+	BaseScene::onTouchMoved(touch, event);
 	m_smartstring->setEndingPoint(touch->getLocation() / E::scale);
 }
 
 void S_MainGame::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
+	BaseScene::onTouchEnded(touch, event);
 	m_smartstring->setEndingPoint(touch->getLocation() / E::scale);
 	m_smartstring->go();
 }
 
-float S_MainGame::getWheelRadius(){
-	return m_wheel->sprite->getContentSize().width * m_wheel->sprite->getScale() /2;
-}
- ;
 void S_MainGame::restartGame(){
 	m_isGameOver = false;
 	m_isRestarting = false;
 	m_bGuide = true;
+	m_score = 0;
 	m_wheel->speed = 0;
 	m_wheel->rotate = 0;//60*PI/180.0;
 	m_wheel->angle = 180*PI/180.0;
 	m_wheel->rotatedAngle = m_wheel->angle;
-	m_wheel->setPosition(E::visibleWidth/2, E::visibleHeight*0.23f);
+	m_wheel->setPosition(E::visibleWidth/2, E::visibleHeight*0.15f);
+	m_scoreLabel->setString(stdp::to_string(m_score));
 }

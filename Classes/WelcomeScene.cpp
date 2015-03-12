@@ -16,14 +16,9 @@ USING_NS_CC;
 
 Scene* S_Welcome::createScene()
 {
-
-
 	auto scene = Scene::create();
-
 	auto layer = S_Welcome::create();
-
 	scene->addChild(layer);
-
 	return scene;
 }
 
@@ -31,17 +26,13 @@ Scene* S_Welcome::createScene()
 bool S_Welcome::init()
 {
 	// super init 
-	if ( !LayerColor::initWithColor(C4B(E::C100)) )
+	if ( !BaseScene::init((E::C100)))
 	{
 		return false;
 	}
 
 	m_tick = 0;
 	m_bClose = 0;
-
-	this->setScale(E::scale);
-	this->setContentSize(Size(E::visibleWidth, E::visibleHeight));
-	this->setAnchorPoint(Vec2(0, 0));
 
 	// create solid color background
 	auto bg = BallButton::create(E::C50);
@@ -249,4 +240,14 @@ void S_Welcome::menuCallback(Ref* pSender)
 	}
 	}
 	**/
+}
+
+ void S_Welcome::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
+{
+	// Back button pressed
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE) {
+		Director::getInstance()->end();
+	}
+
+
 }

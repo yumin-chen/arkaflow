@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "BallButton.h"
-#include "EngineHelper.h"
+#include "BaseScene.h"
 
 #define NORMAL 0
 #define SELECTED 1
@@ -41,12 +41,12 @@ BallButton* BallButton::create(const int normalColor, const int selectedColor, c
 
 void BallButton::addEvents()
 {
-	listener = cocos2d::EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
-	listener->onTouchBegan = CC_CALLBACK_2(BallButton::onTouchBegan, this);
-	listener->onTouchMoved = CC_CALLBACK_2(BallButton::onTouchMoved, this);
-	listener->onTouchEnded = CC_CALLBACK_2(BallButton::onTouchEnded, this);
-	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+	TouchEventsFunc listener;
+	listener.onTouchBegan = CC_CALLBACK_2(BallButton::onTouchBegan, this);
+	listener.onTouchMoved = CC_CALLBACK_2(BallButton::onTouchMoved, this);
+	listener.onTouchEnded = CC_CALLBACK_2(BallButton::onTouchEnded, this);
+	listener.onTouchCancelled = CC_CALLBACK_2(BallButton::onTouchCancelled, this);
+	BaseScene::getCurrentScene()->addTouchEvents(listener);
 }
 
 void BallButton::_updateColor(){
@@ -68,16 +68,13 @@ bool BallButton::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 	if(!m_isEnabled){
 		return false;
 	}
-	cocos2d::Vec2 p = touch->getLocation();
+	cocos2d::Vec2 p = touch->getLocation() / E::scale;
 	cocos2d::Rect rect = this->getBoundingBox();
-	rect.origin.x *= E::scale;
-	rect.origin.y *= E::scale;
-	rect.size.width *= E::scale;
-	rect.size.height *= E::scale;
 
-	if(rect.containsPoint(p))
+	if(rect.containsPoint(p) && this->state == NORMAL)
 	{
 		this->state = SELECTED;
+		E::playEffect("da");
 		_updateColor();
 		return true; // event consumed
 	}
@@ -92,10 +89,18 @@ void BallButton::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
 	if(!m_isEnabled){
 		return;
 	}
+	if(this->state == NORMAL){
+		return;
+	}
 	this->state = NORMAL;
 	_updateColor();
 	if( m_callback )
 	{
 		m_callback(this);
 	}
+}
+
+void BallButton::onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event){
+	this->state = NORMAL;
+	_updateColor();
 }

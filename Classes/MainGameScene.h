@@ -1,12 +1,12 @@
 #ifndef __MAIN_GAME_SCENE_H__
 #define __MAIN_GAME_SCENE_H__
 
-#include "EngineHelper.h"
+#include "BaseScene.h"
 #include "SmartString.h"
 #include "MainBall.h"
 
 
-class S_MainGame : public cocos2d::LayerColor
+class S_MainGame : public BaseScene
 {
 public:
     static cocos2d::Scene* createScene();
@@ -39,6 +39,8 @@ private:
 	void updateAnim();
 	void updateEnemyAI();
 	void checkCollision(MainBall* wheel);
+	void collidingWithBorder();
+	void addScore(int);
 	void pause();
 	int m_close;
 	
@@ -51,6 +53,8 @@ private:
 	
 
 	MainBall* m_wheel; 
+	cocos2d::Label* m_scoreLabel;
+	int m_score;
 
 	SmartString* m_smartstring_enemy;
 	SmartString* m_smartstring;

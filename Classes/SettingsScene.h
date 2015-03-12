@@ -1,10 +1,10 @@
 #ifndef __SETTINGS_SCENE_H__
 #define __SETTINGS_SCENE_H__
 
-#include "EngineHelper.h"
+#include "BaseScene.h"
 #include "BallButton.h"
 
-class S_Settings : public cocos2d::LayerColor
+class S_Settings : public BaseScene
 {
 public:
     static cocos2d::Scene* createScene();

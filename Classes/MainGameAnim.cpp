@@ -20,6 +20,8 @@ using namespace cocos2d;
 #define	TAG_STS_BG		1012
 #define	TAG_STS_SHINE	1013
 #define	TAG_STS			1014
+#define	TAG_SCORE		1015
+#define	TAG_SCORE_I		1016
 
 void S_MainGame::initAnim(){
 	// create solid color background
@@ -45,29 +47,53 @@ void S_MainGame::initAnim(){
 
 	auto pauseButton = BallButton::create(E::C700, E::C200, CC_CALLBACK_1(S_MainGame::menuCallback, this));
 	pauseButton->setScale(0.15f);
-	pauseButton->setPosition(0, E::visibleHeight * 0.5f );
+	pauseButton->setPosition(E::visibleWidth - 48, E::visibleHeight - 48);
 	pauseButton->setTag(TAG_PAUSE);
 	this->addChild(pauseButton, 1000);
 
 	auto pauseIcon = Sprite::create("b_pause.png");
-	pauseIcon->setScale(0.25f);
-	pauseIcon->setPosition(E::visibleWidth-36, E::visibleHeight * 0.5f);
+	pauseIcon->setScale(0.3f);
+	pauseIcon->setPosition(E::visibleWidth - 48, E::visibleHeight - 48);
 	pauseIcon->setTag(TAG_PAUSE_I);
 	pauseIcon->setOpacity(0);
 	this->addChild(pauseIcon, 1000);
 
 	auto silentButton = BallButton::create(E::C700, E::C200);
 	silentButton->setScale(0.15f);
-	silentButton->setPosition(0, E::visibleHeight * 0.5f - 80);
+	silentButton->setPosition(E::visibleWidth - 128, E::visibleHeight - 48);
 	silentButton->setTag(TAG_SILENT);
 	this->addChild(silentButton, 1000);
 
 	auto soundIcon = Sprite::create("b_sound.png");
-	soundIcon->setScale(0.25f);
-	soundIcon->setPosition(E::visibleWidth-36, E::visibleHeight * 0.5f- 80);
+	soundIcon->setScale(0.3f);
+	soundIcon->setPosition(E::visibleWidth - 128, E::visibleHeight - 48);
 	soundIcon->setTag(TAG_SOUND_I);
 	soundIcon->setOpacity(0);
 	this->addChild(soundIcon, 1000);
+
+	auto scoreBg = BallButton::create(E::C700);
+	scoreBg->setScale(0.15f);
+	scoreBg->setPosition(48, E::visibleHeight - 48);
+	scoreBg->setTag(TAG_SCORE);
+	this->addChild(scoreBg, 1000);
+
+	
+	m_scoreLabel = Label::createWithSystemFont("", FONT_MAIN, 32, 
+		Size(196, scoreBg->getBoundingBox().size.height), TextHAlignment::LEFT, TextVAlignment::CENTER);
+	m_scoreLabel->setPosition(96, E::visibleHeight - 48);
+	m_scoreLabel->setAnchorPoint(Vec2(0, 0.5));
+	m_scoreLabel->enableOutline(C4B(E::C900), 1);
+	//m_scoreLabel->enableShadow(C4B_(E::C900, 128),Size(1, -1),0);
+	m_scoreLabel->setColor(C3B(E::C700));
+	this->addChild(m_scoreLabel, 1000);
+
+
+	auto scoreIcon = Sprite::create("b_score.png");
+	scoreIcon->setScale(0.3f);
+	scoreIcon->setPosition(48, E::visibleHeight - 48);
+	scoreIcon->setTag(TAG_SCORE_I);
+	scoreIcon->setOpacity(0);
+	this->addChild(scoreIcon, 1000);
 
 	// create the shadow
 	auto shadow = Sprite::create("shadow.png");
@@ -130,12 +156,14 @@ void S_MainGame::initAnim(){
 	returnIcon->setOpacity(0);
 	this->addChild(returnIcon, 1000);
 
+
+#define STS_POS 0.08f
 	// slide to start background
 	auto StsBg = Sprite::create("slide_to_start_bg.png");
 	StsBg->setScale(0.3f);
 	StsBg->setColor(bgBtm->getColor());
 	StsBg->setTag(TAG_STS_BG);
-	StsBg->setPosition(E::visibleWidth/2, E::visibleHeight*0.1f);
+	StsBg->setPosition(E::visibleWidth/2, E::visibleHeight*STS_POS);
 	this->addChild(StsBg, 5);
 
 	// 
@@ -144,7 +172,7 @@ void S_MainGame::initAnim(){
 	StsShine->setColor(C3B(E::C800));
 	StsShine->setTag(TAG_STS_SHINE);
 	StsShine->setAnchorPoint(Vec2(0, 0.5));
-	StsShine->setPosition(E::visibleWidth/2 - StsBg->getBoundingBox().size.width / 2, E::visibleHeight*0.1f);
+	StsShine->setPosition(E::visibleWidth/2 - StsBg->getBoundingBox().size.width / 2, E::visibleHeight*STS_POS);
 	this->addChild(StsShine, 4);
 
 	//
@@ -152,7 +180,7 @@ void S_MainGame::initAnim(){
 	Sts->setTag(TAG_STS);
 	Sts->setAnchorPoint(Vec2(0.5, 0.5));
 	Sts->setContentSize(Size(StsBg->getBoundingBox().size.width, StsBg->getBoundingBox().size.height));
-	Sts->setPosition(E::visibleWidth/2 - StsBg->getBoundingBox().size.width/2, E::visibleHeight*0.1 - StsBg->getBoundingBox().size.height/2);
+	Sts->setPosition(E::visibleWidth/2 - StsBg->getBoundingBox().size.width/2, E::visibleHeight*STS_POS - StsBg->getBoundingBox().size.height/2);
 	this->addChild(Sts, 4);
 
 }
@@ -187,21 +215,31 @@ void S_MainGame::updateAnim(){
 		this->getChildByTag(TAG_STS_BG)->setVisible(true);
 		this->getChildByTag(TAG_STS_SHINE)->setVisible(true);
 		this->getChildByTag(TAG_STS)->setVisible(true);
+		m_scoreLabel->setVisible(false);
 		static bool shining = false;
 		static long shining_tick = 0;
+		static int shining_count = 0;
 		if(shining){
 			shining_tick = shining_tick + 4;
-			int xOffset = shining_tick % 
-				int(this->getChildByTag(TAG_STS_BG)->getBoundingBox().size.width - 
-				this->getChildByTag(TAG_STS_SHINE)->getBoundingBox().size.width);
+
+			int xOffset = shining_tick %      
+				int(this->getChildByTag(TAG_STS_BG)->getBoundingBox().size.width -
+					this->getChildByTag(TAG_STS_SHINE)->getBoundingBox().size.width);
+
 			if(xOffset == 0){
 				shining_tick = 0;
-				shining = false;
-			}
-		
+				shining_count ++;
+				if(shining_count >= 1){
+					shining = false;
+					shining_count = 0;
+				}
+			}else{
+
 				this->getChildByTag(TAG_STS_SHINE)->setPositionX(E::visibleWidth/2 -
 					this->getChildByTag(TAG_STS_BG)->getBoundingBox().size.width / 2 + xOffset 
 					);
+			}
+
 		}else{
 			shining_tick++;
 			if(shining_tick <= ANI_GUIDE_OPACING)
@@ -219,6 +257,7 @@ void S_MainGame::updateAnim(){
 		this->getChildByTag(TAG_STS_BG)->setVisible(false);
 		this->getChildByTag(TAG_STS_SHINE)->setVisible(false);
 		this->getChildByTag(TAG_STS)->setVisible(false);
+		m_scoreLabel->setVisible(true);
 	}
 
 
@@ -231,24 +270,29 @@ void S_MainGame::updateAnim(){
 		this->getChildByTag(TAG_BTM_BG)->setScale(0.3 + ((m_tick-ANI_MOVING_BG)/ANI_SCALING_BG)*4.0f);
 		this->getChildByTag(TAG_BTM_BG)->setLocalZOrder(0);
 	}
+
 	if(m_tick >= ANI_MOVING_BG + ANI_SCALING_BG/2 && m_tick <=  ANI_MOVING_BG + ANI_SCALING_BG/2 + ANI_SHADOWING_BG){
 		this->getChildByTag(TAG_SHADOW)->setOpacity(((m_tick-ANI_MOVING_BG - ANI_SCALING_BG/2)/ANI_SHADOWING_BG)*255);
 	}
 
 	if(m_tick <= ANI_PAUSE_MOVING){
-		this->getChildByTag(TAG_PAUSE)->setPositionX((m_tick/ANI_PAUSE_MOVING)*(E::visibleWidth-36));
-		this->getChildByTag(TAG_SILENT)->setPositionX((m_tick/ANI_PAUSE_MOVING)*(E::visibleWidth-36));
+		this->getChildByTag(TAG_PAUSE)->setPositionY((m_tick/ANI_PAUSE_MOVING)*(E::visibleHeight-48));
+		this->getChildByTag(TAG_SILENT)->setPositionY((m_tick/ANI_PAUSE_MOVING)*(E::visibleHeight-48));
+		this->getChildByTag(TAG_SCORE)->setPositionY((m_tick/ANI_PAUSE_MOVING)*(E::visibleHeight-48));
 	}
 	if(m_tick >= ANI_PAUSE_MOVING && m_tick <= ANI_PAUSE_MOVING+ANI_PAUSE_SCALING){
-		this->getChildByTag(TAG_PAUSE)->setScale(0.15 + ((m_tick-ANI_PAUSE_MOVING)/ANI_PAUSE_SCALING)*0.1f);
-		this->getChildByTag(TAG_SILENT)->setScale(0.15 + ((m_tick-ANI_PAUSE_MOVING)/ANI_PAUSE_SCALING)*0.1f);
+		this->getChildByTag(TAG_PAUSE)->setScale(0.15 + ((m_tick-ANI_PAUSE_MOVING)/ANI_PAUSE_SCALING)*0.15f);
+		this->getChildByTag(TAG_SILENT)->setScale(0.15 + ((m_tick-ANI_PAUSE_MOVING)/ANI_PAUSE_SCALING)*0.15f);
+		this->getChildByTag(TAG_SCORE)->setScale(0.15 + ((m_tick-ANI_PAUSE_MOVING)/ANI_PAUSE_SCALING)*0.15f);
 		this->getChildByTag(TAG_PAUSE_I)->setOpacity(0);
 		this->getChildByTag(TAG_SOUND_I)->setOpacity(0);
+		this->getChildByTag(TAG_SCORE_I)->setOpacity(0);
 	}
 
 	if(m_tick >= ANI_PAUSE_MOVING+ANI_PAUSE_SCALING  && m_tick <= ANI_PAUSE_MOVING+ANI_PAUSE_SCALING+ANI_PAUSE_OPACING){
 		this->getChildByTag(TAG_PAUSE_I)->setOpacity(((m_tick-ANI_PAUSE_MOVING-ANI_PAUSE_OPACING)/ANI_PAUSE_SCALING)*255);
 		this->getChildByTag(TAG_SOUND_I)->setOpacity(((m_tick-ANI_PAUSE_MOVING-ANI_PAUSE_OPACING)/ANI_PAUSE_SCALING)*255);
+		this->getChildByTag(TAG_SCORE_I)->setOpacity(((m_tick-ANI_PAUSE_MOVING-ANI_PAUSE_OPACING)/ANI_PAUSE_SCALING)*255);
 	}
 	if(m_isGameOver)
 	{

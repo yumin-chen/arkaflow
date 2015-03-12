@@ -21,6 +21,7 @@ class BallButton : public cocos2d::Sprite
 		bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 		void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 		void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+		void onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event);
 		cocos2d::EventListenerTouchOneByOne* listener;
 		cocos2d::ccMenuCallback m_callback;
 		bool m_isEnabled;

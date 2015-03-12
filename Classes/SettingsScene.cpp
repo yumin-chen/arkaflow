@@ -38,15 +38,10 @@ bool S_Settings::init()
 	m_tick = 0;
 	// super init 
 
-	if ( !LayerColor::initWithColor(C4B(E::C100)) )
+	if ( !BaseScene::init((E::C100)) )
 	{
 		return false;
 	}
-
-
-	this->setScale(E::scale);
-	this->setContentSize(Size(E::visibleWidth, E::visibleHeight));
-	this->setAnchorPoint(Vec2(0, 0));
 
 	// create solid color background
 	auto bg = BallButton::create(E::C50);
@@ -233,6 +228,8 @@ void S_Settings::menuCallback(Ref* pSender)
 		m_OkSelected->setColor(C3B(E::C200));
 		m_CancelNormal->setColor(C3B(E::C700));
 		m_CancelSelected->setColor(C3B(E::C200));
+		this->getChildByTag(TAG_OK_BG)->setColor(C3B(E::C700));
+		this->getChildByTag(TAG_CC_BG)->setColor(C3B(E::C700));
 		this->getChildByTag(TAG_BG_TOP)->setColor(C3B(E::C200));
 		this->getChildByTag(TAG_BTM_BG)->setColor(C3B(E::C50));
 		this->setColor(C3B(E::C200));
