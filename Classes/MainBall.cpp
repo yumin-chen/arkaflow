@@ -25,3 +25,7 @@ void MainBall::setPositionY(float y) {
 	if(isReal)
 		sprite->setPositionY(y);
 }
+
+float MainBall::getRadius(){
+	return sprite->getContentSize().width * sprite->getScale() /2;
+}

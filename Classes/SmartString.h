@@ -28,7 +28,7 @@ class SmartString : public cocos2d::Sprite
 		float getWidth();
 		bool isEnemy;
 		Vec2 m_startingPoint;
-		int checkCollision(const Vec2& p, float radius,  MainBall *wheel);
+		int checkCollision(MainBall *wheel);
 
     private:
 		cocos2d::Sprite* m_middle;

@@ -18,7 +18,7 @@ class MainBall
 		void setPosition(float x, float y);
 		void setPositionX(float x);
 		void setPositionY(float y);
-
+		float getRadius();
     private:
 		
 };

@@ -6,12 +6,15 @@
 
 static bool ai_bActionStarted;
 static long ai_tick = 0;
+static long ai_tick_m = 0;
 static float ai_width = 0;
 static float ai_ox;
 void S_MainGame::updateEnemyAI(){
-	
+	ai_tick_m ++;
 	static MainBall* tempWheel = new MainBall;
 	if(!ai_bActionStarted){
+		if(ai_tick_m % 20 != 0)
+			return;
 		*tempWheel = *m_wheel; 
 		tempWheel->isReal = false;
 		for(int i = 0; i < ANI_STRINGING + SS_ANI_MOVING; i++){
@@ -51,10 +54,12 @@ void S_MainGame::updateEnemyAI(){
 
 #define BORDER_WIDTH 12;
 void S_MainGame::checkCollision(MainBall* wheel){
+	if(m_isGameOver)
+		return;
 	//wheel->sprite->setRotation(tick *6);
 	wheel->setPosition(wheel->position.x + wheel->speed / 2 * sin(wheel->angle) + wheel->speed * sin(wheel->rotatedAngle),
 		wheel->position.y + wheel->speed / 2 * cos(wheel->angle) + wheel->speed * cos(wheel->rotatedAngle));
-	wheel->rotatedAngle += wheel->rotate*wheel->speed*PI/180.0f;
+	wheel->rotatedAngle += wheel->rotate*wheel->speed*PI / 180.0f;
 
 	// colision
 	float borderPosition;
@@ -70,6 +75,11 @@ void S_MainGame::checkCollision(MainBall* wheel){
 		}
 		*/
 		wheel->setPositionX(borderPosition);
+
+		if(wheel->isReal){
+			collidingWithBorder();
+			addScore(1);
+		}
 	}
 	// colision left side
 	borderPosition = BORDER_WIDTH + wheel->sprite->getBoundingBox().size.width * 0.5f * 0.775f;
@@ -83,6 +93,11 @@ void S_MainGame::checkCollision(MainBall* wheel){
 		}
 		*/
 		wheel->setPositionX(borderPosition);
+
+		if(wheel->isReal){
+			collidingWithBorder();
+			addScore(1);
+		}
 	}
 	float angle_ = angleMinus90(wheel->angle);
 	//colision top side
@@ -91,6 +106,12 @@ void S_MainGame::checkCollision(MainBall* wheel){
 		wheel->angle = anglePlus90(-angle_);
 		wheel->rotatedAngle = wheel->angle;
 		wheel->setPositionY(borderPosition);
+		
+		if(wheel->isReal){
+			collidingWithBorder();
+			addScore(100);
+		}
+	
 	}
 	//colision bottom side
 	borderPosition = BORDER_WIDTH + wheel->sprite->getBoundingBox().size.width * 0.5 * 0.775;
@@ -103,6 +124,8 @@ void S_MainGame::checkCollision(MainBall* wheel){
 		if(wheel->isReal){
 			m_isGameOver=true;
 			m_tick2=0;
+			E::playEffect("beng");
+			
 		}
 	}
 
@@ -126,13 +149,33 @@ void S_MainGame::checkCollision(MainBall* wheel){
 		break;
 	}
 	*/
-	if(m_smartstring->checkCollision(wheel->position, getWheelRadius(), wheel) > 0){
+	if(m_smartstring->checkCollision(wheel) > 0){
 		if(wheel->isReal && ai_tick == -1)
 			ai_bActionStarted = false;
+		if(wheel->isReal){
+			addScore(m_smartstring->getSpeed());
+			E::playEffect("di");
+			//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/di" AEX);
+		}
 	}
-	if(m_smartstring_enemy->checkCollision(wheel->position, getWheelRadius(), wheel) > 0){
+	if(m_smartstring_enemy->checkCollision(wheel) > 0){
 		if(wheel->isReal && ai_tick == -1)
 			ai_bActionStarted = false;
+		if(wheel->isReal){
+			addScore(m_smartstring_enemy->getSpeed() * 2);
+			E::playEffect("di");
+			//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/di" AEX);
+		}
 	}
 
+}
+
+void S_MainGame::collidingWithBorder(){
+	E::playEffect("da");
+	//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/da" AEX);
+}
+
+void S_MainGame::addScore(int score){
+	m_score += score;
+	m_scoreLabel->setString(stdp::to_string(m_score));
 }

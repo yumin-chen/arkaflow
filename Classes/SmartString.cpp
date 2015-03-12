@@ -133,9 +133,11 @@ float SmartString::getRadius(){
 float SmartString::getMaxWidth(){
 	return getRadius() * 12;
 }
-int SmartString::checkCollision(const Vec2& p, float radius, MainBall *wheel){
+int SmartString::checkCollision(MainBall *wheel){
 	if(!m_isGoing)
 		return 0;
+	Vec2 p = wheel->position;
+	float radius = wheel->getRadius();
 	Vec2 posNow = getPosition();
 	posNow.x = posNow.x + getRadius();
 #define STRING_SC	0.9140625f
@@ -171,15 +173,38 @@ int ret = 0;
 	if(ret != 0){
 		wheel->angle = 0;
 		if(getWidth()>1)
+		{
 			wheel->angle =(wheel->position.x - 
 				(m_startingPoint.x+getRadius()+getWidth()/2)
-				)/getWidth() * 90.0f *PI/180.0f;
+				);
+			wheel->angle = wheel->angle < 0? wheel->angle + radius + stRadius: wheel->angle - radius - stRadius;
+			wheel->angle = wheel->angle	/getWidth() * 90.0f *PI/180.0f;
+		}
+		//MessageBox(std::to_string( angleMinus90(wheel->angle)*180/PI).c_str(), "s");
 		wheel->rotatedAngle = wheel->angle;
 		wheel->speed =wheel->speed*0.5+getSpeed();
-		if(ret == 4){
+
+		
+		
+		
+		if(isEnemy && ret != 3 && angleMinus90(wheel->angle) > PI){
 			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
 			wheel->rotatedAngle = wheel->angle;
 		}
+
+		if(!isEnemy && ret != 4 && angleMinus90(wheel->angle) < PI){
+			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
+			wheel->rotatedAngle = wheel->angle;
+		}
+		
+
+		/**
+		if(ret == 3 && angleMinus90(wheel->angle) < PI){
+			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
+			wheel->rotatedAngle = wheel->angle;
+		}
+		**/
+
 		if(wheel->isReal){
 			m_isGoing = false;
 			this->setVisible(false);
