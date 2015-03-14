@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SmartString.h"
-#include "MainGameScene.h"
+#include "Scene/MainGameScene.h"
 #include "EngineHelper.h"
 
 using namespace cocos2d;

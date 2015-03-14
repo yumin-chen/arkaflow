@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "AppDelegate.h"
 #include "EngineHelper.h"
-#include "WelcomeScene.h"
-#include "Palette.h"
+#include "scene/WelcomeScene.h"
 
 USING_NS_CC;
 
@@ -24,8 +23,24 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	E::calculateScreen();
 	E::settings.colorAccent = C_CYAN;
+	E::settings.musicVolume = 100;
+	E::settings.soundVolume = 100;
 	E::setColorAccent(E::settings.colorAccent);
 	E::playBgMusic();
+	//E::language = 0;
+	LanguageType lang = CCApplication::getInstance()->getCurrentLanguage();
+	switch(lang){
+	case LanguageType::ENGLISH:
+		E::language = 0;
+		break;
+	case LanguageType::CHINESE:
+		E::language = 1;
+		break;
+	default:
+		E::language = 0;
+		break;
+	}
+	
 
     director->setAnimationInterval(1.0 / 60);
 

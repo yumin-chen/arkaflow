@@ -7,9 +7,16 @@
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286
 
 #define DESIGNED_WIDTH 480
+//#define DESIGNED_HEIGHT 640
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define DESIGNED_HEIGHT 800
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #define DESIGNED_HEIGHT 640
+#else
+#define DESIGNED_HEIGHT 800
+#endif
 
-#define FONT_MAIN "Arial"
+
 
 #define C_RED			0
 #define C_PINK			1
@@ -36,6 +43,8 @@
 
 struct sys_settings{
 	int colorAccent;
+	int musicVolume;
+	int soundVolume;
 };
 
 class E
@@ -46,6 +55,7 @@ public:
 	static float visibleHeight;
 	static float originX;
 	static float originY;
+	static int language;
 	static void calculateScreen();
 	static void setRandomColor(cocos2d::Node *n);
 	static void playEffect(const char* pszFilePath);
@@ -111,6 +121,11 @@ namespace stdPatchForMinGW
 #define AEX ".mp3"
 #define stdp std
 #endif
+
+#define S(english,chinese) E::language==0?english:chinese
+//#define FONT_MAIN S("Arial", "Î¢ÈíÑÅºÚ")
+#define FONT_MAIN "fonts/SF Theramin Gothic Condensed.ttf"
+#define FONT_BOLD "fonts/SF Theramin Gothic Bold.ttf"
 
 #endif // _ENGINE_HELPER_H_
 

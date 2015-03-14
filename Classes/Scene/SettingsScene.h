@@ -2,7 +2,8 @@
 #define __SETTINGS_SCENE_H__
 
 #include "BaseScene.h"
-#include "BallButton.h"
+#include "./UI/BallButton.h"
+#include "./UI/BallSlider.h"
 
 class S_Settings : public BaseScene
 {
@@ -29,6 +30,12 @@ private:
 	BallButton* m_OkSelected;
 	BallButton* m_CancelNormal;
 	BallButton* m_CancelSelected;
+
+	BallSlider* m_sliderMusic;
+	BallSlider* m_sliderSound;
+
+	cocos2d::Label* m_lbMusicVolumeValue;
+	cocos2d::Label* m_lbSoundVolumeValue;
 };
 
 #endif // __SETTINGS_SCENE_H__

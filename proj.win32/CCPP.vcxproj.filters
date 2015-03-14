@@ -10,6 +10,15 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\UI">
+      <UniqueIdentifier>{f72f87fe-a594-4638-81a2-6550bd10a486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Scene">
+      <UniqueIdentifier>{69a9e5eb-d466-42ce-8bbd-e61859d1d031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Element">
+      <UniqueIdentifier>{12286482-2055-466e-8cc3-303a91fd9ce3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -18,37 +27,43 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\WelcomeScene.cpp">
+    <ClCompile Include="..\Classes\stdafx.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BallButton.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\UI\BallButton.cpp">
+      <Filter>src\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BaseScene.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\UI\BallSlider.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UI\TitleBar.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\BaseScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\MainGameAnim.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\MainGameScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\SettingsScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Element\MainBall.cpp">
+      <Filter>src\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Element\SmartString.cpp">
+      <Filter>src\Element</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\EnemyAI.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\EngineHelper.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MainBall.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MainGameAnim.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MainGameScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SettingsScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SmartString.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\stdafx.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,34 +74,37 @@
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\WelcomeScene.h">
+    <ClInclude Include="..\Classes\stdafx.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BallButton.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\UI\BallButton.h">
+      <Filter>src\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BaseScene.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\UI\BallSlider.h">
+      <Filter>src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UI\TitleBar.h">
+      <Filter>src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\BaseScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\MainGameScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\SettingsScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\WelcomeScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Element\MainBall.h">
+      <Filter>src\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Element\SmartString.h">
+      <Filter>src\Element</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\EngineHelper.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MainBall.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MainGameScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Palette.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SettingsScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SmartString.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\stdafx.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,15 +14,17 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/stdafx.cpp \
                    ../../Classes/AppDelegate.cpp \
                    ../../Classes/EngineHelper.cpp \
-                   ../../Classes/BaseScene.cpp \
-                   ../../Classes/WelcomeScene.cpp \
-                   ../../Classes/MainGameScene.cpp \
-                   ../../Classes/SettingsScene.cpp \
-                   ../../Classes/MainGameAnim.cpp \
-                   ../../Classes/BallButton.cpp \
-                   ../../Classes/MainBall.cpp \
                    ../../Classes/EnemyAI.cpp \
-                   ../../Classes/SmartString.cpp \
+                   ../../Classes/UI/TitleBar.cpp \
+                   ../../Classes/UI/BallButton.cpp \
+                   ../../Classes/UI/BallSlider.cpp \
+                   ../../Classes/Element/MainBall.cpp \
+                   ../../Classes/Element/SmartString.cpp \
+                   ../../Classes/Scene/BaseScene.cpp \
+                   ../../Classes/Scene/WelcomeScene.cpp \
+                   ../../Classes/Scene/MainGameScene.cpp \
+                   ../../Classes/Scene/MainGameAnim.cpp \
+                   ../../Classes/Scene/SettingsScene.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

@@ -30,6 +30,7 @@ bool BaseScene::init(int backgroundColor)
 
 bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
+	//cocos2d::MessageBox("clicked", "test");
 	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
 	{
 		if(it->onTouchBegan(touch, event)){

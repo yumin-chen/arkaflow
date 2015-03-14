@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "BallButton.h"
-#include "BaseScene.h"
+#include "Scene/BaseScene.h"
 
 #define NORMAL 0
 #define SELECTED 1
@@ -17,24 +17,23 @@ BallButton::~BallButton() {
 
 BallButton* BallButton::create(const int normalColor, const int selectedColor, const cocos2d::ccMenuCallback& callback)
 {
-	BallButton* pSprite = new BallButton();
-
-	if (pSprite->initWithFile("ball.png"))
-	{
-		pSprite->autorelease();
-		pSprite->normalColor = normalColor;
-		pSprite->selectedColor = selectedColor;
-		pSprite->m_callback = callback;
-		pSprite->setColor(cocos2d::C3B(pSprite->normalColor));
-		pSprite->state = NORMAL;
+	BallButton *btn = new (std::nothrow) BallButton;
+    if (btn && btn->initWithFile("ui/ball.png"))//btn->init("ball.png", "", "", TextureResType::LOCAL))
+    {
+        btn->autorelease();
+		btn->normalColor = normalColor;
+		btn->selectedColor = selectedColor;
+		btn->m_callback = callback;
+		btn->setColor(cocos2d::C3B(btn->normalColor));
+		btn->m_isEnabled = true;
+		btn->state = NORMAL;
 		if(selectedColor != 0 || callback != nullptr){
-			pSprite->addEvents();
+			btn->addEvents();
 		}
-		return pSprite;
-	}
-
-	CC_SAFE_DELETE(pSprite);
-	return NULL;
+        return btn;
+    }
+    CC_SAFE_DELETE(btn);
+    return nullptr;
 }
 
 
@@ -65,11 +64,24 @@ void BallButton::setVisible(bool visibility){
 
 bool BallButton::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {
+
+	//cocos2d::MessageBox((stdp::to_string(this->getTag())).c_str(), "tag");
+
 	if(!m_isEnabled){
 		return false;
 	}
 	cocos2d::Vec2 p = touch->getLocation() / E::scale;
 	cocos2d::Rect rect = this->getBoundingBox();
+
+
+	/*
+	if(this->getTag() == 2100){
+		cocos2d::MessageBox((stdp::to_string(p.x) +", " + stdp::to_string(p.y) + "|" 
+			+ stdp::to_string(rect.origin.x) + ", " + stdp::to_string(rect.origin.y)  + ", " +
+			stdp::to_string(rect.size.width) + ", " + stdp::to_string(rect.size.height) + "|" 
+			+ stdp::to_string(rect.containsPoint(p)) ).c_str() , "TEST");
+	}
+	*/
 
 	if(rect.containsPoint(p) && this->state == NORMAL)
 	{

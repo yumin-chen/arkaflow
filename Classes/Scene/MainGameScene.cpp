@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MainGameScene.h"
-#include "BallButton.h"
+#include "UI/BallButton.h"
 
 USING_NS_CC;
 
@@ -110,7 +110,7 @@ void S_MainGame::restartGame(){
 	m_score = 0;
 	m_wheel->speed = 0;
 	m_wheel->rotate = 0;//60*PI/180.0;
-	m_wheel->angle = 180*PI/180.0;
+	m_wheel->angle = 180*PI/180.0f;
 	m_wheel->rotatedAngle = m_wheel->angle;
 	m_wheel->setPosition(E::visibleWidth/2, E::visibleHeight*0.15f);
 	m_scoreLabel->setString(stdp::to_string(m_score));

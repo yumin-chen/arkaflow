@@ -2,7 +2,7 @@
 #include "WelcomeScene.h"
 #include "MainGameScene.h"
 #include "SettingsScene.h"
-#include "BallButton.h"
+#include "UI/BallButton.h"
 
 USING_NS_CC;
 
@@ -37,7 +37,7 @@ bool S_Welcome::init()
 	// create solid color background
 	auto bg = BallButton::create(E::C50);
 	bg->setScale(0.3f);
-	bg->setPosition(E::visibleWidth/2, 128);
+	bg->setPosition(Vec2(E::visibleWidth/2, 128));
 	bg->setTag(TAG_BACKGROUND);
 	// add the wheel to the layer
 	this->addChild(bg, 0);
@@ -46,7 +46,7 @@ bool S_Welcome::init()
 
 	auto newGameBg = BallButton::create(E::C700);
 	newGameBg->setScale(0.2f);
-	newGameBg->setPosition(E::visibleWidth/2 -(newGameBg->getContentSize().width*0.5f + 24)/2, 32);
+	newGameBg->setPosition(Vec2(E::visibleWidth/2 -(newGameBg->getContentSize().width*0.5f + 24)/2, 32));
 	newGameBg->setTag(TAG_NEW_GAME_BG);
 	this->addChild(newGameBg, 0);
 
@@ -57,7 +57,7 @@ bool S_Welcome::init()
 
 	auto settingsBg = BallButton::create(E::C700);
 	settingsBg->setScale(0.2f);
-	settingsBg->setPosition(E::visibleWidth/2 +(settingsBg->getContentSize().width*0.5f + 24)/2, 32);
+	settingsBg->setPosition(Vec2(E::visibleWidth/2 +(settingsBg->getContentSize().width*0.5f + 24)/2, 32));
 	settingsBg->setTag(TAG_SETTINGS_BG);
 	this->addChild(settingsBg, 0);
 

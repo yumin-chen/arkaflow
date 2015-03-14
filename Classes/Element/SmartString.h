@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 #include "MainBall.h"
-using namespace cocos2d;
 
 #define SS_SPEEDRATIO 4
 #define SS_ANI_MOVING 20.0f
@@ -15,10 +14,10 @@ class SmartString : public cocos2d::Sprite
         static SmartString* create();
 		void go();
 		void _update();
-		virtual void setPosition(const Vec2& pos);
+		virtual void setPosition(const cocos2d::Vec2& pos);
 		virtual void setPositionY(float y);
-		void setStartingPoint(const Vec2& p);
-		void setEndingPoint(const Vec2& p);
+		void setStartingPoint(const cocos2d::Vec2& p);
+		void setEndingPoint(const cocos2d::Vec2& p);
 		void setWidth(int w);
 		void setColors(int color);
 		void setOpacity(GLubyte opacity);
@@ -27,7 +26,7 @@ class SmartString : public cocos2d::Sprite
 		float getSpeed();
 		float getWidth();
 		bool isEnemy;
-		Vec2 m_startingPoint;
+		cocos2d::Vec2 m_startingPoint;
 		int checkCollision(MainBall *wheel);
 
     private:

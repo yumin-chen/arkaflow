@@ -1,10 +1,9 @@
 #ifndef __MAIN_GAME_SCENE_H__
 #define __MAIN_GAME_SCENE_H__
 
-#include "BaseScene.h"
-#include "SmartString.h"
-#include "MainBall.h"
-
+#include "scene/BaseScene.h"
+#include "element/SmartString.h"
+#include "element/MainBall.h"
 
 class S_MainGame : public BaseScene
 {
@@ -17,11 +16,11 @@ public:
 
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
 
-	bool onTouchBegan(Touch* touch, Event* event);
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 
-	void onTouchMoved(Touch* touch, Event* event);
+	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 
-	void onTouchEnded(Touch* touch, Event* event);
+	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
 	void menuCallback(cocos2d::Ref* pSender);
 

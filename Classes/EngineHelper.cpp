@@ -13,6 +13,7 @@ float E::visibleWidth;
 float E::visibleHeight;
 float E::originX;
 float E::originY;
+int E::language = 0;
 
 struct sys_settings	E::settings;
 
@@ -40,7 +41,7 @@ void E::playEffect(const char* pszFilePath){
 void E::playBgMusic(){
 	std::ostringstream os;
 	os << "audio/bgmusic" << 1 + rand() % 2 << AEX;
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(os.str().c_str());
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(os.str().c_str(), true);
 }
 
 
@@ -368,5 +369,3 @@ void E::setRandomColor(cocos2d::Node *n){
 	}
 
 }
-
-

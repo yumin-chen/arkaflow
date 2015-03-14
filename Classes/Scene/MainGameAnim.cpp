@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WelcomeScene.h"
 #include "MainGameScene.h"
-#include "BallButton.h"
+#include "UI/BallButton.h"
 
 using namespace cocos2d;
 
@@ -27,7 +27,7 @@ void S_MainGame::initAnim(){
 	// create solid color background
 	auto bg = BallButton::create(E::C50);
 	bg->setScale(0.3f);
-	bg->setPosition(E::visibleWidth/2, 0);
+	bg->setPosition(Vec2(E::visibleWidth/2, 0));
 	bg->setTag(TAG_BTM_BG);
 	// add the wheel to the layer
 	this->addChild(bg, 15);
@@ -47,7 +47,7 @@ void S_MainGame::initAnim(){
 
 	auto pauseButton = BallButton::create(E::C700, E::C200, CC_CALLBACK_1(S_MainGame::menuCallback, this));
 	pauseButton->setScale(0.15f);
-	pauseButton->setPosition(E::visibleWidth - 48, E::visibleHeight - 48);
+	pauseButton->setPosition(Vec2(E::visibleWidth - 48, E::visibleHeight - 48));
 	pauseButton->setTag(TAG_PAUSE);
 	this->addChild(pauseButton, 1000);
 
@@ -60,7 +60,7 @@ void S_MainGame::initAnim(){
 
 	auto silentButton = BallButton::create(E::C700, E::C200);
 	silentButton->setScale(0.15f);
-	silentButton->setPosition(E::visibleWidth - 128, E::visibleHeight - 48);
+	silentButton->setPosition(Vec2(E::visibleWidth - 128, E::visibleHeight - 48));
 	silentButton->setTag(TAG_SILENT);
 	this->addChild(silentButton, 1000);
 
@@ -73,7 +73,7 @@ void S_MainGame::initAnim(){
 
 	auto scoreBg = BallButton::create(E::C700);
 	scoreBg->setScale(0.15f);
-	scoreBg->setPosition(48, E::visibleHeight - 48);
+	scoreBg->setPosition(Vec2(48, E::visibleHeight - 48));
 	scoreBg->setTag(TAG_SCORE);
 	this->addChild(scoreBg, 1000);
 
@@ -82,7 +82,7 @@ void S_MainGame::initAnim(){
 		Size(196, scoreBg->getBoundingBox().size.height), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_scoreLabel->setPosition(96, E::visibleHeight - 48);
 	m_scoreLabel->setAnchorPoint(Vec2(0, 0.5));
-	m_scoreLabel->enableOutline(C4B(E::C900), 1);
+	//m_scoreLabel->enableOutline(C4B(E::C900), 1);
 	//m_scoreLabel->enableShadow(C4B_(E::C900, 128),Size(1, -1),0);
 	m_scoreLabel->setColor(C3B(E::C700));
 	this->addChild(m_scoreLabel, 1000);
@@ -109,7 +109,7 @@ void S_MainGame::initAnim(){
 	auto bgGameOver = BallButton::create(E::C700);
 	bgGameOver->setTag(TAG_GAMEOVER_BG);
 	bgGameOver->setScale(0.3f);
-	bgGameOver->setPosition(E::visibleWidth/2, 0);
+	bgGameOver->setPosition(Vec2(E::visibleWidth/2, 0));
 	bgGameOver->setVisible(false);
 	this->addChild(bgGameOver, 1000);
 
@@ -117,7 +117,7 @@ void S_MainGame::initAnim(){
 	auto gameOverIcon = Sprite::create("gameover.png");
 	gameOverIcon->setScale(0.5f);
 	gameOverIcon->setTag(TAG_GAMEOVER_IC);
-	gameOverIcon->setPosition(E::visibleWidth/2, E::visibleHeight/2);
+	gameOverIcon->setPosition(Vec2(E::visibleWidth/2, E::visibleHeight/2));
 	gameOverIcon->setVisible(false);
 	gameOverIcon->setOpacity(0);
 	this->addChild(gameOverIcon, 1000);
@@ -126,7 +126,7 @@ void S_MainGame::initAnim(){
 	auto bgRestart = BallButton::create(E::C400, E::C200, CC_CALLBACK_1(S_MainGame::menuCallback, this));
 	bgRestart->setTag(TAG_RESTART_BG);
 	bgRestart->setScale(0.2f);
-	bgRestart->setPosition(E::visibleWidth*0.3f, 0);
+	bgRestart->setPosition(Vec2(E::visibleWidth*0.3f, 0));
 	bgRestart->setVisible(false);
 	this->addChild(bgRestart, 1000);
 
@@ -143,7 +143,7 @@ void S_MainGame::initAnim(){
 	auto bgReturn = BallButton::create(E::C400, E::C200, CC_CALLBACK_1(S_MainGame::menuCallback, this));
 	bgReturn->setTag(TAG_RETURN_BG);
 	bgReturn->setScale(0.2f);
-	bgReturn->setPosition(E::visibleWidth*0.7f, 0);
+	bgReturn->setPosition(Vec2(E::visibleWidth*0.7f, 0));
 	bgReturn->setVisible(false);
 	this->addChild(bgReturn, 1000);
 
@@ -151,7 +151,7 @@ void S_MainGame::initAnim(){
 	auto returnIcon = Sprite::create("b_leave.png");
 	returnIcon->setScale(0.6f);
 	returnIcon->setTag(TAG_RETURN_IC);
-	returnIcon->setPosition(E::visibleWidth*0.7f, E::visibleHeight*0.3f);
+	returnIcon->setPosition(Vec2(E::visibleWidth*0.7f, E::visibleHeight*0.3f));
 	returnIcon->setVisible(false);
 	returnIcon->setOpacity(0);
 	this->addChild(returnIcon, 1000);
@@ -163,7 +163,7 @@ void S_MainGame::initAnim(){
 	StsBg->setScale(0.3f);
 	StsBg->setColor(bgBtm->getColor());
 	StsBg->setTag(TAG_STS_BG);
-	StsBg->setPosition(E::visibleWidth/2, E::visibleHeight*STS_POS);
+	StsBg->setPosition(Vec2(E::visibleWidth/2, E::visibleHeight*STS_POS));
 	this->addChild(StsBg, 5);
 
 	// 
@@ -172,7 +172,7 @@ void S_MainGame::initAnim(){
 	StsShine->setColor(C3B(E::C800));
 	StsShine->setTag(TAG_STS_SHINE);
 	StsShine->setAnchorPoint(Vec2(0, 0.5));
-	StsShine->setPosition(E::visibleWidth/2 - StsBg->getBoundingBox().size.width / 2, E::visibleHeight*STS_POS);
+	StsShine->setPosition(Vec2(E::visibleWidth/2 - StsBg->getBoundingBox().size.width / 2, E::visibleHeight*STS_POS));
 	this->addChild(StsShine, 4);
 
 	//
@@ -180,7 +180,7 @@ void S_MainGame::initAnim(){
 	Sts->setTag(TAG_STS);
 	Sts->setAnchorPoint(Vec2(0.5, 0.5));
 	Sts->setContentSize(Size(StsBg->getBoundingBox().size.width, StsBg->getBoundingBox().size.height));
-	Sts->setPosition(E::visibleWidth/2 - StsBg->getBoundingBox().size.width/2, E::visibleHeight*STS_POS - StsBg->getBoundingBox().size.height/2);
+	Sts->setPosition(Vec2(E::visibleWidth/2 - StsBg->getBoundingBox().size.width/2, E::visibleHeight*STS_POS - StsBg->getBoundingBox().size.height/2));
 	this->addChild(Sts, 4);
 
 }

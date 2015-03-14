@@ -1,6 +1,7 @@
 #include "stdafx.h"
-#include "MainGameScene.h"
+#include "Scene/MainGameScene.h"
 
+USING_NS_CC;
 
 #define ANI_STRINGING 15.0f
 
