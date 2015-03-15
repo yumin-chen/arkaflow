@@ -5,6 +5,9 @@
 #include "element/SmartString.h"
 #include "element/MainBall.h"
 
+#define MAIN_BALL_DIAMETER 192*0.2
+#define MAIN_BALL_RADIUS (MAIN_BALL_DIAMETER/2)
+
 class S_MainGame : public BaseScene
 {
 public:
@@ -48,6 +51,7 @@ private:
 	bool m_isGameOver;
 	bool m_isRestarting;
 	bool m_bGuide;
+	bool m_bPaused;
 
 	
 

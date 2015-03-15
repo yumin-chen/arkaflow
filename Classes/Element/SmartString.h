@@ -32,6 +32,9 @@ class SmartString : public cocos2d::Sprite
     private:
 		cocos2d::Sprite* m_middle;
 		cocos2d::Sprite* m_right;
+		cocos2d::Sprite* m_leftInner;
+		cocos2d::Sprite* m_middleInner;
+		cocos2d::Sprite* m_rightInner;
 		void initOpt();
 		void _updatePosition();
 		bool m_isGoing;

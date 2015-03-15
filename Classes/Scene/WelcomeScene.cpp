@@ -6,13 +6,14 @@
 
 USING_NS_CC;
 
+
 #define TAG_NEW_GAME		25
 #define	TAG_SETTINGS		31
+/*
 #define TAG_BACKGROUND		27
 #define TAG_NEW_GAME_BG		28
 #define	TAG_SETTINGS_BG		32
-#define	TAG_MENU			29
-#define TAG_TITLE			30
+*/
 
 Scene* S_Welcome::createScene()
 {
@@ -26,68 +27,53 @@ Scene* S_Welcome::createScene()
 bool S_Welcome::init()
 {
 	// super init 
-	if ( !BaseScene::init((E::C100)))
+	if ( !BaseScene::init((E::P.C50)))
 	{
 		return false;
 	}
-
-	m_tick = 0;
 	m_bClose = 0;
 
 	// create solid color background
-	auto bg = BallButton::create(E::C50);
-	bg->setScale(0.3f);
-	bg->setPosition(Vec2(E::visibleWidth/2, 128));
-	bg->setTag(TAG_BACKGROUND);
-	// add the wheel to the layer
-	this->addChild(bg, 0);
+	m_bg = BallButton::create(E::P.C100);
+	m_bg->setScale(0.3f);
+	m_bg->setPosition(Vec2(E::visibleWidth/2, 96));
+	//bg->setTag(TAG_BACKGROUND);
+	this->addChild(m_bg, 0);
 
-	
 
-	auto newGameBg = BallButton::create(E::C700);
-	newGameBg->setScale(0.2f);
-	newGameBg->setPosition(Vec2(E::visibleWidth/2 -(newGameBg->getContentSize().width*0.5f + 24)/2, 32));
-	newGameBg->setTag(TAG_NEW_GAME_BG);
-	this->addChild(newGameBg, 0);
+	m_newGameBg = BallButton::create(E::P.C700);
+	m_newGameBg->setScale(0.2f);
+	m_newGameBg->setPosition(Vec2(E::visibleWidth/2 -(m_newGameBg->getContentSize().width*0.5f + 24)/2, 0));
+	//newGameBg->setTag(TAG_NEW_GAME_BG);
+	this->addChild(m_newGameBg, 0);
 
 	auto sNewIcon = Sprite::create("b_newgame.png");
-	sNewIcon->setColor(C3B(E::C50));
+	sNewIcon->setColor(C3B(E::P.C50));
 	sNewIcon->setAnchorPoint(Vec2(0, 0));
 	//newGameBg->addChild(sNewIcon);
 
-	auto settingsBg = BallButton::create(E::C700);
-	settingsBg->setScale(0.2f);
-	settingsBg->setPosition(Vec2(E::visibleWidth/2 +(settingsBg->getContentSize().width*0.5f + 24)/2, 32));
-	settingsBg->setTag(TAG_SETTINGS_BG);
-	this->addChild(settingsBg, 0);
+	m_settingsBg = BallButton::create(E::P.C700);
+	m_settingsBg->setScale(0.2f);
+	m_settingsBg->setPosition(Vec2(E::visibleWidth/2 +(m_settingsBg->getContentSize().width*0.5f + 24)/2, 0));
+	//settingsBg->setTag(TAG_SETTINGS_BG);
+	this->addChild(m_settingsBg, 0);
 
 	auto sSettingsIcon = Sprite::create("b_settings.png");
-	sSettingsIcon->setColor(C3B(E::C50));
+	sSettingsIcon->setColor(C3B(E::P.C50));
 	sSettingsIcon->setAnchorPoint(Vec2(0, 0));
 	//settingsBg->addChild(sSettingsIcon);
 
 	// create title sprite
-	auto title = Sprite::create("title.png");
+	m_title = Sprite::create("title.png");
 	// position the sprite on the center of the screen
-	title->setPosition(Vec2(E::visibleWidth/2 + 206/4, E::visibleHeight/2 + 96 - 234/4));
-	title->setScale(0.6f);
-	title->setTag(TAG_TITLE);
-	title->setOpacity(0);
-	this->addChild(title, 0);
-
-	
-
-	auto sNewNormal = BallButton::create(E::C700);
-
-	auto sNewSelected = BallButton::create(E::C200);
-
-	auto sSettingsNormal = BallButton::create(E::C700);
-
-	auto sSettingsSelected = BallButton::create(E::C200);
+	m_title->setPosition(Vec2(E::visibleWidth/2 + 206/4, E::visibleHeight/2 + 96 - 234/4));
+	m_title->setScale(0.6f);
+	m_title->setOpacity(0);
+	this->addChild(m_title, 0);
 
 	auto newGame = MenuItemSprite::create(
-		sNewNormal,
-		sNewSelected,
+		BallButton::create(E::P.C700),
+		BallButton::create(E::P2.C500),
 		CC_CALLBACK_1(S_Welcome::menuCallback, this));
 
 	newGame->setScale(0.5f);
@@ -95,8 +81,8 @@ bool S_Welcome::init()
 	newGame->addChild(sNewIcon);
 
 	auto settings = MenuItemSprite::create(
-		sSettingsNormal,
-		sSettingsSelected,
+		BallButton::create(E::P.C700),
+		BallButton::create(E::P2.C500),
 		CC_CALLBACK_1(S_Welcome::menuCallback, this));
 
 	settings->setScale(0.5f);
@@ -104,45 +90,26 @@ bool S_Welcome::init()
 	settings->addChild(sSettingsIcon);
 
 	// create menu
-	auto menu = Menu::create(newGame, settings, NULL);
-	menu->setPosition(Vec2::ZERO);
-	menu->setPosition(Vec2(E::visibleWidth/2, 32 + 128));
-	menu->alignItemsHorizontallyWithPadding(24);
-	menu->setTag(TAG_MENU);
-	menu->setOpacity(0);
-	menu->setVisible(false);
-	this->addChild(menu, 1);
+	m_menu = Menu::create(newGame, settings, NULL);
+	m_menu->setPosition(Vec2::ZERO);
+	m_menu->setPosition(Vec2(E::visibleWidth/2, 32 + 128));
+	m_menu->alignItemsHorizontallyWithPadding(24);
+	m_menu->setOpacity(0);
+	m_menu->setEnabled(false);
+	this->addChild(m_menu, 1);
 
-	// set up the scheduled callbacks
-	this->scheduleUpdate();
+	// animations
+	runAnimations(false);
 
 	return true;
 }
 
-
-#define ANIMATION_MOVING_DURATION		15.0f
-#define ANIMATION_SCALING_DURATION_1	45.0f
-#define ANIMATION_SCALING_DURATION_2	15.0f
-#define ANIMATION_OPACITING_DURATION	15.0f
-#define ANIMATION_OPAC_BACK_DURATION	15.0f
-
-void S_Welcome::update( float dt ) 
-{
-	if(m_bClose){
-		m_tick = m_tick - 2;
-	}
-	else{
-		m_tick ++;
-	}
-
-	if(m_tick < 0 && m_tick >= -ANIMATION_OPAC_BACK_DURATION){
-		this->getChildByTag(TAG_NEW_GAME_BG)->setOpacity(255-(m_tick/(-ANIMATION_OPAC_BACK_DURATION))*255.0f);
-		this->getChildByTag(TAG_SETTINGS_BG)->setOpacity(255-(m_tick/(-ANIMATION_OPAC_BACK_DURATION))*255.0f);
-	}
-	
-	if(m_tick < -ANIMATION_OPAC_BACK_DURATION){
+void S_Welcome::runAnimations(bool isReversed){
+	auto cbScene = CallFunc::create([this](){
+		if(m_bClose == 0){
+			return;
+		}
 		Scene *scene;
-		//m_tick = -ANIMATION_OPAC_BACK_DURATION;
 		switch(m_bClose){
 		case TAG_NEW_GAME:
 			scene = S_MainGame::createScene();
@@ -151,66 +118,32 @@ void S_Welcome::update( float dt )
 			scene = S_Settings::createScene();
 			break;
 		}
-
 		Director::getInstance()->replaceScene(scene);//TransitionFadeDown::create(0.5, scene));
+		m_bClose = 0;
 		return;
-	}
+	});
+	auto moveBy = MoveBy::create(0.3f , Vec2(0, 128 + 32));
+	auto scaleBy = ScaleBy::create(0.3f, 0.5f/0.2f);
+	auto fadeOut = FadeOut::create(0.3f);
+	auto delay = DelayTime::create(0.2f);
+	auto seq = Sequence::create(cbScene, moveBy, scaleBy, fadeOut, delay, nullptr);
+	m_newGameBg->runAction(isReversed? seq->reverse(): seq);
+	m_settingsBg->runAction(isReversed? seq->reverse(): seq->clone());
+	
+	Sequence* seqMenu;
+	if(isReversed){auto cbMenu = CallFunc::create([this](){m_menu->setEnabled(false);});
+	seqMenu = Sequence::create(delay->clone(), cbMenu, FadeOut::create(0.3f), nullptr);}
+	else{auto menuDelay = DelayTime::create(0.6f);
+	auto cbMenu = CallFunc::create([this](){m_menu->setEnabled(true);});
+	seqMenu = Sequence::create(menuDelay, FadeIn::create(0.3f), cbMenu, nullptr);}
+	m_menu->runAction(seqMenu);
 
-	if(m_tick <= ANIMATION_MOVING_DURATION){
-		this->getChildByTag(TAG_BACKGROUND)->setPositionY(128+(m_tick/(ANIMATION_MOVING_DURATION))*128.0f);
-		this->getChildByTag(TAG_NEW_GAME_BG)->setPositionY(32+(m_tick/(ANIMATION_MOVING_DURATION))*128.0f);
-		this->getChildByTag(TAG_SETTINGS_BG)->setPositionY(32+(m_tick/(ANIMATION_MOVING_DURATION))*128.0f);
-	}
-	if(m_tick >= ANIMATION_MOVING_DURATION && m_tick <= ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_1){
-		this->getChildByTag(TAG_BACKGROUND)->setPositionY(256+((m_tick-ANIMATION_MOVING_DURATION)/(ANIMATION_SCALING_DURATION_1))*128.0f);
-		this->getChildByTag(TAG_BACKGROUND)->setScale(0.3f + ((m_tick-ANIMATION_MOVING_DURATION)/(ANIMATION_SCALING_DURATION_1))*5.0f);
-	}
-	if(m_tick >= ANIMATION_MOVING_DURATION && m_tick <= ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_2){
-		this->getChildByTag(TAG_MENU)->setVisible(false);
-		this->getChildByTag(TAG_NEW_GAME_BG)->setOpacity(255);
-		this->getChildByTag(TAG_SETTINGS_BG)->setOpacity(255);
-		this->getChildByTag(TAG_MENU)->setOpacity(0);
-		this->getChildByTag(TAG_TITLE)->setOpacity(0);
-		this->getChildByTag(TAG_NEW_GAME_BG)->setScale(0.2f + ((m_tick-ANIMATION_MOVING_DURATION)/(ANIMATION_SCALING_DURATION_2))*0.3f);
-		this->getChildByTag(TAG_SETTINGS_BG)->setScale(0.2f + ((m_tick-ANIMATION_MOVING_DURATION)/(ANIMATION_SCALING_DURATION_2))*0.3f);
-	}
-
-	if(m_tick >= ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_2 
-		&& m_tick <= ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_2 + ANIMATION_OPACITING_DURATION){
-			this->getChildByTag(TAG_MENU)->setVisible(true);
-			this->getChildByTag(TAG_NEW_GAME_BG)->setOpacity(255 - ((m_tick-ANIMATION_MOVING_DURATION - ANIMATION_SCALING_DURATION_2)/(ANIMATION_OPACITING_DURATION))*128.0f);
-			this->getChildByTag(TAG_SETTINGS_BG)->setOpacity(255 - ((m_tick-ANIMATION_MOVING_DURATION - ANIMATION_SCALING_DURATION_2)/(ANIMATION_OPACITING_DURATION))*128.0f);
-			this->getChildByTag(TAG_MENU)->setOpacity(((m_tick-ANIMATION_MOVING_DURATION - ANIMATION_SCALING_DURATION_2)/(ANIMATION_OPACITING_DURATION))*255.0f);
-			this->getChildByTag(TAG_TITLE)->setOpacity(((m_tick-ANIMATION_MOVING_DURATION - ANIMATION_SCALING_DURATION_2)/(ANIMATION_OPACITING_DURATION))*255.0f);
-	}
-
-	if(m_tick == ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_1){
-		this->getChildByTag(TAG_MENU)->setOpacity(255);
-		this->getChildByTag(TAG_TITLE)->setOpacity(255);
-		this->getChildByTag(TAG_MENU)->setVisible(true);
-	}
-
-
-	/*
-	if(m_tick == ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_1 + 100)
-	{
-		m_tick = 0;
-		this->getChildByTag(TAG_BACKGROUND)->setScale(0.3f);
-		this->getChildByTag(TAG_BACKGROUND)->setPosition(E::visibleWidth/2, 128);
-		this->getChildByTag(TAG_NEW_GAME_BG)->setScale(0.2f);
-		this->getChildByTag(TAG_NEW_GAME_BG)->setPositionY(32);
-		this->getChildByTag(TAG_NEW_GAME_BG)->setOpacity(255);
-		this->getChildByTag(TAG_SETTINGS_BG)->setScale(0.2f);
-		this->getChildByTag(TAG_SETTINGS_BG)->setPositionY(32);
-		this->getChildByTag(TAG_SETTINGS_BG)->setOpacity(255);
-		this->getChildByTag(TAG_MENU)->setOpacity(0);
-		this->getChildByTag(TAG_TITLE)->setOpacity(0);
-		this->getChildByTag(TAG_MENU)->setVisible(false);
-	}
-	*/
-
-
-
+	if(isReversed){m_title->runAction(FadeOut::create(0.4f));}
+	else{m_title->runAction(Sequence::create(DelayTime::create(0.6f), FadeIn::create(0.4f), nullptr));}
+	
+	auto bgScaleBy = ScaleBy::create(0.8f, 20.0f);
+	auto bgAnim = Sequence::create(moveBy->clone(), bgScaleBy, nullptr);
+	m_bg->runAction(isReversed? bgAnim->reverse(): bgAnim);
 }
 
 void S_Welcome::menuCallback(Ref* pSender)
@@ -219,27 +152,9 @@ void S_Welcome::menuCallback(Ref* pSender)
 	auto tag = pMenuItem->getTag();
 	if(m_bClose == 0){
 		m_bClose = tag;
-		((Menu *)this->getChildByTag(TAG_MENU))->setEnabled(false);
-		m_tick = ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_1;
-	}
-	/**
-	switch(tag)
-	{
-	case TAG_NEW_GAME:
-	{
-	m_bClose = tag;
-	m_tick = ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_1;
-	break;
-	}
 
-	case TAG_SETTINGS:
-	{
-	m_bClose = tag;
-	m_tick = ANIMATION_MOVING_DURATION + ANIMATION_SCALING_DURATION_1;
-	break;
+		runAnimations(true);
 	}
-	}
-	**/
 }
 
  void S_Welcome::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)

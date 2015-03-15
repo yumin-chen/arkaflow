@@ -17,9 +17,11 @@ bool S_MainGame::init()
 {
 	m_close = 0;
 	m_tick = 0;
+	m_bPaused = false;
+
 	// super init 
 
-	if ( !BaseScene::init(E::C100) )
+	if ( !BaseScene::init(E::P.C100) )
 	{
 		return false;
 	}
@@ -29,11 +31,20 @@ bool S_MainGame::init()
 	m_wheel = new MainBall;
 	m_wheel->isReal = true;
 	// create the spinning wheel
-	auto wheel = Sprite::create("wheel.png");
-	wheel->setColor(C3B(E::C900));
-	wheel->setScale(0.15f);
+	auto wheel_inner = Sprite::create("ball_inner.png");
+	wheel_inner->setPosition(256/2, 256/2);
+	wheel_inner->setTag(0);
+	wheel_inner->setColor(C3B(E::P.C800));
+	//wheel_inner->setScale(0.15f);
+
+	auto wheel = Sprite::create("ball_outer.png");
+	wheel->setColor(C3B(E::P.C400));
+	wheel->setScale(0.2f);
+	wheel->addChild(wheel_inner);
 	// add the wheel to the layer
 	this->addChild(wheel, 10);
+
+
 
 	m_wheel->sprite = wheel;
 
@@ -47,16 +58,21 @@ bool S_MainGame::init()
 	
 	restartGame();
 
+	// enable keypad
+	this->setKeypadEnabled(true);
 	// set up the scheduled callbacks
 	this->scheduleUpdate();
 
 	return true;
 }
 
-
-void S_MainGame::update( float dt )
+// the parameter dt stands for delta time, which is the time difference between the previous and the current frame.
+void S_MainGame::update( float dt ) 
 {
 	updateAnim();
+	if(!m_bPaused && !m_isGameOver){
+	auto o = m_wheel->sprite->getChildByTag(0);
+	o->setRotation(o->getRotation() + dt * 360);
 
 	m_smartstring->_update();
 	m_smartstring_enemy->_update();
@@ -64,6 +80,7 @@ void S_MainGame::update( float dt )
 	updateEnemyAI();
 
 	checkCollision(m_wheel);
+	}
 }
 
 void S_MainGame::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
@@ -72,7 +89,10 @@ void S_MainGame::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *e
 	if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE) {
 		pause();
 	}
-
+	
+	if (keyCode == EventKeyboard::KeyCode::KEY_G) {
+		m_bPaused = false;
+	}
 
 }
 
@@ -110,7 +130,7 @@ void S_MainGame::restartGame(){
 	m_score = 0;
 	m_wheel->speed = 0;
 	m_wheel->rotate = 0;//60*PI/180.0;
-	m_wheel->angle = 180*PI/180.0f;
+	m_wheel->angle = 180.0*PI/180.0f;
 	m_wheel->rotatedAngle = m_wheel->angle;
 	m_wheel->setPosition(E::visibleWidth/2, E::visibleHeight*0.15f);
 	m_scoreLabel->setString(stdp::to_string(m_score));

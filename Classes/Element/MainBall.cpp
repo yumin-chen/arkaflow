@@ -27,5 +27,5 @@ void MainBall::setPositionY(float y) {
 }
 
 float MainBall::getRadius(){
-	return sprite->getContentSize().width * sprite->getScale() /2;
+	return sprite->getContentSize().width * sprite->getScale() /2 * 0.75f;
 }

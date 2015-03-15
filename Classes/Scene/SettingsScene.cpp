@@ -7,23 +7,21 @@
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
-#define BTM_HEIGHT		128
+#define BTM_HEIGHT		(96+16)
 
 
-#define	TAG_BTM_BG		2000
-#define	TAG_SHADOW		2001
-#define	TAG_OK_BG		2002
-#define TAG_CC_BG		2003
-#define	TAG_OKCANCEL	2004
 #define	TAG_OK			2005
 #define TAG_CANCEL		2006
+/*
+#define	TAG_BTM_BG		2000
+#define	TAG_SHADOW		2001
 #define	TAG_BG_TOP		2007
 #define	TAG_OK_NORMAL	2008
 #define	TAG_OK_SELECTED	2009
 #define	TAG_CC_NORMAL	2010
 #define	TAG_CC_SELECTED	2011
+*/
 #define TAG_COLOR_MENU  2100
-#define	TAG_TITLE_BG	2200
 
 Scene* S_Settings::createScene()
 {
@@ -43,80 +41,72 @@ bool S_Settings::init()
 	m_tick = 0;
 	// super init 
 
-	if ( !BaseScene::init((E::C100)) )
+	if ( !BaseScene::init((E::P.C50)) )
 	{
 		return false;
 	}
 
-	// create solid color background
-	auto bg = BallButton::create(E::C50);
-	bg->setScale(0.3f);
-	bg->setPosition(Vec2(E::visibleWidth/2, 128+(-9/15.0f)*128));
-	bg->setTag(TAG_BTM_BG);
-	this->addChild(bg, 0);
+	m_titleBar = TitleBar::create(S("Settings", "游戏设置"));
+	this->addChild(m_titleBar, 1000);
 
 	// create solid color background
-	auto bgTop = LayerColor::create(C4B(E::C100));
-	bgTop->setTag(TAG_BG_TOP);
-	bgTop->setContentSize(Size(E::visibleWidth, E::visibleHeight - BTM_HEIGHT));
-	bgTop->setPosition(0, BTM_HEIGHT);
-	this->addChild(bgTop, 0);
+	m_btmBg = BallButton::create(E::P.C100);
+	m_btmBg->setScale(0.3f);
+	m_btmBg->setPosition(Vec2(E::visibleWidth/2, 128+(-9/15.0f)*128));
+//	m_btmBg->setTag(TAG_BTM_BG);
+	this->addChild(m_btmBg, 0);
 
 	// create solid color background
-	auto bgTitleBar = TitleBar::create(S("Settings", "游戏设置"));
-	bgTitleBar->setTag(TAG_TITLE_BG);
-	this->addChild(bgTitleBar, 0);
+	m_bgTop = LayerColor::create(C4B(E::P.C50));
+//	m_bgTop->setTag(TAG_BG_TOP);
+	m_bgTop->setContentSize(Size(E::visibleWidth, E::visibleHeight - BTM_HEIGHT));
+	m_bgTop->setPosition(0, BTM_HEIGHT);
+	this->addChild(m_bgTop, 0);
 
 	// create the shadow
-	auto shadow = Sprite::create("shadow.png");
-	shadow->setScale(1.0f);
-	shadow->setAnchorPoint(Vec2(0, 1));
-	shadow->setScaleX(E::visibleWidth / DESIGNED_WIDTH);
-	shadow->setPosition(0, BTM_HEIGHT);
-	shadow->setTag(TAG_SHADOW);
-	shadow->setOpacity(0);
-	this->addChild(shadow, 0);
+	m_shadow = Sprite::create("shadow.png");
+	m_shadow->setScale(1.0f);
+	m_shadow->setAnchorPoint(Vec2(0, 1));
+	m_shadow->setScaleX(E::visibleWidth / DESIGNED_WIDTH);
+	m_shadow->setPosition(0, BTM_HEIGHT);
+//	m_shadow->setTag(TAG_SHADOW);
+	m_shadow->setOpacity(0);
+	this->addChild(m_shadow, 0);
 
-
-
-
-	auto okBtnBg = BallButton::create(E::C700);
-	okBtnBg->setScale(0.2f);
-	okBtnBg->setPosition(Vec2(E::visibleWidth/2 -(okBtnBg->getContentSize().width*0.4f + 24)/2, 32-48));
-	okBtnBg->setTag(TAG_OK_BG);
-	this->addChild(okBtnBg, 0);
+	m_okBtnBg = BallButton::create(E::P.C700);
+	m_okBtnBg->setScale(0.2f);
+	m_okBtnBg->setPosition(Vec2(E::visibleWidth/2 -(m_okBtnBg->getContentSize().width*0.35f + 24)/2, -16));
+	this->addChild(m_okBtnBg, 0);
 
 	auto sOkIcon = Sprite::create("b_ok.png");
-	sOkIcon->setColor(C3B(E::C50));
+	sOkIcon->setColor(C3B(E::P.C50));
 	sOkIcon->setAnchorPoint(Vec2(0, 0));
 
-	auto cancelBg = BallButton::create(E::C700);
-	cancelBg->setScale(0.2f);
-	cancelBg->setPosition(Vec2(E::visibleWidth/2 +(cancelBg->getContentSize().width*0.4f + 24)/2, 32-48));
-	cancelBg->setTag(TAG_CC_BG);
-	this->addChild(cancelBg, 0);
+	m_cancelBg = BallButton::create(E::P.C700);
+	m_cancelBg->setScale(0.2f);
+	m_cancelBg->setPosition(Vec2(E::visibleWidth/2 +(m_cancelBg->getContentSize().width*0.35f + 24)/2, -16));
+	this->addChild(m_cancelBg, 0);
 
 	auto sCancelIcon = Sprite::create("b_cancel.png");
-	sCancelIcon->setColor(C3B(E::C50));
+	sCancelIcon->setColor(C3B(E::P.C50));
 	sCancelIcon->setAnchorPoint(Vec2(0, 0));
 
+	m_OkNormal = BallButton::create(E::P.C700);
 
-	m_OkNormal = BallButton::create(E::C700);
-
-	m_OkSelected = BallButton::create(E::C200);
+	m_OkSelected = BallButton::create(E::P2.C500);
 
 	auto OkItem = MenuItemSprite::create(
 		m_OkNormal,
 		m_OkSelected,
 		CC_CALLBACK_1(S_Settings::menuCallback, this));
 
-	OkItem->setScale(0.4f);
+	OkItem->setScale(0.35f);
 	OkItem->setTag(TAG_OK);
 	OkItem->addChild(sOkIcon);
 
-	m_CancelNormal = BallButton::create(E::C700);
+	m_CancelNormal = BallButton::create(E::P.C700);
 
-	m_CancelSelected = BallButton::create(E::C200);
+	m_CancelSelected = BallButton::create(E::P2.C500);
 
 
 	auto cancelItem = MenuItemSprite::create(
@@ -124,65 +114,67 @@ bool S_Settings::init()
 		m_CancelSelected,
 		CC_CALLBACK_1(S_Settings::menuCallback, this));
 
-	cancelItem->setScale(0.4f);
+	cancelItem->setScale(0.35f);
 	cancelItem->setTag(TAG_CANCEL);
 	cancelItem->addChild(sCancelIcon);
 
 
 	// create menu
-	auto menu = Menu::create(OkItem, cancelItem, NULL);
-	menu->setPosition(Vec2(E::visibleWidth/2, 64));
-	menu->alignItemsHorizontallyWithPadding(24);
-	menu->setTag(TAG_OKCANCEL);
-	menu->setOpacity(0);
-	menu->setVisible(false);
-	this->addChild(menu, 1);
+	m_menu = Menu::create(OkItem, cancelItem, NULL);
+	m_menu->setPosition(Vec2(E::visibleWidth/2, 64 + 4 -16));
+	m_menu->alignItemsHorizontallyWithPadding(24);
+	m_menu->setEnabled(false);
+	m_menu->setOpacity(0);
+	this->addChild(m_menu, 1);
 
 
-	auto lbTheme = Label::createWithSystemFont(S("THEME", "配色方案"), FONT_BOLD, 24, 
+	m_lbTheme = Label::createWithSystemFont(S("THEME", "配色方案"), FONT_BOLD, 24, 
 				Size(128, 32), TextHAlignment::LEFT, TextVAlignment::CENTER);
-	lbTheme->setPosition(24, E::visibleHeight - 128);
-	lbTheme->setAnchorPoint(Vec2(0, 0));
-	lbTheme->setColor(C3B(E::C900));
-	this->addChild(lbTheme);
+	m_lbTheme->setPosition(24, E::visibleHeight - 128);
+	m_lbTheme->setAnchorPoint(Vec2(0, 0));
+	m_lbTheme->setColor(C3B(E::P.C900));
+	this->addChild(m_lbTheme);
 	
-#define MAX_PALETTE 16
+#define MAX_PALETTE 17
 #define PALETTE_ITEM_WIDTH (80 )//+ (E::visibleWidth - DESIGNED_WIDTH) * 0.1)
 	int NUM_OF_COLUMS = ((E::visibleWidth - 32) / PALETTE_ITEM_WIDTH);
 	BallButton* CPalette[MAX_PALETTE];
 	m_tempColorAccent = E::settings.colorAccent;
+	ColorPalette tempPalette;
 	for(int i = 0; i < MAX_PALETTE; i ++){
-		E::setColorAccent(i);
-		CPalette[i] = BallButton::create(E::C500, E::C200, CC_CALLBACK_1(S_Settings::menuCallback, this));
+		E::getColorPaletteFromID(tempPalette, i == 16? m_tempColorAccent: i);
+		CPalette[i] = BallButton::create(i == 16? RGB(255, 255, 255): tempPalette.C500, tempPalette.C200, CC_CALLBACK_1(S_Settings::menuCallback, this));
 		CPalette[i]->setScale(0.3f);
 		CPalette[i]->setAnchorPoint(Vec2(0, 0));
 		CPalette[i]->setTag(TAG_COLOR_MENU+i);
+		if(i == 16){
+			CPalette[i]->setTexture("colorful.png");
+		}
 
 		CPalette[i]->setPosition(Vec2((E::visibleWidth - PALETTE_ITEM_WIDTH * NUM_OF_COLUMS) / 2  + PALETTE_ITEM_WIDTH * (i % NUM_OF_COLUMS), E::visibleHeight - 128 - 80 - (80) * (i / NUM_OF_COLUMS)));
 		this->addChild(CPalette[i]);
 	}
-	E::setColorAccent(m_tempColorAccent);
 
-	auto lbAudio = Label::createWithSystemFont(S("AUDIO", "音量调节"), FONT_BOLD, 24, 
+	m_lbAudio = Label::createWithSystemFont(S("AUDIO", "音量调节"), FONT_BOLD, 24, 
 				Size(128, 32), TextHAlignment::LEFT, TextVAlignment::CENTER);
-	lbAudio->setPosition(24, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64);
-	lbAudio->setAnchorPoint(Vec2(0, 0));
-	lbAudio->setColor(C3B(E::C900));
-	this->addChild(lbAudio);
+	m_lbAudio->setPosition(24, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64);
+	m_lbAudio->setAnchorPoint(Vec2(0, 0));
+	m_lbAudio->setColor(C3B(E::P.C900));
+	this->addChild(m_lbAudio);
 
-		auto lbMusicVolume = Label::createWithSystemFont(S("Music", "音乐"), FONT_MAIN, 24, 
+	m_lbMusicVolume = Label::createWithSystemFont(S("Music", "音乐"), FONT_MAIN, 24, 
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
-	lbMusicVolume->setPosition(E::originX + 96 + 12, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 32);
-	lbMusicVolume->setAnchorPoint(Vec2(0, 0));
-	lbMusicVolume->setColor(C3B(E::C900));
-	this->addChild(lbMusicVolume);
+	m_lbMusicVolume->setPosition(E::originX + 96 + 12, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 32);
+	m_lbMusicVolume->setAnchorPoint(Vec2(0, 0));
+	m_lbMusicVolume->setColor(C3B(E::P.C900));
+	this->addChild(m_lbMusicVolume);
 
-			auto lbSoundVolume = Label::createWithSystemFont(S("Sound", "音效"), FONT_MAIN, 24, 
+	m_lbSoundVolume = Label::createWithSystemFont(S("Sound", "音效"), FONT_MAIN, 24, 
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
-	lbSoundVolume->setPosition(E::originX + 96 + 12, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 80 - 32);
-	lbSoundVolume->setAnchorPoint(Vec2(0, 0));
-	lbSoundVolume->setColor(C3B(E::C900));
-	this->addChild(lbSoundVolume);
+	m_lbSoundVolume->setPosition(E::originX + 96 + 12, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 80 - 32);
+	m_lbSoundVolume->setAnchorPoint(Vec2(0, 0));
+	m_lbSoundVolume->setColor(C3B(E::P.C900));
+	this->addChild(m_lbSoundVolume);
 
 	auto spMusicIcon = Sprite::create("v_music.png");
 	spMusicIcon->setPosition(E::originX + 64, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40);
@@ -198,14 +190,14 @@ bool S_Settings::init()
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_lbMusicVolumeValue->setPosition(E::originX + 320+64+24, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 32);
 	m_lbMusicVolumeValue->setAnchorPoint(Vec2(0, 0));
-	m_lbMusicVolumeValue->setColor(C3B(E::C900));
+	m_lbMusicVolumeValue->setColor(C3B(E::P.C900));
 	this->addChild(m_lbMusicVolumeValue);
 
 	m_lbSoundVolumeValue = Label::createWithSystemFont(stdp::to_string(E::settings.soundVolume), FONT_MAIN, 24, 
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_lbSoundVolumeValue->setPosition(E::originX + 320+64+24, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 80 - 32);
 	m_lbSoundVolumeValue->setAnchorPoint(Vec2(0, 0));
-	m_lbSoundVolumeValue->setColor(C3B(E::C900));
+	m_lbSoundVolumeValue->setColor(C3B(E::P.C900));
 	this->addChild(m_lbSoundVolumeValue);
 
 	m_sliderMusic = BallSlider::create();
@@ -242,77 +234,44 @@ bool S_Settings::init()
 
 	this->addChild(m_sliderSound);
 
-
-	// set up the scheduled callbacks
-	this->scheduleUpdate();
+	runAnimations(false);
 
 	return true;
 }
 
-#define ANI_SCALING_BG	30.0f
-#define ANI_MOVING		15.0f
-#define ANI_SCALING		15.0f
-#define ANI_OPACITING	15.0f
-#define ANI_OPAC_BACK	2.0f
-void S_Settings::update( float dt )
-{
-	if(m_bClose){
-		m_tick = m_tick - 3;
-	}
-	else{
-		m_tick ++;
-	}
+void S_Settings::runAnimations(bool isReversed){
+	auto cbClose = CallFunc::create([this](){
+		if(m_bClose){
+			Director::getInstance()->replaceScene(S_Welcome::createScene());
+			m_bClose = false;
+		}
+	});
 
-	if(m_tick < -ANI_OPAC_BACK){
-		Director::getInstance()->replaceScene(S_Welcome::createScene());//TransitionFadeDown::create(0.5, scene));
-		return;
-	}
+	auto moveBy = MoveBy::create(0.2f , Vec2(0, 64 + 4));
+	auto scaleBy = ScaleBy::create(0.2f , 0.35f/0.2f);
+	auto fadeOut = FadeOut::create(0.2f);
+	auto seq = Sequence::create(cbClose, moveBy, scaleBy, fadeOut, nullptr);
+	m_okBtnBg->runAction(isReversed? seq->reverse(): seq);
+	m_cancelBg->runAction(isReversed? seq->reverse(): seq->clone());
 
-	if(m_tick <= ANI_SCALING_BG){
-		this->getChildByTag(TAG_BTM_BG)->setScale(1 + (m_tick/ANI_SCALING_BG)*3.0f);
-		this->getChildByTag(TAG_SHADOW)->setOpacity((m_tick/ANI_SCALING_BG)*255);
-	}
-	if(m_tick <= ANI_MOVING){
-		this->getChildByTag(TAG_OK_BG)->setPositionY(32-48+(m_tick/(ANI_MOVING))*(64+16));
-		this->getChildByTag(TAG_CC_BG)->setPositionY(32-48+(m_tick/(ANI_MOVING))*(64+16));
-	}
+	
+	auto menuDelay = DelayTime::create(0.4f);
+	auto cbMenuDisable = CallFunc::create([this](){m_menu->setEnabled(false);});
+	auto cbMenuEnable = CallFunc::create([this](){m_menu->setEnabled(true);});
+	Sequence* menuSeq;
+	if(isReversed){menuSeq = Sequence::create(cbMenuDisable, FadeOut::create(0.2f), nullptr);}
+	else{menuSeq = Sequence::create(menuDelay, FadeIn::create(0.2f), cbMenuEnable, nullptr);}
+	m_menu->runAction(menuSeq);
+	
+	if(isReversed){m_shadow->runAction(FadeOut::create(0.6f));}
+	else{m_shadow->runAction(FadeIn::create(0.6f));}
 
-	if(m_tick >= ANI_MOVING && m_tick <= ANI_MOVING + ANI_SCALING){
-		this->getChildByTag(TAG_OKCANCEL)->setVisible(false);
-		this->getChildByTag(TAG_OK_BG)->setOpacity(255);
-		this->getChildByTag(TAG_CC_BG)->setOpacity(255);
-		this->getChildByTag(TAG_OKCANCEL)->setOpacity(0);
-		this->getChildByTag(TAG_OK_BG)->setScale(0.2f + ((m_tick-ANI_MOVING)/(ANI_SCALING))*0.2f);
-		this->getChildByTag(TAG_CC_BG)->setScale(0.2f + ((m_tick-ANI_MOVING)/(ANI_SCALING))*0.2f);
-	}
+	auto btmScaleBy = ScaleBy::create(0.6f , 16.0f);
+	m_btmBg->runAction(isReversed? btmScaleBy->reverse(): btmScaleBy);
 
-	if(m_tick >= ANI_MOVING + ANI_SCALING 
-		&& m_tick <= ANI_MOVING + ANI_SCALING + ANI_OPACITING){
-			this->getChildByTag(TAG_OKCANCEL)->setVisible(true);
-			this->getChildByTag(TAG_OK_BG)->setOpacity(255 - ((m_tick-ANI_MOVING - ANI_SCALING)/(ANI_OPACITING))*128);
-			this->getChildByTag(TAG_CC_BG)->setOpacity(255 - ((m_tick-ANI_MOVING - ANI_SCALING)/(ANI_OPACITING))*128);
-			this->getChildByTag(TAG_OKCANCEL)->setOpacity(((m_tick-ANI_MOVING - ANI_SCALING)/(ANI_OPACITING))*255);
+	if(isReversed){
+		m_titleBar->fadeOut();
 	}
-	/*
-	if(m_tick == ANI_MOVING + 100)
-	{
-		this->getChildByTag(TAG_OK_BG)->setPositionY(32-48);
-		this->getChildByTag(TAG_CC_BG)->setPositionY(32-48);
-		this->getChildByTag(TAG_BTM_BG)->setScale(1);
-		this->getChildByTag(TAG_SHADOW)->setOpacity(0);
-		m_tick = 0;
-	}
-	*/
-	m_tick ++;
-}
-
-
-void S_Settings::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
-{
-	// Back button pressed
-	if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE) {
-	}
-
 
 }
 
@@ -320,19 +279,27 @@ void S_Settings::menuCallback(Ref* pSender)
 {
 	auto pMenuItem = (MenuItem*)pSender;
 	auto tag = pMenuItem->getTag();
-	if(tag >= TAG_COLOR_MENU && tag <= TAG_COLOR_MENU + 15){
+	if(tag >= TAG_COLOR_MENU && tag <= TAG_COLOR_MENU + 16){
 		m_tempColorAccent = tag - TAG_COLOR_MENU;
 		E::setColorAccent(m_tempColorAccent);
-		m_OkNormal->setColor(C3B(E::C700));
-		m_OkSelected->setColor(C3B(E::C200));
-		m_CancelNormal->setColor(C3B(E::C700));
-		m_CancelSelected->setColor(C3B(E::C200));
-		this->getChildByTag(TAG_OK_BG)->setColor(C3B(E::C700));
-		this->getChildByTag(TAG_CC_BG)->setColor(C3B(E::C700));
-		this->getChildByTag(TAG_BG_TOP)->setColor(C3B(E::C200));
-		this->getChildByTag(TAG_BTM_BG)->setColor(C3B(E::C50));
-		((TitleBar*)this->getChildByTag(TAG_TITLE_BG))->updateColors();
-		this->setColor(C3B(E::C200));
+		m_OkNormal->setColor(C3B(E::P.C700));
+		m_OkSelected->setColor(C3B(E::P2.C500));
+		m_CancelNormal->setColor(C3B(E::P.C700));
+		m_CancelSelected->setColor(C3B(E::P2.C500));
+		m_okBtnBg->setColor(C3B(E::P.C700));
+		m_cancelBg->setColor(C3B(E::P.C700));
+		m_bgTop->setColor(C3B(E::P.C50));
+		m_btmBg->setColor(C3B(E::P.C100));
+		m_lbTheme->setColor(C3B(E::P.C900));
+		m_lbAudio->setColor(C3B(E::P.C900));
+		m_lbMusicVolume->setColor(C3B(E::P.C900));
+		m_lbSoundVolume->setColor(C3B(E::P.C900));
+		m_lbMusicVolumeValue->setColor(C3B(E::P.C900));
+		m_lbSoundVolumeValue->setColor(C3B(E::P.C900));
+		m_titleBar->updateColors();
+		m_sliderMusic->updateColors();
+		m_sliderSound->updateColors();
+		this->setColor(C3B(E::P.C200));
 	}
 	switch(tag)
 	{
@@ -344,20 +311,36 @@ void S_Settings::menuCallback(Ref* pSender)
 			CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
 			CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
 			E::setColorAccent(E::settings.colorAccent);
-			m_bClose = true;
-			m_tick = ANI_MOVING + ANI_SCALING;
+			m_bClose = true;			
+			runAnimations(true);
+			//m_tick = ANI_MOVING + ANI_SCALING;
 			break;
 		}
 
 	case TAG_CANCEL:
 		{
-			E::setColorAccent(E::settings.colorAccent);
-			CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
-			CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
-			m_bClose = true;
-			m_tick = ANI_MOVING + ANI_SCALING;
+			_cancel();
 			break;
 		}
 	}
 
+}
+
+ void S_Settings::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
+{
+	// Back button pressed
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE) {
+		_cancel();
+	}
+
+
+}
+
+void S_Settings::_cancel(){
+			E::setColorAccent(E::settings.colorAccent);
+			CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
+			CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
+			m_bClose = true;
+			runAnimations(true);
+			//m_tick = ANI_MOVING + ANI_SCALING;
 }

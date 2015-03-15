@@ -34,18 +34,37 @@
 #define C_AMBER			13
 #define C_ORANGE		14
 #define C_DEEPORANGE	15
+#define C_RANDOM		16
 
 #define C4B(color) Color4B((color & 0xFF0000) >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF, 255)
 #define C4B_(color, alpha) Color4B((color & 0xFF0000) >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF, alpha)
 #define C4F(color) Color4F(((color & 0xFF0000) >> 16)/255.0f, ((color & 0x00FF00) >> 8)/255.0f, (color & 0x0000FF)/255.0f, 1.0f)
 #define C4F_(color, alpha) Color4F(((color & 0xFF0000) >> 16)/255.0f, ((color & 0x00FF00) >> 8)/255.0f, (color & 0x0000FF)/255.0f, alpha)
 #define C3B(color) Color3B((color & 0xFF0000) >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF)
+#define RGB(r,g,b) ((r|(g<<8)|(b<<16)))
 
 struct sys_settings{
 	int colorAccent;
 	int musicVolume;
 	int soundVolume;
 };
+
+typedef struct{
+	int C50;
+	int C100;
+	int C200;
+	int C300;
+	int C400;
+	int C500;
+	int C600;
+	int C700;
+	int C800;
+	int C900;
+	int A100;
+	int A200;
+	int A400;
+	int A700;
+} ColorPalette;
 
 class E
 {
@@ -66,20 +85,9 @@ public:
 
 	// For Color Palette
 	static void setColorAccent(int ID);
-	static int C50;
-	static int C100;
-	static int C200;
-	static int C300;
-	static int C400;
-	static int C500;
-	static int C600;
-	static int C700;
-	static int C800;
-	static int C900;
-	static int A100;
-	static int A200;
-	static int A400;
-	static int A700;
+	static void getColorPaletteFromID(ColorPalette&, int ID);
+	static ColorPalette P;
+	static ColorPalette P2;
 };
 
 

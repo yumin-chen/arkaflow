@@ -18,7 +18,7 @@ TitleBar* TitleBar::create(const std::string title)
 
 
     TitleBar * layer = new (std::nothrow) TitleBar();
-    if(layer && layer->initWithColor(C4B(E::C500)))
+    if(layer && layer->initWithColor(C4B(E::P.C500)))
     {
         layer->autorelease();
 		layer->setContentSize(Size(E::visibleWidth, TITLE_HEIGHT));
@@ -40,7 +40,7 @@ TitleBar* TitleBar::create(const std::string title)
 			layer->m_titleLabel->setPosition(0, TITLE_HEIGHT/2);
 			layer->m_titleLabel->setAnchorPoint(Vec2(0, 0.5));
 			//layer->m_titleLabel->enableOutline(Color4B(255, 255, 255, 255), 8);
-			//m_titleLabel->enableOutline(C4B(E::C900), 1);
+			//m_titleLabel->enableOutline(C4B(E::P.C900), 1);
 			//layer->m_titleLabel->setString(title);
 			layer->m_titleLabel->enableShadow(Color4B(0, 0, 0, 128), Size(2, -2));
 			layer->m_titleLabel->setColor(Color3B(255, 255, 255));
@@ -48,7 +48,7 @@ TitleBar* TitleBar::create(const std::string title)
 			layer->addChild(layer->m_titleLabel, 1);
 		}
 
-		auto moveTo = MoveTo::create(0.2f , Vec2(0, E::visibleHeight - TITLE_HEIGHT));
+		auto moveTo = MoveTo::create(0.4f , Vec2(0, E::visibleHeight - TITLE_HEIGHT));
 			layer->runAction(moveTo);
 
 		/*
@@ -62,6 +62,11 @@ TitleBar* TitleBar::create(const std::string title)
 }
 
 void TitleBar::updateColors(){
-	this->setColor(C3B(E::C500));
-	//m_titleLabel->setColor(C3B(E::C50));
+	this->setColor(C3B(E::P.C500));
+	//m_titleLabel->setColor(C3B(E::P.C50));
+}
+
+void TitleBar::fadeOut(){
+	auto moveTo = MoveTo::create(0.4f , Vec2(0, E::visibleHeight));
+	this->runAction(moveTo);
 }

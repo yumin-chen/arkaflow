@@ -53,7 +53,7 @@ void S_MainGame::updateEnemyAI(){
 }
 
 
-#define BORDER_WIDTH 12;
+#define BORDER_WIDTH 0
 void S_MainGame::checkCollision(MainBall* wheel){
 	if(m_isGameOver)
 		return;
@@ -65,7 +65,7 @@ void S_MainGame::checkCollision(MainBall* wheel){
 	// colision
 	float borderPosition;
 	// colision right side
-	borderPosition = E::visibleWidth - BORDER_WIDTH - wheel->sprite->getBoundingBox().size.width * 0.5f * 0.775f;
+	borderPosition = E::visibleWidth - BORDER_WIDTH - MAIN_BALL_RADIUS;
 	if(wheel->position.x > borderPosition){ 
 		wheel->angle = -wheel->angle;
 		wheel->rotatedAngle = wheel->angle;
@@ -78,12 +78,15 @@ void S_MainGame::checkCollision(MainBall* wheel){
 		wheel->setPositionX(borderPosition);
 
 		if(wheel->isReal){
+#ifndef NDEBUG
+		m_bPaused = true;
+#endif
 			collidingWithBorder();
 			addScore(1);
 		}
 	}
 	// colision left side
-	borderPosition = BORDER_WIDTH + wheel->sprite->getBoundingBox().size.width * 0.5f * 0.775f;
+	borderPosition = BORDER_WIDTH + MAIN_BALL_RADIUS;
 	if(wheel->position.x < borderPosition){ 
 		wheel->angle = -wheel->angle;
 		wheel->rotatedAngle = wheel->angle;
@@ -96,32 +99,40 @@ void S_MainGame::checkCollision(MainBall* wheel){
 		wheel->setPositionX(borderPosition);
 
 		if(wheel->isReal){
+#ifndef NDEBUG
+		m_bPaused = true;
+#endif
 			collidingWithBorder();
 			addScore(1);
 		}
 	}
 	float angle_ = angleMinus90(wheel->angle);
+
 	//colision top side
-	borderPosition = E::visibleHeight - BORDER_WIDTH - wheel->sprite->getBoundingBox().size.width * 0.5 * 0.775;
+	borderPosition = E::visibleHeight - MAIN_BALL_RADIUS;
 	if(wheel->position.y > borderPosition){ 
 		wheel->angle = anglePlus90(-angle_);
 		wheel->rotatedAngle = wheel->angle;
 		wheel->setPositionY(borderPosition);
 		
 		if(wheel->isReal){
+#ifndef NDEBUG
+		m_bPaused = true;
+#endif
 			collidingWithBorder();
 			addScore(100);
 		}
 	
 	}
+
 	//colision bottom side
-	borderPosition = BORDER_WIDTH + wheel->sprite->getBoundingBox().size.width * 0.5 * 0.775;
+	borderPosition = BORDER_WIDTH + MAIN_BALL_RADIUS;
 	if(wheel->position.y < borderPosition && !m_isGameOver){ 
 		/*
 		wheel->angle = anglePlus90(-angle_);
 		wheel->rotatedAngle = wheel->angle;
-		wheel->setPositionY(borderPosition);
 		*/
+		wheel->setPositionY(borderPosition);
 		if(wheel->isReal){
 			m_isGameOver=true;
 			m_tick2=0;
@@ -155,6 +166,9 @@ void S_MainGame::checkCollision(MainBall* wheel){
 			ai_bActionStarted = false;
 		if(wheel->isReal){
 			addScore(m_smartstring->getSpeed());
+#ifndef NDEBUG
+		m_bPaused = true;
+#endif		
 			E::playEffect("di");
 			//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/di" AEX);
 		}
@@ -164,6 +178,9 @@ void S_MainGame::checkCollision(MainBall* wheel){
 			ai_bActionStarted = false;
 		if(wheel->isReal){
 			addScore(m_smartstring_enemy->getSpeed() * 2);
+#ifndef NDEBUG
+		m_bPaused = true;
+#endif
 			E::playEffect("di");
 			//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/di" AEX);
 		}

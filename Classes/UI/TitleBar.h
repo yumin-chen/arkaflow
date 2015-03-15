@@ -10,6 +10,7 @@ class TitleBar : public cocos2d::LayerColor
         ~TitleBar();
         static TitleBar* create(const std::string = "");
 		void updateColors();
+		void fadeOut();
 
     private:
 		cocos2d::Label* m_titleLabel;

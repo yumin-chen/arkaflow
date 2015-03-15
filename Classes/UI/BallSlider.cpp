@@ -38,16 +38,18 @@ void BallSlider::initRenderers()
 	auto center = Sprite::create("ui/slidernode_center.png");
 	center->setScale(BALL_SCALE);
 	_slidBallRenderer->addChild(center);
-	//_slidBallPressedRenderer->addChild(center);
+
+	//_slidBallNormalRenderer->runAction(RotateBy::create(1E32f, 1E32f * 720));
+
 	updateColors();
 }
 
 void BallSlider::updateColors()
 {
-	_barRenderer->setColor(C3B(E::C50));
-	_progressBarRenderer->setColor(C3B(E::C300));
-	_slidBallNormalRenderer->setColor(C3B(E::C400));
-	_slidBallPressedRenderer->setColor(C3B(E::C500));
+	_barRenderer->setColor(C3B(E::P.C900));
+	_progressBarRenderer->setColor(C3B(E::P.C300));
+	_slidBallNormalRenderer->setColor(C3B(E::P.C500));
+	_slidBallPressedRenderer->setColor(C3B(E::P2.C800));
 }
 
 void BallSlider::setWidth(float w){

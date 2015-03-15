@@ -2,6 +2,7 @@
 #include "SmartString.h"
 #include "Scene/MainGameScene.h"
 #include "EngineHelper.h"
+#include "math.h"
 
 using namespace cocos2d;
 
@@ -15,7 +16,7 @@ SmartString::~SmartString() {
 SmartString* SmartString::create()
 {
 	SmartString* pSprite = new SmartString();
-	if (pSprite->initWithFile("string_l.png"))
+	if (pSprite->initWithFile("ball_outer.png", Rect(0, 0, 128, 256)))
 	{
 		pSprite->autorelease();
 		pSprite->initOpt();
@@ -29,22 +30,35 @@ SmartString* SmartString::create()
 
 void SmartString::initOpt(){
 	this->setAnchorPoint(Vec2(0, 0.5));
-	m_middle = Sprite::create("string_m.png");
+	m_middle = Sprite::create("ball_outer.png", Rect(128, 0, 1, 256));
 	m_middle->setAnchorPoint(Vec2(0, 0));
-	m_right = Sprite::create("string_r.png");
+	m_right = Sprite::create("ball_outer.png", Rect(128, 0, 128, 256));
 	m_right->setAnchorPoint(Vec2(0, 0));
+	m_leftInner = Sprite::create("string_inner.png", Rect(0, 0, 128, 256));
+	m_middleInner = Sprite::create("string_inner.png", Rect(128, 0, 1, 256));
+	m_rightInner = Sprite::create("string_inner.png", Rect(128, 0, 128, 256));
+	m_leftInner->setPosition(256/2 - getRadius()/2, 256/2);
+	m_middleInner->setAnchorPoint(Vec2(0, 0));
+	//m_middleInner->setPosition(256/2 - getRadius()/2, 256/2);
+	m_rightInner->setPosition(256/2 - getRadius()/2, 256/2);
 	this->addChild(m_middle);
 	this->addChild(m_right);
+	this->addChild(m_leftInner);
+	m_middle->addChild(m_middleInner);
+	m_right->addChild(m_rightInner);
 	this->setScale(0.1f);
 	this->setVisible(false);
-	setColors(E::C900);
+	setColors(E::P.C900);
 	m_isGoing = false;
 }
 
 void SmartString::setColors(int color){
-	this->setColor(C3B(color));
-	m_middle->setColor(C3B(color));
-	m_right->setColor(C3B(color));
+	this->setColor(C3B(E::P.C900));
+	m_middle->setColor(C3B(E::P.C900));
+	m_right->setColor(C3B(E::P.C900));
+	m_leftInner->setColor(C3B(color));
+	m_middleInner->setColor(C3B(color));
+	m_rightInner->setColor(C3B(color));
 }
 void SmartString::setOpacity(GLubyte opacity){
 	Sprite::setOpacity(opacity);
@@ -74,19 +88,19 @@ void SmartString::setEndingPoint(const Vec2& p){
 void SmartString::setWidth(int w){
 	m_width = w;
 	if(abs(m_width) < getMaxWidth() * 0.2){
-		setColors(E::C900);
+		setColors(E::P.C400);
 		m_speed = 5;
 	}else if(abs(m_width) < getMaxWidth() * 0.4){
-		setColors(E::C800);
+		setColors(E::P.C300);
 		m_speed = 4;
 	}else if(abs(m_width) < getMaxWidth() * 0.6){
-		setColors(E::C700);
+		setColors(E::P.C200);
 		m_speed = 3;
 	}else if(abs(m_width) < getMaxWidth() * 0.7){
-		setColors(E::C600);
+		setColors(E::P.C100);
 		m_speed = 2;
 	}else{
-		setColors(E::C500);
+		setColors(E::P.C50);
 		m_speed = 1;
 	}
 	if(m_width > getMaxWidth()){
@@ -109,6 +123,7 @@ void SmartString::_updatePosition(){
 void SmartString::go(){
 	m_tick = 0;
 	m_isGoing = true;
+	this->setVisible(true);
 }
 
 
@@ -128,49 +143,67 @@ void SmartString::_update(){
 	}
 }
 float SmartString::getRadius(){
-	return this->getContentSize().width * this->getScale();
+	return getContentSize().width * getScale();
 }
 float SmartString::getMaxWidth(){
 	return getRadius() * 12;
 }
 int SmartString::checkCollision(MainBall *wheel){
-	if(!m_isGoing)
+	if(!m_isGoing || m_tick == 0)
 		return 0;
 	Vec2 p = wheel->position;
 	float radius = wheel->getRadius();
 	Vec2 posNow = getPosition();
 	posNow.x = posNow.x + getRadius();
-#define STRING_SC	0.9140625f
-#define WHEEL_SC	0.7265625f
-radius*=WHEEL_SC;
+
+#define STRING_SC	0.75f
+
 float stRadius=getRadius()*STRING_SC;
 int ret = 0;
 	// left collision
-	if(p.getDistance(posNow) <= radius + stRadius && p.x < posNow.x){
+	int dif = radius + stRadius - p.getDistance(posNow);
+	float radian = atan2(posNow.y - p.y, posNow.x - p.x);
+	if(0 <= dif && p.x < posNow.x){
+		wheel->setPosition(wheel->position.x + dif * sin(radian),
+		wheel->position.y + dif * cos(radian));
 		//m_isGoing = false;
 		ret = 1;
 	}
 
 	Vec2 endingPoint = Vec2(posNow.x + m_width, posNow.y);
+	dif = radius + stRadius - p.getDistance(endingPoint);
+	radian = atan2(endingPoint.y - p.y, endingPoint.x - p.x);
 	// right collision
-	if(p.getDistance(endingPoint) <= radius + stRadius && p.x > endingPoint.x){
+	if(0 <= dif && p.x > endingPoint.x){
+		wheel->setPosition(wheel->position.x - dif * sin(radian),
+		wheel->position.y - dif * cos(radian));
 		//m_isGoing = false;
 		ret = 2;
 	}
 
+
+	Vec2 midPoint = Vec2(posNow.x + m_width/2, posNow.y);
 	// up collision
-	if(p.x >= posNow.x && p.x <= endingPoint.x && p.y > posNow.y && p.y - posNow.y < radius + stRadius){
+	if(p.x >= posNow.x && p.x <= endingPoint.x && p.y > posNow.y && p.y - posNow.y < radius + stRadius && !isEnemy){
 		//m_isGoing = false;
+		wheel->setPositionY(posNow.y + radius + stRadius);
+		radian = atan2(midPoint.y - wheel->position.y, midPoint.x - wheel->position.x);
 		ret = 3;
 	}
 
 	// down collision
-	if(p.x >= posNow.x && p.x <= endingPoint.x && p.y < posNow.y && posNow.y - p.y < radius + stRadius){
+	if(p.x >= posNow.x && p.x <= endingPoint.x && p.y < posNow.y && posNow.y - p.y < radius + stRadius && isEnemy){
 		//m_isGoing = false;
+		wheel->setPositionY(posNow.y - radius - stRadius);
+		radian = atan2(midPoint.y - wheel->position.y, midPoint.x - wheel->position.x);
 		ret = 4;
 	}
 
+	
+
 	if(ret != 0){
+		//wheel->angle = radian;
+//		/*
 		wheel->angle = 0;
 		if(getWidth()>1)
 		{
@@ -180,13 +213,14 @@ int ret = 0;
 			wheel->angle = wheel->angle < 0? wheel->angle + radius + stRadius: wheel->angle - radius - stRadius;
 			wheel->angle = wheel->angle	/getWidth() * 90.0f *PI/180.0f;
 		}
+//		*/
 		//MessageBox(std::to_string( angleMinus90(wheel->angle)*180/PI).c_str(), "s");
 		wheel->rotatedAngle = wheel->angle;
 		wheel->speed =wheel->speed*0.5+getSpeed();
 
 		
 		
-		
+//		/*
 		if(isEnemy && ret != 3 && angleMinus90(wheel->angle) > PI){
 			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
 			wheel->rotatedAngle = wheel->angle;
@@ -196,7 +230,7 @@ int ret = 0;
 			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
 			wheel->rotatedAngle = wheel->angle;
 		}
-		
+//		*/
 
 		/**
 		if(ret == 3 && angleMinus90(wheel->angle) < PI){
@@ -207,7 +241,7 @@ int ret = 0;
 
 		if(wheel->isReal){
 			m_isGoing = false;
-			this->setVisible(false);
+			//this->setVisible(false);
 		}
 	}
 
