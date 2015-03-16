@@ -241,6 +241,13 @@ int ret = 0;
 
 		if(wheel->isReal){
 			m_isGoing = false;
+			
+#if NDEBUG
+			this->runAction(FadeOut::create(0.2f));
+			m_leftInner->runAction(FadeOut::create(0.2f));
+			m_middleInner->runAction(FadeOut::create(0.2f));
+			m_rightInner->runAction(FadeOut::create(0.2f));
+#endif
 			//this->setVisible(false);
 		}
 	}

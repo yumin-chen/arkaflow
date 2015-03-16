@@ -2,6 +2,8 @@
 #include "WelcomeScene.h"
 #include "MainGameScene.h"
 #include "UI/BallButton.h"
+#include "UI/EdgedBallButton.h"
+#include "UI/TitleBar.h"
 
 using namespace cocos2d;
 
@@ -25,85 +27,98 @@ using namespace cocos2d;
 
 void S_MainGame::initAnim(){
 	// create solid color background
-	auto bg = BallButton::create(E::P.C50);
-	bg->setScale(0.3f);
-	bg->setPosition(Vec2(E::visibleWidth/2, 0));
-	bg->setTag(TAG_BTM_BG);
-	// add the wheel to the layer
-	this->addChild(bg, 15);
+	m_mbg = BallButton::create(E::P.C50);
+	m_mbg->setScale(0.3f);
+	m_mbg->setPosition(Vec2(E::visibleWidth/2, 0));
+	m_mbg->setTag(TAG_BTM_BG);
+	auto cbGoHigher = CallFunc::create([this](){m_mbg->setLocalZOrder(15);});
+	auto cbGoLower = CallFunc::create([this](){m_mbg->setLocalZOrder(0);});
+	this->addChild(m_mbg, 15);
+	auto seq = Sequence::create(MoveBy::create(0.4f, Vec2(0, (E::visibleHeight-TITLEBAR_HEIGHT)/2)), cbGoHigher, cbGoLower, ScaleBy::create(0.4f, 16), nullptr);
+	m_mbg->runAction(seq);
 
 	// 
 	auto bgTop = LayerColor::create(C4B(E::P.C100));
-	bgTop->setContentSize(Size(E::visibleWidth, E::visibleHeight*0.3f));
-	bgTop->setPosition(0, E::visibleHeight*0.7f);
+	bgTop->setContentSize(Size(E::visibleWidth, (E::visibleHeight-TITLEBAR_HEIGHT)*0.3f));
+	bgTop->setPosition(0, (E::visibleHeight-TITLEBAR_HEIGHT)*0.7f);
 	this->addChild(bgTop, 1);
 
 	// 
 	auto bgBtm = LayerColor::create(C4B(E::P.C100));
-	bgBtm->setContentSize(Size(E::visibleWidth, E::visibleHeight*0.3f));
+	bgBtm->setContentSize(Size(E::visibleWidth, (E::visibleHeight-TITLEBAR_HEIGHT)*0.3f));
 	bgBtm->setPosition(0, 0);
 	this->addChild(bgBtm, 1);
 
+	auto titleBar = TitleBar::create(S("Ching Chong Ping Pong", "Ç¬À¤µ¯Çò"));
+	this->addChild(titleBar, 999);
 
-	auto pauseButton = BallButton::create(E::P.C700, E::P.C200, CC_CALLBACK_1(S_MainGame::menuCallback, this));
-	pauseButton->setScale(0.15f);
-	pauseButton->setPosition(Vec2(E::visibleWidth - 48, E::visibleHeight - 48));
+
+	auto pauseButton = EdgedBallButton::create(CC_CALLBACK_1(S_MainGame::menuCallback, this));
+	pauseButton->setScale(0.12f);
+	pauseButton->setPosition(Vec2(E::visibleWidth - 48, 40));
 	pauseButton->setTag(TAG_PAUSE);
-	this->addChild(pauseButton, 1000);
+	titleBar->addChild(pauseButton, 1000);
 
 	auto pauseIcon = Sprite::create("b_pause.png");
-	pauseIcon->setScale(0.3f);
-	pauseIcon->setPosition(E::visibleWidth - 48, E::visibleHeight - 48);
+	pauseIcon->setScale(2.5f);
+	pauseIcon->setColor(C3B(E::P.C700));
+	//pauseIcon->setPosition(E::visibleWidth - 48, E::visibleHeight - 48);
+	pauseIcon->setAnchorPoint(Vec2(0, 0));
 	pauseIcon->setTag(TAG_PAUSE_I);
-	pauseIcon->setOpacity(0);
-	this->addChild(pauseIcon, 1000);
+	//pauseIcon->setOpacity(0);
+	pauseButton->addChild(pauseIcon, 1000);
 
-	auto silentButton = BallButton::create(E::P.C700, E::P.C200);
-	silentButton->setScale(0.15f);
-	silentButton->setPosition(Vec2(E::visibleWidth - 128, E::visibleHeight - 48));
+	auto silentButton = EdgedBallButton::create(CC_CALLBACK_1(S_MainGame::menuCallback, this));
+	silentButton->setScale(0.12f);
+	silentButton->setPosition(Vec2(E::visibleWidth - 128, 40));
 	silentButton->setTag(TAG_SILENT);
-	this->addChild(silentButton, 1000);
+	titleBar->addChild(silentButton, 1000);
 
 	auto soundIcon = Sprite::create("b_sound.png");
-	soundIcon->setScale(0.3f);
-	soundIcon->setPosition(E::visibleWidth - 128, E::visibleHeight - 48);
+	soundIcon->setScale(2.5f);
+	soundIcon->setColor(C3B(E::P.C700));
+	//soundIcon->setPosition(E::visibleWidth - 128, E::visibleHeight - 48);
+	soundIcon->setAnchorPoint(Vec2(0, 0));
 	soundIcon->setTag(TAG_SOUND_I);
-	soundIcon->setOpacity(0);
-	this->addChild(soundIcon, 1000);
+	//soundIcon->setOpacity(0);
+	silentButton->addChild(soundIcon, 1000);
 
-	auto scoreBg = BallButton::create(E::P.C700);
-	scoreBg->setScale(0.15f);
-	scoreBg->setPosition(Vec2(48, E::visibleHeight - 48));
+	auto scoreBg = EdgedBallButton::create();
+	scoreBg->setScale(0.12f);
+	scoreBg->setPosition(Vec2(48, 40));
 	scoreBg->setTag(TAG_SCORE);
-	this->addChild(scoreBg, 1000);
+	titleBar->addChild(scoreBg, 1000);
 
 	
-	m_scoreLabel = Label::createWithSystemFont("", FONT_MAIN, 32, 
-		Size(196, scoreBg->getBoundingBox().size.height), TextHAlignment::LEFT, TextVAlignment::CENTER);
-	m_scoreLabel->setPosition(96, E::visibleHeight - 48);
+	m_scoreLabel = Label::createWithTTF("", FONT_BOLD, 32, 
+		Size(196, TITLEBAR_HEIGHT), TextHAlignment::LEFT, TextVAlignment::CENTER);
+	m_scoreLabel->setPosition(96, TITLEBAR_HEIGHT/2 - 2);
 	m_scoreLabel->setAnchorPoint(Vec2(0, 0.5));
 	//m_scoreLabel->enableOutline(C4B(E::P.C900), 1);
-	//m_scoreLabel->enableShadow(C4B_(E::P.C900, 128),Size(1, -1),0);
-	m_scoreLabel->setColor(C3B(E::P.C700));
-	this->addChild(m_scoreLabel, 1000);
+	m_scoreLabel->enableShadow(C4B_(E::P.C900, 128),Size(1, -1),0);
+	m_scoreLabel->setColor(C3B(E::P.C50));
+	titleBar->addChild(m_scoreLabel, 1000);
 
 
 	auto scoreIcon = Sprite::create("b_score.png");
-	scoreIcon->setScale(0.3f);
-	scoreIcon->setPosition(48, E::visibleHeight - 48);
+	scoreIcon->setScale(2.5f);
+	scoreIcon->setColor(C3B(E::P.C700));
+	//scoreIcon->setPosition(48, E::visibleHeight - 48);
+	scoreIcon->setAnchorPoint(Vec2(0, 0));
 	scoreIcon->setTag(TAG_SCORE_I);
-	scoreIcon->setOpacity(0);
-	this->addChild(scoreIcon, 1000);
+	//scoreIcon->setOpacity(0);
+	scoreBg->addChild(scoreIcon, 1000);
 
 	// create the shadow
 	auto shadow = Sprite::create("shadow.png");
 	shadow->setScale(1.0f);
 	shadow->setAnchorPoint(Vec2(0, 1));
 	shadow->setScaleX(E::visibleWidth / DESIGNED_WIDTH);
-	shadow->setPosition(0, E::visibleHeight * 0.3f);
+	shadow->setPosition(0, (E::visibleHeight-TITLEBAR_HEIGHT) * 0.3f);
 	shadow->setTag(TAG_SHADOW);
 	shadow->setOpacity(0);
 	this->addChild(shadow, 2);
+	shadow->runAction(Sequence::create(DelayTime::create(0.4f), FadeIn::create(0.4f), nullptr));
 
 	// game over background
 	auto bgGameOver = BallButton::create(E::P.C700);
@@ -185,16 +200,18 @@ void S_MainGame::initAnim(){
 
 }
 
+/*
 #define ANI_MOVING_BG		15.0f
 #define ANI_SCALING_BG		30.0f
 #define ANI_SHADOWING_BG	15.0f
 #define ANI_PAUSE_MOVING	30.0f
 #define ANI_PAUSE_SCALING	15.0f
 #define ANI_PAUSE_OPACING	15.0f
-
+*/
 #define ANI_GO_MOVING		15.0f
 #define ANI_GO_SCALING		15.0f
 #define ANI_GO_OPACING		15.0f
+
 
 #define ANI_GUIDE_OPACING	30.0f
 #define ANI_GUIDE_STAYING	90.0f
@@ -261,39 +278,6 @@ void S_MainGame::updateAnim(){
 	}
 
 
-	if(m_tick <= ANI_MOVING_BG){
-		this->getChildByTag(TAG_BTM_BG)->setPositionY(0 + (m_tick/ANI_MOVING_BG)*(E::visibleHeight/2));
-		this->getChildByTag(TAG_BTM_BG)->setLocalZOrder(15);
-	}
-
-	if(m_tick > ANI_MOVING_BG && m_tick <=  ANI_MOVING_BG + ANI_SCALING_BG){
-		this->getChildByTag(TAG_BTM_BG)->setScale(0.3 + ((m_tick-ANI_MOVING_BG)/ANI_SCALING_BG)*4.0f);
-		this->getChildByTag(TAG_BTM_BG)->setLocalZOrder(0);
-	}
-
-	if(m_tick >= ANI_MOVING_BG + ANI_SCALING_BG/2 && m_tick <=  ANI_MOVING_BG + ANI_SCALING_BG/2 + ANI_SHADOWING_BG){
-		this->getChildByTag(TAG_SHADOW)->setOpacity(((m_tick-ANI_MOVING_BG - ANI_SCALING_BG/2)/ANI_SHADOWING_BG)*255);
-	}
-
-	if(m_tick <= ANI_PAUSE_MOVING){
-		this->getChildByTag(TAG_PAUSE)->setPositionY((m_tick/ANI_PAUSE_MOVING)*(E::visibleHeight-48));
-		this->getChildByTag(TAG_SILENT)->setPositionY((m_tick/ANI_PAUSE_MOVING)*(E::visibleHeight-48));
-		this->getChildByTag(TAG_SCORE)->setPositionY((m_tick/ANI_PAUSE_MOVING)*(E::visibleHeight-48));
-	}
-	if(m_tick >= ANI_PAUSE_MOVING && m_tick <= ANI_PAUSE_MOVING+ANI_PAUSE_SCALING){
-		this->getChildByTag(TAG_PAUSE)->setScale(0.15 + ((m_tick-ANI_PAUSE_MOVING)/ANI_PAUSE_SCALING)*0.15f);
-		this->getChildByTag(TAG_SILENT)->setScale(0.15 + ((m_tick-ANI_PAUSE_MOVING)/ANI_PAUSE_SCALING)*0.15f);
-		this->getChildByTag(TAG_SCORE)->setScale(0.15 + ((m_tick-ANI_PAUSE_MOVING)/ANI_PAUSE_SCALING)*0.15f);
-		this->getChildByTag(TAG_PAUSE_I)->setOpacity(0);
-		this->getChildByTag(TAG_SOUND_I)->setOpacity(0);
-		this->getChildByTag(TAG_SCORE_I)->setOpacity(0);
-	}
-
-	if(m_tick >= ANI_PAUSE_MOVING+ANI_PAUSE_SCALING  && m_tick <= ANI_PAUSE_MOVING+ANI_PAUSE_SCALING+ANI_PAUSE_OPACING){
-		this->getChildByTag(TAG_PAUSE_I)->setOpacity(((m_tick-ANI_PAUSE_MOVING-ANI_PAUSE_OPACING)/ANI_PAUSE_SCALING)*255);
-		this->getChildByTag(TAG_SOUND_I)->setOpacity(((m_tick-ANI_PAUSE_MOVING-ANI_PAUSE_OPACING)/ANI_PAUSE_SCALING)*255);
-		this->getChildByTag(TAG_SCORE_I)->setOpacity(((m_tick-ANI_PAUSE_MOVING-ANI_PAUSE_OPACING)/ANI_PAUSE_SCALING)*255);
-	}
 	if(m_isGameOver)
 	{
 		if(m_close > 0 || m_isRestarting){
@@ -341,7 +325,7 @@ void S_MainGame::updateAnim(){
 void S_MainGame::pause()
 {
 			m_close = 1;
-			m_tick = ANI_PAUSE_MOVING + ANI_PAUSE_SCALING;
+//			m_tick = ANI_PAUSE_MOVING + ANI_PAUSE_SCALING;
 }
 void S_MainGame::menuCallback(Ref* pSender)
 {
@@ -369,7 +353,7 @@ void S_MainGame::menuCallback(Ref* pSender)
 		{
 			m_close = 1;
 			m_tick2 = ANI_GO_MOVING + ANI_GO_SCALING  +ANI_GO_OPACING;
-			m_tick = ANI_PAUSE_MOVING + ANI_PAUSE_SCALING;
+//			m_tick = ANI_PAUSE_MOVING + ANI_PAUSE_SCALING;
 			break;
 		}
 	}
