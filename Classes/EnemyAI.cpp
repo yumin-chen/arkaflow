@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Scene/MainGameScene.h"
+#include "UI/TitleBar.h"
 
 USING_NS_CC;
 
@@ -21,13 +22,15 @@ void S_MainGame::updateEnemyAI(){
 		for(int i = 0; i < ANI_STRINGING + SS_ANI_MOVING; i++){
 			checkCollision(tempWheel);
 		}
-		if(tempWheel->position.y + (SS_ANI_MOVING) * SS_SPEEDRATIO > E::visibleHeight * 0.7){
+		if(tempWheel->position.y + (SS_ANI_MOVING) * SS_SPEEDRATIO > (E::visibleHeight-TITLEBAR_HEIGHT) * 0.7){
 			ai_width = m_smartstring_enemy->getMaxWidth() * (rand() % 50 + 50) / 100.0f;
 			ai_width = rand() % 2 == 0? ai_width: -ai_width;
 			ai_ox = ai_width * (rand() % 10) / 100.0f;
 			ai_ox = rand() % 2 == 0? ai_ox: -ai_ox;
 			ai_ox = 0;
-			m_smartstring_enemy->setStartingPoint(Vec2(ai_ox + tempWheel->position.x -  ai_width/2, tempWheel->position.y + SS_ANI_MOVING * SS_SPEEDRATIO));
+			float ty = tempWheel->position.y + SS_ANI_MOVING * SS_SPEEDRATIO;
+			ty = ty > (E::visibleHeight-TITLEBAR_HEIGHT) -  16? (E::visibleHeight-TITLEBAR_HEIGHT) - 16: ty;
+			m_smartstring_enemy->setStartingPoint(Vec2(ai_ox + tempWheel->position.x -  ai_width/2, ty));
 			ai_bActionStarted = true;
 			ai_tick = 0;
 		}
@@ -109,7 +112,7 @@ void S_MainGame::checkCollision(MainBall* wheel){
 	float angle_ = angleMinus90(wheel->angle);
 
 	//colision top side
-	borderPosition = E::visibleHeight - MAIN_BALL_RADIUS;
+	borderPosition = E::visibleHeight - MAIN_BALL_RADIUS - TITLEBAR_HEIGHT;
 	if(wheel->position.y > borderPosition){ 
 		wheel->angle = anglePlus90(-angle_);
 		wheel->rotatedAngle = wheel->angle;

@@ -4,8 +4,6 @@
 
 USING_NS_CC;
 
-#define TITLE_HEIGHT	80
-
 
 TitleBar::TitleBar() {
 }
@@ -21,7 +19,7 @@ TitleBar* TitleBar::create(const std::string title)
     if(layer && layer->initWithColor(C4B(E::P.C500)))
     {
         layer->autorelease();
-		layer->setContentSize(Size(E::visibleWidth, TITLE_HEIGHT));
+		layer->setContentSize(Size(E::visibleWidth, TITLEBAR_HEIGHT));
 		layer->setPosition(0, E::visibleHeight);
 
 		// create the shadow
@@ -36,8 +34,8 @@ TitleBar* TitleBar::create(const std::string title)
 		// create title label
 		if(!title.empty()){
 			layer->m_titleLabel = Label::createWithSystemFont(title, FONT_BOLD, 40, 
-				Size(E::visibleWidth, TITLE_HEIGHT), TextHAlignment::CENTER, TextVAlignment::CENTER);
-			layer->m_titleLabel->setPosition(0, TITLE_HEIGHT/2);
+				Size(E::visibleWidth, TITLEBAR_HEIGHT), TextHAlignment::CENTER, TextVAlignment::CENTER);
+			layer->m_titleLabel->setPosition(0, TITLEBAR_HEIGHT/2);
 			layer->m_titleLabel->setAnchorPoint(Vec2(0, 0.5));
 			//layer->m_titleLabel->enableOutline(Color4B(255, 255, 255, 255), 8);
 			//m_titleLabel->enableOutline(C4B(E::P.C900), 1);
@@ -48,7 +46,7 @@ TitleBar* TitleBar::create(const std::string title)
 			layer->addChild(layer->m_titleLabel, 1);
 		}
 
-		auto moveTo = MoveTo::create(0.4f , Vec2(0, E::visibleHeight - TITLE_HEIGHT));
+		auto moveTo = MoveTo::create(0.4f , Vec2(0, E::visibleHeight - TITLEBAR_HEIGHT));
 			layer->runAction(moveTo);
 
 		/*

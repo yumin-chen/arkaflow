@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+#define TITLEBAR_HEIGHT	80
+
 class TitleBar : public cocos2d::LayerColor
 {
     public:
