@@ -21,10 +21,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		//glview->setDesignResolutionSize(DESIGNED_WIDTH, DESIGNED_HEIGHT, ResolutionPolicy::NO_BORDER);
     }
 
+	auto ud = UserDefault::getInstance();
 	E::calculateScreen();
-	E::settings.colorAccent = C_CYAN;
-	E::settings.musicVolume = 100;
-	E::settings.soundVolume = 100;
+	E::settings.colorAccent = ud->getIntegerForKey(UD_COLOR_ACCENT, C_CYAN);
+	E::settings.musicVolume = ud->getIntegerForKey(UD_MUSIC_VOLUME, 100);
+	E::settings.soundVolume = ud->getIntegerForKey(UD_SOUND_VOLUME, 100);
 	E::setColorAccent(E::settings.colorAccent);
 	E::playBgMusic();
 	//E::language = 0;

@@ -128,7 +128,7 @@ bool S_Settings::init()
 	this->addChild(m_menu, 1);
 
 
-	m_lbTheme = Label::createWithSystemFont(S("THEME", "配色方案"), FONT_BOLD, 24, 
+	m_lbTheme = Label::createWithTTF(S("THEME", "配色方案"), FONT_BOLD, 24, 
 				Size(128, 32), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_lbTheme->setPosition(24, E::visibleHeight - 128);
 	m_lbTheme->setAnchorPoint(Vec2(0, 0));
@@ -143,7 +143,7 @@ bool S_Settings::init()
 	ColorPalette tempPalette;
 	for(int i = 0; i < MAX_PALETTE; i ++){
 		E::getColorPaletteFromID(tempPalette, i == 16? m_tempColorAccent: i);
-		CPalette[i] = BallButton::create(i == 16? RGB(255, 255, 255): tempPalette.C500, tempPalette.C200, CC_CALLBACK_1(S_Settings::menuCallback, this));
+		CPalette[i] = BallButton::create(i == 16? 0xFFFFFF: tempPalette.C500, tempPalette.C200, CC_CALLBACK_1(S_Settings::menuCallback, this));
 		CPalette[i]->setScale(0.3f);
 		CPalette[i]->setAnchorPoint(Vec2(0, 0));
 		CPalette[i]->setTag(TAG_COLOR_MENU+i);
@@ -155,21 +155,21 @@ bool S_Settings::init()
 		this->addChild(CPalette[i]);
 	}
 
-	m_lbAudio = Label::createWithSystemFont(S("AUDIO", "音量调节"), FONT_BOLD, 24, 
+	m_lbAudio = Label::createWithTTF(S("AUDIO", "音量调节"), FONT_BOLD, 24, 
 				Size(128, 32), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_lbAudio->setPosition(24, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64);
 	m_lbAudio->setAnchorPoint(Vec2(0, 0));
 	m_lbAudio->setColor(C3B(E::P.C900));
 	this->addChild(m_lbAudio);
 
-	m_lbMusicVolume = Label::createWithSystemFont(S("Music", "音乐"), FONT_MAIN, 24, 
+	m_lbMusicVolume = Label::createWithTTF(S("Music", "音乐"), FONT_MAIN, 24, 
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_lbMusicVolume->setPosition(E::originX + 96 + 12, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 32);
 	m_lbMusicVolume->setAnchorPoint(Vec2(0, 0));
 	m_lbMusicVolume->setColor(C3B(E::P.C900));
 	this->addChild(m_lbMusicVolume);
 
-	m_lbSoundVolume = Label::createWithSystemFont(S("Sound", "音效"), FONT_MAIN, 24, 
+	m_lbSoundVolume = Label::createWithTTF(S("Sound", "音效"), FONT_MAIN, 24, 
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_lbSoundVolume->setPosition(E::originX + 96 + 12, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 80 - 32);
 	m_lbSoundVolume->setAnchorPoint(Vec2(0, 0));
@@ -186,14 +186,14 @@ bool S_Settings::init()
 	spSoundIcon->setScale(0.25f);
 	this->addChild(spSoundIcon);
 
-	m_lbMusicVolumeValue = Label::createWithSystemFont(stdp::to_string(E::settings.musicVolume), FONT_MAIN, 24,
+	m_lbMusicVolumeValue = Label::createWithTTF(stdp::to_string(E::settings.musicVolume), FONT_MAIN, 24,
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_lbMusicVolumeValue->setPosition(E::originX + 320+64+24, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 32);
 	m_lbMusicVolumeValue->setAnchorPoint(Vec2(0, 0));
 	m_lbMusicVolumeValue->setColor(C3B(E::P.C900));
 	this->addChild(m_lbMusicVolumeValue);
 
-	m_lbSoundVolumeValue = Label::createWithSystemFont(stdp::to_string(E::settings.soundVolume), FONT_MAIN, 24, 
+	m_lbSoundVolumeValue = Label::createWithTTF(stdp::to_string(E::settings.soundVolume), FONT_MAIN, 24, 
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
 	m_lbSoundVolumeValue->setPosition(E::originX + 320+64+24, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 80 - 32);
 	m_lbSoundVolumeValue->setAnchorPoint(Vec2(0, 0));
@@ -235,6 +235,9 @@ bool S_Settings::init()
 	this->addChild(m_sliderSound);
 
 	runAnimations(false);
+
+	// enable keyboard
+	this->setKeyboardEnabled(true);
 
 	return true;
 }
@@ -305,9 +308,14 @@ void S_Settings::menuCallback(Ref* pSender)
 	{
 	case TAG_OK:
 		{
+
 			E::settings.colorAccent = m_tempColorAccent;
 			E::settings.musicVolume = m_sliderMusic->getPercent();
 			E::settings.soundVolume = m_sliderSound->getPercent();
+	auto ud = UserDefault::getInstance();
+	ud->setIntegerForKey(UD_COLOR_ACCENT, E::settings.colorAccent);
+	ud->setIntegerForKey(UD_MUSIC_VOLUME, E::settings.musicVolume);
+	ud->setIntegerForKey(UD_SOUND_VOLUME, E::settings.soundVolume);
 			CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
 			CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
 			E::setColorAccent(E::settings.colorAccent);
@@ -329,7 +337,7 @@ void S_Settings::menuCallback(Ref* pSender)
  void S_Settings::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
 {
 	// Back button pressed
-	if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE) {
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACK) {
 		_cancel();
 	}
 

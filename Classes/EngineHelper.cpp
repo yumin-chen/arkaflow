@@ -35,12 +35,14 @@ void E::playEffect(const char* pszFilePath){
 	strcpy (fp, "audio/");
 	strcat (fp, pszFilePath);
 	strcat (fp, AEX);
+	CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
 	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(fp);
 }
 
 void E::playBgMusic(){
 	std::ostringstream os;
 	os << "audio/bgmusic" << 1 + rand() % 2 << AEX;
+	CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(os.str().c_str(), true);
 }
 

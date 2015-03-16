@@ -41,13 +41,16 @@
 #define C4F(color) Color4F(((color & 0xFF0000) >> 16)/255.0f, ((color & 0x00FF00) >> 8)/255.0f, (color & 0x0000FF)/255.0f, 1.0f)
 #define C4F_(color, alpha) Color4F(((color & 0xFF0000) >> 16)/255.0f, ((color & 0x00FF00) >> 8)/255.0f, (color & 0x0000FF)/255.0f, alpha)
 #define C3B(color) Color3B((color & 0xFF0000) >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF)
-#define RGB(r,g,b) ((r|(g<<8)|(b<<16)))
 
 struct sys_settings{
 	int colorAccent;
 	int musicVolume;
 	int soundVolume;
 };
+#define UD_COLOR_ACCENT "q"
+#define UD_MUSIC_VOLUME "w"
+#define UD_SOUND_VOLUME "e"
+
 
 typedef struct{
 	int C50;
