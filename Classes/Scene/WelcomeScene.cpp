@@ -3,6 +3,7 @@
 #include "MainGameScene.h"
 #include "SettingsScene.h"
 #include "UI/BallButton.h"
+#include "UI/BallDialog.h"
 
 USING_NS_CC;
 
@@ -101,6 +102,9 @@ bool S_Welcome::init()
 	// animations
 	runAnimations(false);
 
+	// enable keyboard
+	this->setKeyboardEnabled(true);
+
 	return true;
 }
 
@@ -160,9 +164,17 @@ void S_Welcome::menuCallback(Ref* pSender)
  void S_Welcome::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
 {
 	// Back button pressed
-	if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE) {
-		Director::getInstance()->end();
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACK) {
+	auto exitDialog = BallDialog::create(S("Do you want to exit?", "ÒªÍË³öÓÎÏ·Âð£¿"), CC_CALLBACK_1(S_Welcome::exitGame, this));
+	exitDialog->setPosition(E::visibleWidth / 2, E::visibleHeight / 2);
+	this->addChild(exitDialog, 1000);
 	}
 
-
 }
+
+ void S_Welcome::exitGame(Ref* pSender){
+		Director::getInstance()->end();	
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        exit(0);
+#endif
+ }

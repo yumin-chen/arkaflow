@@ -4,6 +4,7 @@
 #include "scene/BaseScene.h"
 #include "element/SmartString.h"
 #include "element/MainBall.h"
+#include "UI/BallButton.h"
 
 #define MAIN_BALL_DIAMETER 192*0.2
 #define MAIN_BALL_RADIUS (MAIN_BALL_DIAMETER/2)
@@ -57,6 +58,7 @@ private:
 
 	MainBall* m_wheel; 
 	cocos2d::Label* m_scoreLabel;
+	BallButton* m_mbg;
 	int m_score;
 
 	SmartString* m_smartstring_enemy;

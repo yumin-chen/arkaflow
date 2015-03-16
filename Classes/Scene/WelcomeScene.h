@@ -15,6 +15,7 @@ public:
 private:
 	int m_bClose;
 	void runAnimations(bool);
+	void exitGame(cocos2d::Ref*);
 	cocos2d::Menu* m_menu;
 	cocos2d::Sprite* m_title;
 	BallButton* m_bg;

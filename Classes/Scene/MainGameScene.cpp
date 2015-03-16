@@ -58,8 +58,9 @@ bool S_MainGame::init()
 	
 	restartGame();
 
-	// enable keypad
-	this->setKeypadEnabled(true);
+	// enable keyboard
+	this->setKeyboardEnabled(true);
+
 	// set up the scheduled callbacks
 	this->scheduleUpdate();
 
