@@ -86,7 +86,6 @@ bool BallButton::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 	if(rect.containsPoint(p) && this->state == NORMAL)
 	{
 		this->state = SELECTED;
-		E::playEffect("da");
 		_updateColor();
 		return true; // event consumed
 	}
@@ -108,6 +107,7 @@ void BallButton::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
 	_updateColor();
 	if( m_callback )
 	{
+		E::playEffect("da");
 		m_callback(this);
 	}
 }
