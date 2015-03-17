@@ -8,16 +8,17 @@ class BallDialog : public cocos2d::Sprite
     public:
         BallDialog();
         ~BallDialog();
-        static BallDialog* create(const std::string = "", const cocos2d::ccMenuCallback& callbackOK = nullptr, const cocos2d::ccMenuCallback& callbackCancel = nullptr);
-		void runAnimations();
+        static BallDialog* create(const std::string = "", const std::function<void(void)>& callbackOK = nullptr, const std::function<void(void)>& callbackCancel = nullptr, const std::string ok = "b_ok.png", const std::string cancel = "b_cancel.png");
+		void runAnimations(bool);
 
     private:
 		cocos2d::Label* m_contentLabel;
 		cocos2d::Sprite* m_innerSprite;
 		cocos2d::Menu* m_menu;
-		cocos2d::ccMenuCallback m_callbackOK;
-		cocos2d::ccMenuCallback m_callbackCancel;
-		void initOpt();
+		std::function<void(void)> m_callbackOK;
+		std::function<void(void)> m_callbackCancel;
+		int m_resultTag;
+		void initOpt(std::string, std::string);
 		void menuCallback(cocos2d::Ref* pSender);
 
 };

@@ -1,5 +1,6 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "MainGameScene.h"
+#include "WelcomeScene.h"
 #include "UI/BallButton.h"
 
 USING_NS_CC;
@@ -70,7 +71,6 @@ bool S_MainGame::init()
 // the parameter dt stands for delta time, which is the time difference between the previous and the current frame.
 void S_MainGame::update( float dt ) 
 {
-	updateAnim();
 	if(!m_bPaused && !m_isGameOver){
 	auto o = m_wheel->sprite->getChildByTag(0);
 	o->setRotation(o->getRotation() + dt * 360);
@@ -100,12 +100,16 @@ void S_MainGame::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *e
 
 bool S_MainGame::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
-	BaseScene::onTouchBegan(touch, event);
-	m_bGuide = false;
+	if(BaseScene::onTouchBegan(touch, event)){
+		return true;
+	}
 	cocos2d::Vec2 p = touch->getLocation() / E::scale;
 
-	if(Rect(0, 0, E::visibleWidth, E::visibleHeight*0.3f).containsPoint(p))
+	if(Rect(0, 0, E::visibleWidth, (E::visibleHeight - TITLEBAR_HEIGHT)*0.3f).containsPoint(p))
 	{
+		m_stsBackground->setVisible(false);
+		m_stsShine->setVisible(false);
+		m_stsLayer->setVisible(false);
 		m_smartstring->setStartingPoint(p);
 		return true; // event consumed
 	}
@@ -127,12 +131,18 @@ void S_MainGame::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
 void S_MainGame::restartGame(){
 	m_isGameOver = false;
 	m_isRestarting = false;
-	m_bGuide = true;
+	m_stsBackground->setVisible(true);
+	m_stsShine->setVisible(true);
+	m_stsLayer->setVisible(true);
 	m_score = 0;
 	m_wheel->speed = 0;
 	m_wheel->rotate = 0;//60*PI/180.0;
 	m_wheel->angle = 180.0*PI/180.0f;
 	m_wheel->rotatedAngle = m_wheel->angle;
 	m_wheel->setPosition(E::visibleWidth/2, E::visibleHeight*0.15f);
-	m_scoreLabel->setString(stdp::to_string(m_score));
+	m_titleBar->setString(stdp::to_string(m_score));
+}
+
+void S_MainGame::leaveGame(){
+	Director::getInstance()->replaceScene(S_Welcome::createScene());
 }

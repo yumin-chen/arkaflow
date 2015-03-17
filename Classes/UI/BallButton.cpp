@@ -5,14 +5,13 @@
 #define NORMAL 0
 #define SELECTED 1
 
-BallButton::BallButton() {}
+BallButton::BallButton() {/*m_listenerIndex = -1;*/}
 
 BallButton::~BallButton() {
 	/*
-	cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(listener);
-	listener->release();
-	listener = nullptr;
-	*/
+	if(m_listenerIndex != -1)
+		BaseScene::getCurrentScene()->removeTouchEvents(m_listenerIndex);
+		*/
 }
 
 BallButton* BallButton::create(const int normalColor, const int selectedColor, const cocos2d::ccMenuCallback& callback)
@@ -21,13 +20,13 @@ BallButton* BallButton::create(const int normalColor, const int selectedColor, c
     if (btn && btn->initWithFile("ui/ball.png"))//btn->init("ball.png", "", "", TextureResType::LOCAL))
     {
         btn->autorelease();
-		btn->normalColor = normalColor;
-		btn->selectedColor = selectedColor;
+		btn->m_normalColor = normalColor;
+		btn->m_selectedColor = selectedColor;
 		btn->m_callback = callback;
-		btn->setColor(cocos2d::C3B(btn->normalColor));
-		btn->m_isEnabled = true;
-		btn->state = NORMAL;
+		btn->setColor(cocos2d::C3B(btn->m_normalColor));
+		btn->m_state = NORMAL;
 		if(selectedColor != 0 || callback != nullptr){
+			btn->m_isEnabled = true;
 			btn->addEvents();
 		}
         return btn;
@@ -49,11 +48,11 @@ void BallButton::addEvents()
 }
 
 void BallButton::_updateColor(){
-	if(this->state == NORMAL){
-		this->setColor(cocos2d::C3B(this->normalColor));
+	if(this->m_state == NORMAL){
+		this->setColor(cocos2d::C3B(this->m_normalColor));
 	}
 	else{
-		this->setColor(cocos2d::C3B(this->selectedColor));
+		this->setColor(cocos2d::C3B(this->m_selectedColor));
 	}
 }
 
@@ -70,7 +69,7 @@ bool BallButton::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 	if(!m_isEnabled){
 		return false;
 	}
-	cocos2d::Vec2 p = touch->getLocation() / E::scale;
+	cocos2d::Vec2 p = this->getParent()->convertTouchToNodeSpace(touch);
 	cocos2d::Rect rect = this->getBoundingBox();
 
 
@@ -83,9 +82,9 @@ bool BallButton::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 	}
 	*/
 
-	if(rect.containsPoint(p) && this->state == NORMAL)
+	if(rect.containsPoint(p) && this->m_state == NORMAL)
 	{
-		this->state = SELECTED;
+		this->m_state = SELECTED;
 		_updateColor();
 		return true; // event consumed
 	}
@@ -100,19 +99,24 @@ void BallButton::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
 	if(!m_isEnabled){
 		return;
 	}
-	if(this->state == NORMAL){
+	if(this->m_state == NORMAL){
 		return;
 	}
-	this->state = NORMAL;
+	this->m_state = NORMAL;
 	_updateColor();
 	if( m_callback )
 	{
-		E::playEffect("da");
-		m_callback(this);
+		cocos2d::Vec2 p = this->getParent()->convertTouchToNodeSpace(touch);
+		cocos2d::Rect rect = this->getBoundingBox();
+		if(rect.containsPoint(p) && this->m_state == NORMAL)
+		{
+			E::playEffect("da");
+			m_callback(this);
+		}
 	}
 }
 
 void BallButton::onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event){
-	this->state = NORMAL;
+	this->m_state = NORMAL;
 	_updateColor();
 }

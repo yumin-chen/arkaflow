@@ -137,8 +137,7 @@ void S_MainGame::checkCollision(MainBall* wheel){
 		*/
 		wheel->setPositionY(borderPosition);
 		if(wheel->isReal){
-			m_isGameOver=true;
-			m_tick2=0;
+			gameOver();
 			E::playEffect("beng");
 			
 		}
@@ -198,5 +197,5 @@ void S_MainGame::collidingWithBorder(){
 
 void S_MainGame::addScore(int score){
 	m_score += score;
-	m_scoreLabel->setString(stdp::to_string(m_score));
+	m_titleBar->setString(stdp::to_string(m_score));
 }

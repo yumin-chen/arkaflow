@@ -46,10 +46,14 @@ struct sys_settings{
 	int colorAccent;
 	int musicVolume;
 	int soundVolume;
+	bool musicEnabled;
+	bool soundEnabled;
 };
 #define UD_COLOR_ACCENT "q"
 #define UD_MUSIC_VOLUME "w"
 #define UD_SOUND_VOLUME "e"
+#define UD_MUSIC_ENABLED "r"
+#define UD_SOUND_ENABLED "t"
 
 
 typedef struct{

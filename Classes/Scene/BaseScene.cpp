@@ -30,10 +30,14 @@ bool BaseScene::init(int backgroundColor)
 
 bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
+#ifndef NDEBUG
+	Vec2 p = touch->getLocation() / E::scale;
+	debugPrint("Began:" + stdp::to_string(p.x) + ", " + stdp::to_string(p.y));
+#endif
 	//cocos2d::MessageBox("clicked", "test");
 	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
 	{
-		if(it->onTouchBegan(touch, event)){
+		if(it->onTouchBegan && it->onTouchBegan(touch, event)){
 			return true;
 		}
 	}
@@ -41,24 +45,72 @@ bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 }
 
 void BaseScene::onTouchMoved(Touch* touch, Event* event){
+#ifndef NDEBUG
+	Vec2 p = touch->getLocation() / E::scale;
+	debugPrint("Moved:" + stdp::to_string(p.x) + ", " + stdp::to_string(p.y));
+#endif
 	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
-		it->onTouchMoved(touch, event);
+	{
+		if(it->onTouchMoved){
+			it->onTouchMoved(touch, event);
+		}
+	}
 }
 
 void BaseScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
+#ifndef NDEBUG
+	Vec2 p = touch->getLocation() / E::scale;
+	debugPrint("Ended:" + stdp::to_string(p.x) + ", " + stdp::to_string(p.y));
+#endif
 	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
-		it->onTouchEnded(touch, event);
+	{
+		if(it->onTouchEnded){
+			it->onTouchEnded(touch, event);
+		}
+	}
 }
 
 void BaseScene::onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event){
 	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
-		it->onTouchCancelled(touch, event);
+	{
+		if(it->onTouchCancelled){
+			it->onTouchCancelled(touch, event);
+		}
+	}
 }
 
 BaseScene* BaseScene::getCurrentScene(){
 	return s_CurrentScene;
 }
 
-void BaseScene::addTouchEvents(TouchEventsFunc touchEvent){
+size_t BaseScene::addTouchEvents(TouchEventsFunc touchEvent){
 	_touchEvents.push_back(touchEvent);
+	return _touchEvents.size() - 1;
 };
+
+/*
+void BaseScene::removeTouchEvents(size_t index){
+	_touchEvents.at(index).onTouchBegan = nullptr;
+	_touchEvents.at(index).onTouchMoved = nullptr;
+	_touchEvents.at(index).onTouchEnded = nullptr;
+	_touchEvents.at(index).onTouchCancelled = nullptr;
+};
+*/
+
+
+#ifndef NDEBUG //if DEBUG
+void BaseScene::debugPrint(std::string output){
+	static Label* label = nullptr;
+	static BaseScene *thisScene = nullptr;
+	if(label == nullptr || thisScene != this){
+		label = Label::createWithSystemFont(output, "Arial", 24, 
+			Size(E::visibleWidth, 48), TextHAlignment::LEFT, TextVAlignment::BOTTOM);
+		label->setPosition(24, 24);
+		label->setAnchorPoint(Vec2(0, 0));
+		label->enableShadow(Color4B(0, 0, 0, 128), Size(1, -1));
+		this->addChild(label, 10000);
+		thisScene = this;
+	}
+	label->setString(output);
+};
+#endif

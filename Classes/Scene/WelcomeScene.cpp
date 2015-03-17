@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "WelcomeScene.h"
 #include "MainGameScene.h"
 #include "SettingsScene.h"
@@ -165,14 +165,13 @@ void S_Welcome::menuCallback(Ref* pSender)
 {
 	// Back button pressed
 	if (keyCode == EventKeyboard::KeyCode::KEY_BACK) {
-	auto exitDialog = BallDialog::create(S("Do you want to exit?", "ÒªÍË³öÓÎÏ·Âð£¿"), CC_CALLBACK_1(S_Welcome::exitGame, this));
-	exitDialog->setPosition(E::visibleWidth / 2, E::visibleHeight / 2);
+	auto exitDialog = BallDialog::create(S("Do you want to exit?", "è¦é€€å‡ºæ¸¸æˆå—ï¼Ÿ"), CC_CALLBACK_0(S_Welcome::_exitGame, this));
 	this->addChild(exitDialog, 1000);
 	}
 
 }
 
- void S_Welcome::exitGame(Ref* pSender){
+ void S_Welcome::_exitGame(){
 		Director::getInstance()->end();	
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         exit(0);

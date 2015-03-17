@@ -31,6 +31,7 @@ void E::calculateScreen(){
 }
 
 void E::playEffect(const char* pszFilePath){
+	if(!E::settings.soundEnabled) return;
 	char *fp = new char[strlen(pszFilePath) + 10];
 	strcpy (fp, "audio/");
 	strcat (fp, pszFilePath);
@@ -40,6 +41,7 @@ void E::playEffect(const char* pszFilePath){
 }
 
 void E::playBgMusic(){
+	if(!E::settings.musicEnabled) return;
 	std::ostringstream os;
 	os << "audio/bgmusic" << 1 + rand() % 2 << AEX;
 	CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);

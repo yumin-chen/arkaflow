@@ -26,6 +26,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	E::settings.colorAccent = ud->getIntegerForKey(UD_COLOR_ACCENT, C_CYAN);
 	E::settings.musicVolume = ud->getIntegerForKey(UD_MUSIC_VOLUME, 100);
 	E::settings.soundVolume = ud->getIntegerForKey(UD_SOUND_VOLUME, 100);
+	E::settings.musicEnabled = ud->getBoolForKey(UD_MUSIC_ENABLED, true);
+	E::settings.soundEnabled = ud->getBoolForKey(UD_SOUND_ENABLED, true);
 	E::setColorAccent(E::settings.colorAccent);
 	E::playBgMusic();
 	//E::language = 0;

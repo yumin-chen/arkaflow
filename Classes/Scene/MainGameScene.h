@@ -5,6 +5,7 @@
 #include "element/SmartString.h"
 #include "element/MainBall.h"
 #include "UI/BallButton.h"
+#include "UI/TitleBar.h"
 
 #define MAIN_BALL_DIAMETER 192*0.2
 #define MAIN_BALL_RADIUS (MAIN_BALL_DIAMETER/2)
@@ -31,6 +32,7 @@ public:
 	float getWheelRadius();
 
 	void restartGame();
+	void leaveGame();
 
     
     CREATE_FUNC(S_MainGame);
@@ -39,25 +41,25 @@ private:
 
 	
 	void initAnim();
-	void updateAnim();
 	void updateEnemyAI();
 	void checkCollision(MainBall* wheel);
 	void collidingWithBorder();
 	void addScore(int);
 	void pause();
+	void gameOver();
 	int m_close;
 	
 	long m_tick;
-	long m_tick2;
 	bool m_isGameOver;
 	bool m_isRestarting;
-	bool m_bGuide;
 	bool m_bPaused;
 
-	
-
+	cocos2d::Sprite* m_soundIcon;
+	cocos2d::Sprite* m_stsBackground;
+	cocos2d::Sprite* m_stsShine;
+	cocos2d::LayerColor* m_stsLayer;
+	TitleBar* m_titleBar;
 	MainBall* m_wheel; 
-	cocos2d::Label* m_scoreLabel;
 	BallButton* m_mbg;
 	int m_score;
 
