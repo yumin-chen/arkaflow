@@ -3,6 +3,7 @@
 
 #include "BaseScene.h"
 #include "UI/BallButton.h"
+#include "UI/EdgedBallButton.h"
 #include "UI/BallSlider.h"
 #include "UI/TitleBar.h"
 
@@ -16,8 +17,8 @@ public:
     CREATE_FUNC(S_Settings);
 
 private:
+	void _ok();
 	void _cancel();
-	long m_tick;
 	bool m_bClose;
 	int m_tempColorAccent;
 	void runAnimations(bool);
@@ -30,6 +31,12 @@ private:
 	BallButton* m_cancelBg;
 	BallButton* m_btmBg;
 	TitleBar* m_titleBar;
+
+	EdgedBallButton* m_spMusicBtn;
+	EdgedBallButton* m_spSoundBtn;
+
+	cocos2d::Sprite* m_spMusicIcon;
+	cocos2d::Sprite* m_spSoundIcon;
 
 	cocos2d::Menu* m_menu;
 	cocos2d::Sprite* m_shadow;

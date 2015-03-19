@@ -13,8 +13,6 @@ TitleBar::~TitleBar() {
 
 TitleBar* TitleBar::create(const std::string title)
 {
-
-
     TitleBar * layer = new (std::nothrow) TitleBar();
     if(layer && layer->initWithColor(C4B(E::P.C500)))
     {
@@ -24,7 +22,7 @@ TitleBar* TitleBar::create(const std::string title)
 		layer->setPosition(0, E::visibleHeight);
 
 		// create the shadow
-		auto shadow = Sprite::create("shadow.png");
+		auto shadow = Sprite::create("ui/shadow.png");
 		//shadow->setScale(1.0f);
 		shadow->setAnchorPoint(Vec2(0, 1));
 		shadow->setScaleX(E::visibleWidth / DESIGNED_WIDTH);

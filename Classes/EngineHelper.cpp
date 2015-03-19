@@ -42,10 +42,8 @@ void E::playEffect(const char* pszFilePath){
 
 void E::playBgMusic(){
 	if(!E::settings.musicEnabled) return;
-	std::ostringstream os;
-	os << "audio/bgmusic" << 1 + rand() % 2 << AEX;
 	CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(os.str().c_str(), true);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgmusic" AEX, true);
 }
 
 

@@ -41,7 +41,7 @@ void EdgedBallButton::initOpt(){
 
 	m_innerSprite->setOpacity(0);
 	this->setOpacity(0);
-	_updateColor();
+	updateColors();
 }
 
 void EdgedBallButton::addEvents()
@@ -61,7 +61,7 @@ void EdgedBallButton::setVisible(bool visibility){
 }
 
 
-void EdgedBallButton::_updateColor(){
+void EdgedBallButton::updateColors(){
 	if(m_state == NORMAL){
 		setColor(C3B(E::P.C700));
 		m_innerSprite->setColor(C3B(E::P.C50));
@@ -91,7 +91,7 @@ bool EdgedBallButton::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 	if(rect.containsPoint(p) && this->m_state == NORMAL)
 	{
 		this->m_state = SELECTED;
-		_updateColor();
+		updateColors();
 		return true; // event consumed
 	}
 
@@ -110,7 +110,7 @@ void EdgedBallButton::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 	}
 	
 	m_state = NORMAL;
-	_updateColor();
+	updateColors();
 	if( m_callback )
 	{
 		cocos2d::Vec2 p = this->getParent()->convertTouchToNodeSpace(touch);
@@ -125,5 +125,5 @@ void EdgedBallButton::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 	
 void EdgedBallButton::onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event){
 	this->m_state = NORMAL;
-	_updateColor();
+	updateColors();
 };

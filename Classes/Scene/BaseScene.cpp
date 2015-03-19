@@ -3,11 +3,17 @@
 
 USING_NS_CC;
 
+#define TAG_EMITTER_START	20150204
+
 static BaseScene *s_CurrentScene = nullptr;
 
 bool BaseScene::init(int backgroundColor)
 {
 	s_CurrentScene = this;
+	m_emitterCreated = TAG_EMITTER_START;
+	m_emitterReleased = TAG_EMITTER_START;
+	m_emitterStopped = TAG_EMITTER_START;
+	m_touchEmitter = true;
 	if ( !LayerColor::initWithColor(C4B(backgroundColor)) )
 	{
 		return false;
@@ -30,10 +36,14 @@ bool BaseScene::init(int backgroundColor)
 
 bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
+	if(m_touchEmitter)
+		putEmitter(touch->getLocation()/E::scale);
+	/*
 #ifndef NDEBUG
 	Vec2 p = touch->getLocation() / E::scale;
 	debugPrint("Began:" + stdp::to_string(p.x) + ", " + stdp::to_string(p.y));
 #endif
+	*/
 	//cocos2d::MessageBox("clicked", "test");
 	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
 	{
@@ -44,11 +54,14 @@ bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 	return false;
 }
 
-void BaseScene::onTouchMoved(Touch* touch, Event* event){
+void BaseScene::onTouchMoved(Touch* touch, Event* event)
+{
+	/*
 #ifndef NDEBUG
 	Vec2 p = touch->getLocation() / E::scale;
 	debugPrint("Moved:" + stdp::to_string(p.x) + ", " + stdp::to_string(p.y));
 #endif
+	*/
 	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
 	{
 		if(it->onTouchMoved){
@@ -58,10 +71,12 @@ void BaseScene::onTouchMoved(Touch* touch, Event* event){
 }
 
 void BaseScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
+	/*
 #ifndef NDEBUG
 	Vec2 p = touch->getLocation() / E::scale;
 	debugPrint("Ended:" + stdp::to_string(p.x) + ", " + stdp::to_string(p.y));
 #endif
+	*/
 	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
 	{
 		if(it->onTouchEnded){
@@ -97,19 +112,153 @@ void BaseScene::removeTouchEvents(size_t index){
 };
 */
 
+void BaseScene::putEmitter(Vec2 pos){
+	m_emitterCreated ++;
+
+	auto _emitter = ParticleSystemQuad::createWithTotalParticles(100);
+    _emitter->retain();
+	_emitter->setTag(m_emitterCreated);
+
+    this->addChild(_emitter, 10);
+    ////_emitter->release();    // win32 : Remove this line
+    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage("ui/ball_outer.png") );
+
+	_emitter->setAngleVar(360);
+
+    // duration
+    _emitter->setDuration(-1);
+
+    // gravity
+    _emitter->setGravity(Vec2::ZERO);
+
+    // speed of particles
+    _emitter->setSpeed(160);
+    _emitter->setSpeedVar(20);
+
+    // radial
+    _emitter->setRadialAccel(-30);
+    _emitter->setRadialAccelVar(-10);
+
+    // tagential
+    _emitter->setTangentialAccel(30);
+    _emitter->setTangentialAccelVar(0);
+
+    // emitter position
+    _emitter->setPosition(pos);
+    _emitter->setPosVar(Vec2::ZERO);
+
+    // life of particles
+    _emitter->setLife(0.8f);
+    _emitter->setLifeVar(0.4f);
+
+    // color of particles
+	_emitter->setStartColor(C4F_(E::P.C500, 0.7f));
+    _emitter->setStartColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.2f));
+    _emitter->setEndColor(C4F_(E::P.C300, 0.15f));
+    _emitter->setEndColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.15f));
+
+    // size, in pixels
+    _emitter->setStartSize(16.0f);
+    _emitter->setStartSizeVar(1.0f);
+    _emitter->setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
+
+    // emits per second
+    _emitter->setEmissionRate(_emitter->getTotalParticles()/_emitter->getLife());
+
+    // additive
+
+    _emitter->setBlendAdditive(false);
+	auto cbStopEmitter = CallFunc::create([this](){m_emitterStopped++; ((ParticleSystemQuad*)this->getChildByTag(m_emitterStopped))->stopSystem();});
+	auto cbRemoveEmitter = CallFunc::create([this](){m_emitterReleased++; this->getChildByTag(m_emitterReleased)->removeFromParentAndCleanup(true);});
+	_emitter->runAction(Sequence::create(DelayTime::create(0.3f), cbStopEmitter, DelayTime::create(2.0f), cbRemoveEmitter, nullptr));
+
+}
+
+void BaseScene::putEmitter2(Vec2 pos){
+	m_emitterCreated ++;
+
+	auto _emitter = ParticleSystemQuad::createWithTotalParticles(100);
+    _emitter->retain();
+	_emitter->setTag(m_emitterCreated);
+
+    this->addChild(_emitter, 10);
+    ////_emitter->release();    // win32 : Remove this line
+    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage("target.png") );
+
+	_emitter->setAngleVar(360);
+
+    // duration
+    _emitter->setDuration(-1);
+
+    // gravity
+    _emitter->setGravity(Vec2::ZERO);
+
+    // speed of particles
+    _emitter->setSpeed(160);
+    _emitter->setSpeedVar(20);
+
+    // radial
+    _emitter->setRadialAccel(-30);
+    _emitter->setRadialAccelVar(-10);
+
+    // tagential
+    _emitter->setTangentialAccel(30);
+    _emitter->setTangentialAccelVar(0);
+
+    // emitter position
+    _emitter->setPosition(pos);
+    _emitter->setPosVar(Vec2::ZERO);
+
+    // life of particles
+    _emitter->setLife(1.6f);
+    _emitter->setLifeVar(0.6f);
+
+	// spin of particles
+    _emitter->setStartSpin(0);
+    _emitter->setStartSpinVar(30);
+    _emitter->setEndSpin(360);
+    _emitter->setEndSpinVar(360);
+
+    // color of particles
+	_emitter->setStartColor(C4F_(E::P.C700, 0.7f));
+    _emitter->setStartColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.2f));
+    _emitter->setEndColor(C4F_(E::P.C700, 0.15f));
+    _emitter->setEndColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.15f));
+
+    // size, in pixels
+    _emitter->setStartSize(28.0f);
+    _emitter->setStartSizeVar(4.0f);
+    _emitter->setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
+
+    // emits per second
+    _emitter->setEmissionRate(_emitter->getTotalParticles()/_emitter->getLife());
+
+    // additive
+
+    _emitter->setBlendAdditive(false);
+	auto cbStopEmitter = CallFunc::create([this](){m_emitterStopped++; ((ParticleSystemQuad*)this->getChildByTag(m_emitterStopped))->stopSystem();});
+	auto cbRemoveEmitter = CallFunc::create([this](){m_emitterReleased++; this->getChildByTag(m_emitterReleased)->removeFromParentAndCleanup(true);});
+	_emitter->runAction(Sequence::create(DelayTime::create(0.3f), cbStopEmitter, DelayTime::create(2.0f), cbRemoveEmitter, nullptr));
+
+}
+
+void BaseScene::setTouchEmitterEnabled(bool enabled){
+	m_touchEmitter = enabled;
+}
+
 
 #ifndef NDEBUG //if DEBUG
 void BaseScene::debugPrint(std::string output){
 	static Label* label = nullptr;
 	static BaseScene *thisScene = nullptr;
-	if(label == nullptr || thisScene != this){
+	if(label == nullptr || thisScene != getCurrentScene()){
 		label = Label::createWithSystemFont(output, "Arial", 24, 
 			Size(E::visibleWidth, 48), TextHAlignment::LEFT, TextVAlignment::BOTTOM);
 		label->setPosition(24, 24);
 		label->setAnchorPoint(Vec2(0, 0));
 		label->enableShadow(Color4B(0, 0, 0, 128), Size(1, -1));
-		this->addChild(label, 10000);
-		thisScene = this;
+		getCurrentScene()->addChild(label, 10000);
+		thisScene = getCurrentScene();
 	}
 	label->setString(output);
 };

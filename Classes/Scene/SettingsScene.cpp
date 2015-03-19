@@ -4,6 +4,7 @@
 #include "UI/BallButton.h"
 #include "UI/TitleBar.h"
 #include "UI/BallSlider.h"
+#include "UI/EdgedBallButton.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
@@ -38,7 +39,6 @@ Scene* S_Settings::createScene()
 bool S_Settings::init()
 {
 	m_bClose = false;
-	m_tick = 0;
 	// super init 
 
 	if ( !BaseScene::init((E::P.C50)) )
@@ -64,7 +64,7 @@ bool S_Settings::init()
 	this->addChild(m_bgTop, 0);
 
 	// create the shadow
-	m_shadow = Sprite::create("shadow.png");
+	m_shadow = Sprite::create("ui/shadow.png");
 	m_shadow->setScale(1.0f);
 	m_shadow->setAnchorPoint(Vec2(0, 1));
 	m_shadow->setScaleX(E::visibleWidth / DESIGNED_WIDTH);
@@ -78,7 +78,7 @@ bool S_Settings::init()
 	m_okBtnBg->setPosition(Vec2(E::visibleWidth/2 -(m_okBtnBg->getContentSize().width*0.35f + 24)/2, -16));
 	this->addChild(m_okBtnBg, 0);
 
-	auto sOkIcon = Sprite::create("b_ok.png");
+	auto sOkIcon = Sprite::create("ui/b_ok.png");
 	sOkIcon->setColor(C3B(E::P.C50));
 	sOkIcon->setAnchorPoint(Vec2(0, 0));
 
@@ -87,7 +87,7 @@ bool S_Settings::init()
 	m_cancelBg->setPosition(Vec2(E::visibleWidth/2 +(m_cancelBg->getContentSize().width*0.35f + 24)/2, -16));
 	this->addChild(m_cancelBg, 0);
 
-	auto sCancelIcon = Sprite::create("b_cancel.png");
+	auto sCancelIcon = Sprite::create("ui/b_cancel.png");
 	sCancelIcon->setColor(C3B(E::P.C50));
 	sCancelIcon->setAnchorPoint(Vec2(0, 0));
 
@@ -148,7 +148,7 @@ bool S_Settings::init()
 		CPalette[i]->setAnchorPoint(Vec2(0, 0));
 		CPalette[i]->setTag(TAG_COLOR_MENU+i);
 		if(i == 16){
-			CPalette[i]->setTexture("colorful.png");
+			CPalette[i]->setTexture("ui/colorful.png");
 		}
 
 		CPalette[i]->setPosition(Vec2((E::visibleWidth - PALETTE_ITEM_WIDTH * NUM_OF_COLUMS) / 2  + PALETTE_ITEM_WIDTH * (i % NUM_OF_COLUMS), E::visibleHeight - 128 - 80 - (80) * (i / NUM_OF_COLUMS)));
@@ -176,15 +176,31 @@ bool S_Settings::init()
 	m_lbSoundVolume->setColor(C3B(E::P.C900));
 	this->addChild(m_lbSoundVolume);
 
-	auto spMusicIcon = Sprite::create("v_music.png");
-	spMusicIcon->setPosition(E::originX + 64, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40);
-	spMusicIcon->setScale(0.25f);
-	this->addChild(spMusicIcon);
+	m_spMusicBtn = EdgedBallButton::create(CC_CALLBACK_1(S_Settings::menuCallback, this));
+	m_spMusicBtn->setPosition(E::originX + 64, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40);
+#define TAG_MUSIC_BTN	2020
+	m_spMusicBtn->setTag(TAG_MUSIC_BTN);
+	m_spMusicBtn->setScale(0.3f);
+	this->addChild(m_spMusicBtn);
 
-	auto spSoundIcon = Sprite::create("v_sound.png");
-	spSoundIcon->setPosition(E::originX + 64, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 80);
-	spSoundIcon->setScale(0.25f);
-	this->addChild(spSoundIcon);
+	m_spMusicIcon = Sprite::create(E::settings.musicEnabled? "ui/ob_music_on.png": "ui/ob_music_off.png");
+	m_spMusicIcon->setPosition(Vec2(128, 128));
+	m_spMusicIcon->setScale(0.9f);
+	m_spMusicIcon->setColor(C3B(E::P.C700));
+	m_spMusicBtn->addChild(m_spMusicIcon);
+
+	m_spSoundBtn = EdgedBallButton::create(CC_CALLBACK_1(S_Settings::menuCallback, this));
+	m_spSoundBtn->setPosition(E::originX + 64, E::visibleHeight - 128 - 80 - (80) * (MAX_PALETTE / NUM_OF_COLUMS) - 64 - 40 - 80);
+#define TAG_SOUND_BTN	2021
+	m_spSoundBtn->setTag(TAG_SOUND_BTN);
+	m_spSoundBtn->setScale(0.3f);
+	this->addChild(m_spSoundBtn);
+
+	m_spSoundIcon = Sprite::create(E::settings.soundEnabled? "ui/ob_notif_on.png": "ui/ob_notif_off.png");
+	m_spSoundIcon->setPosition(Vec2(128, 128));
+	m_spSoundIcon->setScale(0.9f);
+	m_spSoundIcon->setColor(C3B(E::P.C700));
+	m_spSoundBtn->addChild(m_spSoundIcon);
 
 	m_lbMusicVolumeValue = Label::createWithTTF(stdp::to_string(E::settings.musicVolume), FONT_MAIN, 24,
 				Size(128, 64), TextHAlignment::LEFT, TextVAlignment::CENTER);
@@ -299,6 +315,10 @@ void S_Settings::menuCallback(Ref* pSender)
 		m_lbSoundVolume->setColor(C3B(E::P.C900));
 		m_lbMusicVolumeValue->setColor(C3B(E::P.C900));
 		m_lbSoundVolumeValue->setColor(C3B(E::P.C900));
+		m_spMusicIcon->setColor(C3B(E::P.C700));
+		m_spSoundIcon->setColor(C3B(E::P.C700));
+		m_spMusicBtn->updateColors();
+		m_spSoundBtn->updateColors();
 		m_titleBar->updateColors();
 		m_sliderMusic->updateColors();
 		m_sliderSound->updateColors();
@@ -308,8 +328,57 @@ void S_Settings::menuCallback(Ref* pSender)
 	{
 	case TAG_OK:
 		{
+			putEmitter(m_okBtnBg->getPosition());
+			_ok();
+			break;
+		}
 
-			E::settings.colorAccent = m_tempColorAccent;
+	case TAG_CANCEL:
+		{
+			putEmitter(m_cancelBg->getPosition());
+			_cancel();
+			break;
+		}
+	case TAG_MUSIC_BTN:
+		{
+			E::settings.musicEnabled = !E::settings.musicEnabled;
+			m_spMusicIcon->setTexture(E::settings.musicEnabled? "ui/ob_music_on.png": "ui/ob_music_off.png");
+			if(!E::settings.musicEnabled){
+				CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+			}else{
+				E::playBgMusic();
+			}
+			break;
+		}
+	case TAG_SOUND_BTN:
+		{
+			E::settings.soundEnabled = !E::settings.soundEnabled;
+			m_spSoundIcon->setTexture(E::settings.soundEnabled? "ui/ob_notif_on.png": "ui/ob_notif_off.png");
+			if(!E::settings.musicEnabled){
+				CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
+			}	
+			break;
+		}
+	}
+
+}
+
+ void S_Settings::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
+{
+	// Back button pressed
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACK || keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+		_cancel();
+	}
+
+	// Enter key pressed
+	if (keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER || keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+		_ok();
+	}
+
+}
+
+void S_Settings::_ok(){
+				E::settings.colorAccent = m_tempColorAccent;
 			E::settings.musicVolume = m_sliderMusic->getPercent();
 			E::settings.soundVolume = m_sliderSound->getPercent();
 	auto ud = UserDefault::getInstance();
@@ -321,27 +390,6 @@ void S_Settings::menuCallback(Ref* pSender)
 			E::setColorAccent(E::settings.colorAccent);
 			m_bClose = true;			
 			runAnimations(true);
-			//m_tick = ANI_MOVING + ANI_SCALING;
-			break;
-		}
-
-	case TAG_CANCEL:
-		{
-			_cancel();
-			break;
-		}
-	}
-
-}
-
- void S_Settings::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
-{
-	// Back button pressed
-	if (keyCode == EventKeyboard::KeyCode::KEY_BACK) {
-		_cancel();
-	}
-
-
 }
 
 void S_Settings::_cancel(){

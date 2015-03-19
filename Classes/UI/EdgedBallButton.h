@@ -11,11 +11,11 @@ class EdgedBallButton : public cocos2d::Sprite
         static EdgedBallButton* create(const cocos2d::ccMenuCallback& callback = nullptr);
 		void setVisible(bool visibility);
 		void runAnimations();
+		void updateColors();
 
     private:
 		void addEvents();
 		void initOpt();
-		void _updateColor();
 		bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 		void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 		void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);

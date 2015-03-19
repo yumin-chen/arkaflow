@@ -48,7 +48,7 @@ bool S_Welcome::init()
 	//newGameBg->setTag(TAG_NEW_GAME_BG);
 	this->addChild(m_newGameBg, 0);
 
-	auto sNewIcon = Sprite::create("b_newgame.png");
+	auto sNewIcon = Sprite::create("ui/b_newgame.png");
 	sNewIcon->setColor(C3B(E::P.C50));
 	sNewIcon->setAnchorPoint(Vec2(0, 0));
 	//newGameBg->addChild(sNewIcon);
@@ -59,13 +59,13 @@ bool S_Welcome::init()
 	//settingsBg->setTag(TAG_SETTINGS_BG);
 	this->addChild(m_settingsBg, 0);
 
-	auto sSettingsIcon = Sprite::create("b_settings.png");
+	auto sSettingsIcon = Sprite::create("ui/b_settings.png");
 	sSettingsIcon->setColor(C3B(E::P.C50));
 	sSettingsIcon->setAnchorPoint(Vec2(0, 0));
 	//settingsBg->addChild(sSettingsIcon);
 
 	// create title sprite
-	m_title = Sprite::create("title.png");
+	m_title = Sprite::create("ui/title.png");
 	// position the sprite on the center of the screen
 	m_title->setPosition(Vec2(E::visibleWidth/2 + 206/4, E::visibleHeight/2 + 96 - 234/4));
 	m_title->setScale(0.6f);
@@ -154,6 +154,7 @@ void S_Welcome::menuCallback(Ref* pSender)
 {
 	auto pMenuItem = (MenuItem*)pSender;
 	auto tag = pMenuItem->getTag();
+	putEmitter(tag == TAG_NEW_GAME? m_newGameBg->getPosition() : tag == TAG_SETTINGS? m_settingsBg->getPosition() :pMenuItem->getPosition());
 	if(m_bClose == 0){
 		m_bClose = tag;
 
@@ -163,10 +164,33 @@ void S_Welcome::menuCallback(Ref* pSender)
 
  void S_Welcome::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
 {
+	static BallDialog* exitDialog = nullptr;
 	// Back button pressed
-	if (keyCode == EventKeyboard::KeyCode::KEY_BACK) {
-	auto exitDialog = BallDialog::create(S("Do you want to exit?", "要退出游戏吗？"), CC_CALLBACK_0(S_Welcome::_exitGame, this));
-	this->addChild(exitDialog, 1000);
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACK || keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+		if(exitDialog == nullptr){
+			exitDialog = BallDialog::create(S("Do you want to exit?", "要退出游戏吗？"), CC_CALLBACK_0(S_Welcome::_exitGame, this));
+			this->addChild(exitDialog, 1000);
+		}else{
+			exitDialog->runAnimations(true);
+			exitDialog = nullptr;
+		}
+	}
+
+	else if(keyCode == EventKeyboard::KeyCode::KEY_MENU){
+		m_bClose = TAG_SETTINGS;
+		runAnimations(true);
+	}
+
+		// Enter key pressed
+	else if (keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER || keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+		if(exitDialog == nullptr){
+			m_bClose = TAG_NEW_GAME;
+			runAnimations(true);
+		}
+		else
+		{
+			_exitGame();
+		}
 	}
 
 }

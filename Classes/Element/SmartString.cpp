@@ -4,10 +4,9 @@
 #include "EngineHelper.h"
 #include "math.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
 SmartString::SmartString() {
-	isEnemy = false;
 }
 
 SmartString::~SmartString() {
@@ -16,7 +15,7 @@ SmartString::~SmartString() {
 SmartString* SmartString::create()
 {
 	SmartString* pSprite = new SmartString();
-	if (pSprite->initWithFile("ball_outer.png", Rect(0, 0, 128, 256)))
+	if (pSprite->initWithFile("ui/ball_outer.png", Rect(0, 0, 128, 256)))
 	{
 		pSprite->autorelease();
 		pSprite->initOpt();
@@ -30,13 +29,14 @@ SmartString* SmartString::create()
 
 void SmartString::initOpt(){
 	this->setAnchorPoint(Vec2(0, 0.5));
-	m_middle = Sprite::create("ball_outer.png", Rect(128, 0, 1, 256));
+	m_pBody = nullptr;
+	m_middle = Sprite::create("ui/ball_outer.png", Rect(128, 0, 1, 256));
 	m_middle->setAnchorPoint(Vec2(0, 0));
-	m_right = Sprite::create("ball_outer.png", Rect(128, 0, 128, 256));
+	m_right = Sprite::create("ui/ball_outer.png", Rect(128, 0, 128, 256));
 	m_right->setAnchorPoint(Vec2(0, 0));
-	m_leftInner = Sprite::create("string_inner.png", Rect(0, 0, 128, 256));
-	m_middleInner = Sprite::create("string_inner.png", Rect(128, 0, 1, 256));
-	m_rightInner = Sprite::create("string_inner.png", Rect(128, 0, 128, 256));
+	m_leftInner = Sprite::create("ui/string_inner.png", Rect(0, 0, 128, 256));
+	m_middleInner = Sprite::create("ui/string_inner.png", Rect(128, 0, 1, 256));
+	m_rightInner = Sprite::create("ui/string_inner.png", Rect(128, 0, 128, 256));
 	m_leftInner->setPosition(256/2 - getRadius()/2, 256/2);
 	m_middleInner->setAnchorPoint(Vec2(0, 0));
 	//m_middleInner->setPosition(256/2 - getRadius()/2, 256/2);
@@ -48,8 +48,15 @@ void SmartString::initOpt(){
 	m_right->addChild(m_rightInner);
 	this->setScale(0.1f);
 	this->setVisible(false);
+	this->setTag(TAG_PHY_STRING);
 	setColors(E::P.C900);
 	m_isGoing = false;
+}
+
+void SmartString::onContactWithBall(){
+	detachBody();
+	m_isGoing = false;
+	animFadeOut();
 }
 
 void SmartString::setColors(int color){
@@ -64,6 +71,9 @@ void SmartString::setOpacity(GLubyte opacity){
 	Sprite::setOpacity(opacity);
 	m_middle->setOpacity(opacity);
 	m_right->setOpacity(opacity);
+	m_leftInner->setOpacity(opacity);
+	m_middleInner->setOpacity(opacity);
+	m_rightInner->setOpacity(opacity);
 }
 		
 void SmartString::setPosition(const Vec2& pos){
@@ -74,35 +84,53 @@ void SmartString::setPositionY(float y){
 	Sprite::setPositionY(y);
 	_updatePosition();
 }
+
+void SmartString::detachBody(){
+	if(m_pBody != nullptr){
+		m_pBody->removeFromWorld();
+		m_pBody = nullptr;
+		this->setPhysicsBody(nullptr);
+	}
+}
+
 void SmartString::setStartingPoint(const Vec2& p){
+	detachBody();
+	stopAllActions();
+	
 	m_startingPoint = p;
 	this->setWidth(0);
 	this->setPosition(Vec2(m_startingPoint.x - getRadius(), m_startingPoint.y));
+	this->setRotation(0);
 	this->setVisible(true);
 	this->setOpacity(255);
 	m_isGoing = false;
 }
 void SmartString::setEndingPoint(const Vec2& p){
-	setWidth((p.x - m_startingPoint.x));
+	setWidth(p.getDistance(m_startingPoint));
+	if(m_startingPoint.x != p.x){
+	float angle = - atan((m_startingPoint.y - p.y)/ (m_startingPoint.x - p.x)) /PI * 180;
+	if(p.x < m_startingPoint.x){
+		angle = - 90 - (90 - angle);
+	}
+	setRotation(angle);
+	}
+	this->setVisible(true);
+	this->setOpacity(255);
 }
 void SmartString::setWidth(int w){
 	m_width = w;
 	if(abs(m_width) < getMaxWidth() * 0.2){
 		setColors(E::P.C400);
-		m_speed = 5;
 	}else if(abs(m_width) < getMaxWidth() * 0.4){
 		setColors(E::P.C300);
-		m_speed = 4;
 	}else if(abs(m_width) < getMaxWidth() * 0.6){
 		setColors(E::P.C200);
-		m_speed = 3;
 	}else if(abs(m_width) < getMaxWidth() * 0.7){
 		setColors(E::P.C100);
-		m_speed = 2;
 	}else{
 		setColors(E::P.C50);
-		m_speed = 1;
 	}
+	m_speed = 3 * getMaxWidth() / (abs(m_width) + 128);
 	if(m_width > getMaxWidth()){
 		m_width = getMaxWidth();
 	}
@@ -121,142 +149,58 @@ void SmartString::_updatePosition(){
 	m_right->setPosition(Vec2( (m_width  / this->getScale() + getContentSize().width), 0));
 }
 void SmartString::go(){
-	m_tick = 0;
+	detachBody();
+	float d = 192 * this->getScale();
+	float w = m_width + d;
+	m_pBody = PhysicsBody::createBox(Size(w, d), SMOOTH_MATERIAL);
+	w-=d/4;
+	w*= E::scale;
+	//w -= d/2;
+	m_pBody->setVelocity(Vec2(0, m_speed * SS_SPEEDRATIO));
+#define SS_FORCERATIO -400
+	m_pBody->applyForce(Vec2(0, m_speed * SS_FORCERATIO));
+	m_pBody->setPositionOffset(Vec2((w) / 2 * cos(getRotation() * PI / 180) , - w / 2* sin(getRotation() * PI / 180)));
+	m_pBody->setRotationEnable(false);
+	m_pBody->setCollisionBitmask(0x0000000F);
+	m_pBody->setContactTestBitmask(0x0000000F);
+
+	//m_pBody->
+	this->setPhysicsBody(m_pBody);
+	m_deltaDiff = 0;
 	m_isGoing = true;
 	this->setVisible(true);
 }
 
-
-#define ANI_OPACING 10.0f
-void SmartString::_update(){
+#define MOVING_TIME 0.3f
+void SmartString::update(float dt){
 	if(m_isGoing){
-		setPositionY(getPositionY() + m_speed * SS_SPEEDRATIO * (1 - int(isEnemy) * 2));
-		m_tick++;
-		if(m_tick > SS_ANI_MOVING && m_tick <= SS_ANI_MOVING + ANI_OPACING){
-			this->setOpacity(255 - 255 * (m_tick-SS_ANI_MOVING)/ANI_OPACING);
-		}
-		if(m_tick == SS_ANI_MOVING + ANI_OPACING)
-		{
+		m_deltaDiff = m_deltaDiff + dt;
+		if(m_deltaDiff > MOVING_TIME){
 			m_isGoing = false;
-			this->setVisible(false);
+			animFadeOut();
 		}
 	}
 }
+
 float SmartString::getRadius(){
 	return getContentSize().width * getScale();
 }
+
 float SmartString::getMaxWidth(){
-	return getRadius() * 12;
+	return 192;
 }
-int SmartString::checkCollision(MainBall *wheel){
-	if(!m_isGoing || m_tick == 0)
-		return 0;
-	Vec2 p = wheel->position;
-	float radius = wheel->getRadius();
-	Vec2 posNow = getPosition();
-	posNow.x = posNow.x + getRadius();
 
-#define STRING_SC	0.75f
-
-float stRadius=getRadius()*STRING_SC;
-int ret = 0;
-	// left collision
-	int dif = radius + stRadius - p.getDistance(posNow);
-	float radian = atan2(posNow.y - p.y, posNow.x - p.x);
-	if(0 <= dif && p.x < posNow.x){
-		wheel->setPosition(wheel->position.x + dif * sin(radian),
-		wheel->position.y + dif * cos(radian));
-		//m_isGoing = false;
-		ret = 1;
-	}
-
-	Vec2 endingPoint = Vec2(posNow.x + m_width, posNow.y);
-	dif = radius + stRadius - p.getDistance(endingPoint);
-	radian = atan2(endingPoint.y - p.y, endingPoint.x - p.x);
-	// right collision
-	if(0 <= dif && p.x > endingPoint.x){
-		wheel->setPosition(wheel->position.x - dif * sin(radian),
-		wheel->position.y - dif * cos(radian));
-		//m_isGoing = false;
-		ret = 2;
-	}
-
-
-	Vec2 midPoint = Vec2(posNow.x + m_width/2, posNow.y);
-	// up collision
-	if(p.x >= posNow.x && p.x <= endingPoint.x && p.y > posNow.y && p.y - posNow.y < radius + stRadius && !isEnemy){
-		//m_isGoing = false;
-		wheel->setPositionY(posNow.y + radius + stRadius);
-		radian = atan2(midPoint.y - wheel->position.y, midPoint.x - wheel->position.x);
-		ret = 3;
-	}
-
-	// down collision
-	if(p.x >= posNow.x && p.x <= endingPoint.x && p.y < posNow.y && posNow.y - p.y < radius + stRadius && isEnemy){
-		//m_isGoing = false;
-		wheel->setPositionY(posNow.y - radius - stRadius);
-		radian = atan2(midPoint.y - wheel->position.y, midPoint.x - wheel->position.x);
-		ret = 4;
-	}
-
-	
-
-	if(ret != 0){
-		//wheel->angle = radian;
-//		/*
-		wheel->angle = 0;
-		if(getWidth()>1)
-		{
-			wheel->angle =(wheel->position.x - 
-				(m_startingPoint.x+getRadius()+getWidth()/2)
-				);
-			wheel->angle = wheel->angle < 0? wheel->angle + radius + stRadius: wheel->angle - radius - stRadius;
-			wheel->angle = wheel->angle	/getWidth() * 90.0f *PI/180.0f;
-		}
-//		*/
-		//MessageBox(std::to_string( angleMinus90(wheel->angle)*180/PI).c_str(), "s");
-		wheel->rotatedAngle = wheel->angle;
-		wheel->speed =wheel->speed*0.5+getSpeed();
-
-		
-		
-//		/*
-		if(isEnemy && ret != 3 && angleMinus90(wheel->angle) > PI){
-			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
-			wheel->rotatedAngle = wheel->angle;
-		}
-
-		if(!isEnemy && ret != 4 && angleMinus90(wheel->angle) < PI){
-			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
-			wheel->rotatedAngle = wheel->angle;
-		}
-//		*/
-
-		/**
-		if(ret == 3 && angleMinus90(wheel->angle) < PI){
-			wheel->angle = anglePlus90(-angleMinus90(wheel->angle));
-			wheel->rotatedAngle = wheel->angle;
-		}
-		**/
-
-		if(wheel->isReal){
-			m_isGoing = false;
-			
-#if NDEBUG
-			this->runAction(FadeOut::create(0.2f));
-			m_leftInner->runAction(FadeOut::create(0.2f));
-			m_middleInner->runAction(FadeOut::create(0.2f));
-			m_rightInner->runAction(FadeOut::create(0.2f));
-#endif
-			//this->setVisible(false);
-		}
-	}
-
-	return ret;
-}
 float SmartString::getSpeed(){
 	return m_speed;
 }
 float SmartString::getWidth(){
 	return m_width;
+}
+
+void SmartString::animFadeOut(){
+	auto cbSetVisible = CallFunc::create([this](){setVisible(false); detachBody();});
+	this->runAction(Sequence::create(FadeOut::create(0.2f), cbSetVisible, nullptr));
+	m_leftInner->runAction(FadeOut::create(0.2f));
+	m_middleInner->runAction(FadeOut::create(0.2f));
+	m_rightInner->runAction(FadeOut::create(0.2f));
 }

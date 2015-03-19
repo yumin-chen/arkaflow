@@ -12,15 +12,22 @@ public:
 	virtual void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 	virtual void onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event);
 	static BaseScene* getCurrentScene();
+	void setTouchEmitterEnabled(bool);
+	void putEmitter(cocos2d::Vec2 pos);
+	void putEmitter2(cocos2d::Vec2 pos);
 	size_t addTouchEvents(TouchEventsFunc touchEvent);
 	/*
 	void removeTouchEvents(size_t index);
 	*/
-private:
-	std::vector<TouchEventsFunc> _touchEvents;
 #ifndef NDEBUG //if DEBUG
-	void debugPrint(std::string);
+	static void debugPrint(std::string);
 #endif
+private:
+	int m_emitterCreated;
+	int m_emitterReleased;
+	int m_emitterStopped;
+	bool m_touchEmitter;
+	std::vector<TouchEventsFunc> _touchEvents;
 
 };
 

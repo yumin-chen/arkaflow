@@ -19,6 +19,9 @@
     <Filter Include="src\Element">
       <UniqueIdentifier>{12286482-2055-466e-8cc3-303a91fd9ce3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Levels">
+      <UniqueIdentifier>{cc893549-e152-4465-be74-24b106a5f662}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,9 +45,6 @@
     <ClCompile Include="..\Classes\Scene\BaseScene.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Scene\MainGameAnim.cpp">
-      <Filter>src\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Scene\MainGameScene.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
@@ -60,11 +60,32 @@
     <ClCompile Include="..\Classes\Element\SmartString.cpp">
       <Filter>src\Element</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\EnemyAI.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\EngineHelper.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UI\BallDialog.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UI\EdgedBallButton.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\BaseLevel.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level1.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Element\Ring.cpp">
+      <Filter>src\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Element\Target.cpp">
+      <Filter>src\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level2.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Levels.cpp">
+      <Filter>src\Levels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +127,30 @@
     </ClInclude>
     <ClInclude Include="..\Classes\EngineHelper.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UI\BallDialog.h">
+      <Filter>src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UI\EdgedBallButton.h">
+      <Filter>src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\BaseLevel.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level1.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Element\Ring.h">
+      <Filter>src\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Element\Target.h">
+      <Filter>src\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level2.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Levels.h">
+      <Filter>src\Levels</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

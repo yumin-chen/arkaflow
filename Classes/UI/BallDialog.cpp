@@ -121,6 +121,11 @@ void BallDialog::runAnimations(bool bReverse){
 					this->removeFromParentAndCleanup(true);
 					break;
 				}
+			default:
+				{
+					this->removeFromParentAndCleanup(true);
+					break;
+				}
 			}
 
 

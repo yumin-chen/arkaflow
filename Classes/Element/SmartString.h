@@ -4,8 +4,7 @@
 #include "cocos2d.h"
 #include "MainBall.h"
 
-#define SS_SPEEDRATIO 4
-#define SS_ANI_MOVING 20.0f
+#define SS_SPEEDRATIO 200
 class SmartString : public cocos2d::Sprite
 {
     public:
@@ -13,7 +12,8 @@ class SmartString : public cocos2d::Sprite
         ~SmartString();
         static SmartString* create();
 		void go();
-		void _update();
+		void update(float dt);
+		void onContactWithBall();
 		virtual void setPosition(const cocos2d::Vec2& pos);
 		virtual void setPositionY(float y);
 		void setStartingPoint(const cocos2d::Vec2& p);
@@ -25,20 +25,21 @@ class SmartString : public cocos2d::Sprite
 		float getMaxWidth();
 		float getSpeed();
 		float getWidth();
-		bool isEnemy;
 		cocos2d::Vec2 m_startingPoint;
-		int checkCollision(MainBall *wheel);
 
     private:
+		cocos2d::PhysicsBody* m_pBody;
 		cocos2d::Sprite* m_middle;
 		cocos2d::Sprite* m_right;
 		cocos2d::Sprite* m_leftInner;
 		cocos2d::Sprite* m_middleInner;
 		cocos2d::Sprite* m_rightInner;
+		void animFadeOut();
 		void initOpt();
+		void detachBody();
 		void _updatePosition();
+		float m_deltaDiff;
 		bool m_isGoing;
-		long m_tick;
 		int m_width;
 		float m_speed;
 

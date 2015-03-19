@@ -139,11 +139,15 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Element\MainBall.cpp" />
+    <ClCompile Include="..\Classes\Element\Ring.cpp" />
     <ClCompile Include="..\Classes\Element\SmartString.cpp" />
-    <ClCompile Include="..\Classes\EnemyAI.cpp" />
+    <ClCompile Include="..\Classes\Element\Target.cpp" />
     <ClCompile Include="..\Classes\EngineHelper.cpp" />
+    <ClCompile Include="..\Classes\Levels\BaseLevel.cpp" />
+    <ClCompile Include="..\Classes\Levels\Level1.cpp" />
+    <ClCompile Include="..\Classes\Levels\Level2.cpp" />
+    <ClCompile Include="..\Classes\Levels\Levels.cpp" />
     <ClCompile Include="..\Classes\Scene\BaseScene.cpp" />
-    <ClCompile Include="..\Classes\Scene\MainGameAnim.cpp" />
     <ClCompile Include="..\Classes\Scene\MainGameScene.cpp" />
     <ClCompile Include="..\Classes\Scene\SettingsScene.cpp" />
     <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp" />
@@ -151,22 +155,32 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\Classes\UI\BallButton.cpp" />
+    <ClCompile Include="..\Classes\UI\BallDialog.cpp" />
     <ClCompile Include="..\Classes\UI\BallSlider.cpp" />
+    <ClCompile Include="..\Classes\UI\EdgedBallButton.cpp" />
     <ClCompile Include="..\Classes\UI\TitleBar.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Element\MainBall.h" />
+    <ClInclude Include="..\Classes\Element\Ring.h" />
     <ClInclude Include="..\Classes\Element\SmartString.h" />
+    <ClInclude Include="..\Classes\Element\Target.h" />
     <ClInclude Include="..\Classes\EngineHelper.h" />
+    <ClInclude Include="..\Classes\Levels\BaseLevel.h" />
+    <ClInclude Include="..\Classes\Levels\Level1.h" />
+    <ClInclude Include="..\Classes\Levels\Level2.h" />
+    <ClInclude Include="..\Classes\Levels\Levels.h" />
     <ClInclude Include="..\Classes\Scene\BaseScene.h" />
     <ClInclude Include="..\Classes\Scene\MainGameScene.h" />
     <ClInclude Include="..\Classes\Scene\SettingsScene.h" />
     <ClInclude Include="..\Classes\Scene\WelcomeScene.h" />
     <ClInclude Include="..\Classes\stdafx.h" />
     <ClInclude Include="..\Classes\UI\BallButton.h" />
+    <ClInclude Include="..\Classes\UI\BallDialog.h" />
     <ClInclude Include="..\Classes\UI\BallSlider.h" />
+    <ClInclude Include="..\Classes\UI\EdgedBallButton.h" />
     <ClInclude Include="..\Classes\UI\TitleBar.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
