@@ -7,16 +7,7 @@
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286
 
 #define DESIGNED_WIDTH 480
-//#define DESIGNED_HEIGHT 640
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #define DESIGNED_HEIGHT 800
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#define DESIGNED_HEIGHT 640
-#else
-#define DESIGNED_HEIGHT 800
-#endif
-
-
 
 #define C_RED			0
 #define C_PINK			1
@@ -97,22 +88,12 @@ public:
 	static ColorPalette P2;
 };
 
-
-inline float angleMinus90(float angle){
-	return float((int(angle*180/PI + 270)%360*PI/180));
-}
-
-inline float anglePlus90(float angle){
-	return float((int(angle*180/PI + 90)%360*PI/180));
-}
-
 typedef struct{
 	std::function<bool(cocos2d::Touch*, cocos2d::Event*)> onTouchBegan;
     std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchMoved;
     std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchEnded;
     std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchCancelled;
 } TouchEventsFunc;
-
 
 
 namespace stdPatchForMinGW
@@ -141,6 +122,10 @@ namespace stdPatchForMinGW
 //#define FONT_MAIN S("Arial", "Î¢ÈíÑÅºÚ")
 #define FONT_MAIN "fonts/SF Theramin Gothic Condensed.ttf"
 #define FONT_BOLD "fonts/SF Theramin Gothic Bold.ttf"
+
+#define SMOOTH_MATERIAL PhysicsMaterial(0.0f, 1.0f, 0.0f)
+
+#define _LEVEL(l) Level##l
 
 #endif // _ENGINE_HELPER_H_
 
