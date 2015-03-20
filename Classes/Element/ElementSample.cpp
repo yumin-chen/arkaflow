@@ -25,12 +25,3 @@ Ring* Ring::create() {
 void Ring::initOpt() {
 
 }
-
-void Ring::setOpacity(GLubyte o){
-	Sprite::setOpacity(o);
-	auto children = this->getChildren();
-	for (Vector<Node*>::iterator it = children.begin() ; it != children.end(); ++it)
-	{
-		(*it)->setOpacity(o);
-	}
-}

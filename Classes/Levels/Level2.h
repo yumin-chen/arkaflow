@@ -8,7 +8,9 @@ class Level2 : public BaseLevel
 {
 public:
     virtual bool init();  
+	virtual void restart();
 	virtual void update(float);
+	virtual int getLevel(){return 2;};
     CREATE_FUNC(Level2); 
 };
 

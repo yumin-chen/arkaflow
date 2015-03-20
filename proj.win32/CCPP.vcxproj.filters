@@ -87,6 +87,18 @@
     <ClCompile Include="..\Classes\Levels\Levels.cpp">
       <Filter>src\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Element\Block.cpp">
+      <Filter>src\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level3.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Element\Triangle.cpp">
+      <Filter>src\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level4.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -150,6 +162,18 @@
       <Filter>src\Levels</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Levels\Levels.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Element\Block.h">
+      <Filter>src\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level3.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Element\Triangle.h">
+      <Filter>src\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level4.h">
       <Filter>src\Levels</Filter>
     </ClInclude>
   </ItemGroup>

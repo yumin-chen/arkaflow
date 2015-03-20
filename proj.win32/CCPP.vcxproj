@@ -138,14 +138,18 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\Element\Block.cpp" />
     <ClCompile Include="..\Classes\Element\MainBall.cpp" />
     <ClCompile Include="..\Classes\Element\Ring.cpp" />
     <ClCompile Include="..\Classes\Element\SmartString.cpp" />
     <ClCompile Include="..\Classes\Element\Target.cpp" />
+    <ClCompile Include="..\Classes\Element\Triangle.cpp" />
     <ClCompile Include="..\Classes\EngineHelper.cpp" />
     <ClCompile Include="..\Classes\Levels\BaseLevel.cpp" />
     <ClCompile Include="..\Classes\Levels\Level1.cpp" />
     <ClCompile Include="..\Classes\Levels\Level2.cpp" />
+    <ClCompile Include="..\Classes\Levels\Level3.cpp" />
+    <ClCompile Include="..\Classes\Levels\Level4.cpp" />
     <ClCompile Include="..\Classes\Levels\Levels.cpp" />
     <ClCompile Include="..\Classes\Scene\BaseScene.cpp" />
     <ClCompile Include="..\Classes\Scene\MainGameScene.cpp" />
@@ -163,14 +167,18 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\Element\Block.h" />
     <ClInclude Include="..\Classes\Element\MainBall.h" />
     <ClInclude Include="..\Classes\Element\Ring.h" />
     <ClInclude Include="..\Classes\Element\SmartString.h" />
     <ClInclude Include="..\Classes\Element\Target.h" />
+    <ClInclude Include="..\Classes\Element\Triangle.h" />
     <ClInclude Include="..\Classes\EngineHelper.h" />
     <ClInclude Include="..\Classes\Levels\BaseLevel.h" />
     <ClInclude Include="..\Classes\Levels\Level1.h" />
     <ClInclude Include="..\Classes\Levels\Level2.h" />
+    <ClInclude Include="..\Classes\Levels\Level3.h" />
+    <ClInclude Include="..\Classes\Levels\Level4.h" />
     <ClInclude Include="..\Classes\Levels\Levels.h" />
     <ClInclude Include="..\Classes\Scene\BaseScene.h" />
     <ClInclude Include="..\Classes\Scene\MainGameScene.h" />

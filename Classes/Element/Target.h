@@ -9,10 +9,13 @@ class Target: public cocos2d::Sprite
         Target();
         ~Target();
 		static Target* create();
-		void setOpacity(GLubyte);
 		void beHit();
 		void initBody();
+		void playAnim(int);
+		SETOPACITY_FUNC(Sprite);
+		static int targetNum;
     private:
+		bool bAlreadyHit;
 		void initOpt();
 		
 };

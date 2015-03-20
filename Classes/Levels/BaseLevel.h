@@ -7,8 +7,10 @@ class BaseLevel : public cocos2d::LayerColor
 {
 public:
     virtual bool init(); 
-    virtual void setOpacity(GLubyte opacity);
+	virtual void restart();
 	virtual void update(float) = 0;
+	virtual int getLevel() = 0;
+	SETOPACITY_FUNC(LayerColor);
 };
 
 #endif // __BASE_LEVEL_H__

@@ -9,7 +9,7 @@ class Ring: public cocos2d::Sprite
         Ring();
         ~Ring();
 		static Ring* create();
-		void setOpacity(GLubyte);
+		SETOPACITY_FUNC(Sprite);
     private:
 		void initOpt();
 		

@@ -39,12 +39,16 @@ struct sys_settings{
 	int soundVolume;
 	bool musicEnabled;
 	bool soundEnabled;
+	int currentLevel;
+	int unlockedLevel;
 };
 #define UD_COLOR_ACCENT "q"
 #define UD_MUSIC_VOLUME "w"
 #define UD_SOUND_VOLUME "e"
 #define UD_MUSIC_ENABLED "r"
 #define UD_SOUND_ENABLED "t"
+#define UD_CURRENT_LEVEL "y"
+#define UD_UNLOCKED_LEVEL "u"
 
 
 typedef struct{
@@ -120,12 +124,24 @@ namespace stdPatchForMinGW
 
 #define S(english,chinese) E::language==0?english:chinese
 //#define FONT_MAIN S("Arial", "Î¢ÈíÑÅºÚ")
-#define FONT_MAIN "fonts/SF Theramin Gothic Condensed.ttf"
-#define FONT_BOLD "fonts/SF Theramin Gothic Bold.ttf"
+#define FONT_MAIN S("fonts/SF Theramin Gothic Condensed.ttf", "fonts/Chinese Font.ttf")
+#define FONT_BOLD S("fonts/SF Theramin Gothic Bold.ttf", "fonts/Chinese Font.ttf")
 
 #define SMOOTH_MATERIAL PhysicsMaterial(0.0f, 1.0f, 0.0f)
 
 #define _LEVEL(l) Level##l
 
-#endif // _ENGINE_HELPER_H_
+
+#define SETOPACITY_FUNC(__PARENT__) \
+virtual void setOpacity(GLubyte opacity) \
+{ \
+	__PARENT__::setOpacity(opacity); \
+	auto children = this->getChildren(); \
+	for (cocos2d::Vector<cocos2d::Node*>::iterator it = children.begin() ; it != children.end(); ++it) \
+	{ \
+		(*it)->setOpacity(opacity); \
+	} \
+}
+
+#endif // _ENGINE_HELPER_H_ 
 

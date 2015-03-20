@@ -23,12 +23,18 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/Element/SmartString.cpp \
                    ../../Classes/Element/Ring.cpp \
                    ../../Classes/Element/Target.cpp \
+                   ../../Classes/Element/Block.cpp \
+                   ../../Classes/Element/Triangle.cpp \
                    ../../Classes/Scene/BaseScene.cpp \
                    ../../Classes/Scene/WelcomeScene.cpp \
                    ../../Classes/Scene/MainGameScene.cpp \
                    ../../Classes/Scene/SettingsScene.cpp \
                    ../../Classes/Levels/BaseLevel.cpp \
+                   ../../Classes/Levels/Levels.cpp \
                    ../../Classes/Levels/Level1.cpp \
+                   ../../Classes/Levels/Level2.cpp \
+                   ../../Classes/Levels/Level3.cpp \
+                   ../../Classes/Levels/Level4.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

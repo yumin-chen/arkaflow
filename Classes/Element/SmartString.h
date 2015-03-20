@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "MainBall.h"
 
-#define SS_SPEEDRATIO 200
+#define SS_SPEEDRATIO 300
 class SmartString : public cocos2d::Sprite
 {
     public:

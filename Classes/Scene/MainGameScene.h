@@ -15,9 +15,10 @@
 
 #define	TAG_PHY				19950204
 #define TAG_PHY_EDGE		(TAG_PHY+1)
-#define TAG_PHY_BALL		(TAG_PHY+2)
-#define TAG_PHY_STRING		(TAG_PHY+3)
-#define TAG_PHY_TARGET		(TAG_PHY+4)
+#define TAG_PHY_EDGE_BTM	(TAG_PHY+2)
+#define TAG_PHY_BALL		(TAG_PHY+3)
+#define TAG_PHY_STRING		(TAG_PHY+4)
+#define TAG_PHY_TARGET		(TAG_PHY+5)
 
 class S_MainGame : public BaseScene
 {
@@ -27,6 +28,7 @@ public:
     void update( float dt );
 	void restartGame();
 	void leaveGame();    
+	void nextLevelDialog();
     CREATE_FUNC(S_MainGame);
 
 private:
@@ -34,6 +36,7 @@ private:
 	void updateEnemyAI();
 	void checkCollision(MainBall* wheel);
 	bool onContactBegin(cocos2d::PhysicsContact& contact);
+	bool onContactPreSolve(cocos2d::PhysicsContact& contact, cocos2d::PhysicsContactPreSolve& solve);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
@@ -43,6 +46,7 @@ private:
 	void addScore(int);
 	void pause();
 	void gameOver();
+	void backLevel();
 
 	bool m_isGameOver;
 	bool m_isRestarting;

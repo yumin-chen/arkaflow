@@ -28,6 +28,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	E::settings.soundVolume = ud->getIntegerForKey(UD_SOUND_VOLUME, 100);
 	E::settings.musicEnabled = ud->getBoolForKey(UD_MUSIC_ENABLED, true);
 	E::settings.soundEnabled = ud->getBoolForKey(UD_SOUND_ENABLED, true);
+	E::settings.currentLevel = ud->getIntegerForKey(UD_CURRENT_LEVEL, 1);
+	E::settings.unlockedLevel = ud->getIntegerForKey(UD_UNLOCKED_LEVEL, 1);
 	E::setColorAccent(E::settings.colorAccent);
 	E::playBgMusic();
 	//E::language = 0;

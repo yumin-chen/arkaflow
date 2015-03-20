@@ -157,7 +157,7 @@ void SmartString::go(){
 	w*= E::scale;
 	//w -= d/2;
 	m_pBody->setVelocity(Vec2(0, m_speed * SS_SPEEDRATIO));
-#define SS_FORCERATIO -400
+#define SS_FORCERATIO -500
 	m_pBody->applyForce(Vec2(0, m_speed * SS_FORCERATIO));
 	m_pBody->setPositionOffset(Vec2((w) / 2 * cos(getRotation() * PI / 180) , - w / 2* sin(getRotation() * PI / 180)));
 	m_pBody->setRotationEnable(false);

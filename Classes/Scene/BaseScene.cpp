@@ -36,8 +36,6 @@ bool BaseScene::init(int backgroundColor)
 
 bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
-	if(m_touchEmitter)
-		putEmitter(touch->getLocation()/E::scale);
 	/*
 #ifndef NDEBUG
 	Vec2 p = touch->getLocation() / E::scale;
@@ -51,6 +49,8 @@ bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 			return true;
 		}
 	}
+	if(m_touchEmitter)
+		putEmitter(touch->getLocation()/E::scale);
 	return false;
 }
 
@@ -83,6 +83,8 @@ void BaseScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
 			it->onTouchEnded(touch, event);
 		}
 	}
+	if(m_touchEmitter)
+		putEmitter(touch->getLocation()/E::scale);
 }
 
 void BaseScene::onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event){

@@ -29,9 +29,13 @@ Scene* S_MainGame::createScene()
 // on "init" you need to initialize your instance
 bool S_MainGame::init()
 {
+	m_game = nullptr;
 	m_bPaused = false;
 	// super init 
 	if (!BaseScene::init(E::P.C100)){return false;}
+#ifndef NDEBUG
+	E::settings.currentLevel = 4;
+#endif
 
 	// disable touch emitter
 	setTouchEmitterEnabled(false);
@@ -45,11 +49,6 @@ bool S_MainGame::init()
 	this->addChild(m_mbg, 15);
 	auto seq = Sequence::create(MoveBy::create(0.4f, Vec2(0, (E::visibleHeight-TITLEBAR_HEIGHT)/2)), cbGoHigher, cbGoLower, ScaleBy::create(0.4f, 16), nullptr);
 	m_mbg->runAction(seq);
-
-	m_game = Levels::createLevel(1);
-	m_game->setOpacity(0);
-	addChild(m_game, 2);
-	m_game->runAction(Sequence::create(DelayTime::create(0.6f), FadeIn::create(0.3f), nullptr));
 
 	// 
 	auto bgBtm = LayerColor::create(C4B(E::P.C100));
@@ -122,14 +121,24 @@ bool S_MainGame::init()
 
 	// create edges
 	auto edgeSp = Sprite::create();
-	auto boundBody = PhysicsBody::createEdgeBox(Size(E::visibleWidth+30, E::visibleHeight - TITLEBAR_HEIGHT+30), SMOOTH_MATERIAL, 16);
+	auto boundBody = PhysicsBody::createEdgeBox(Size(E::visibleWidth+32, E::visibleHeight - TITLEBAR_HEIGHT+32+128), SMOOTH_MATERIAL, 14);
 	boundBody->setContactTestBitmask(0xFFFFFFFF);
 	boundBody->setCategoryBitmask(0xFFFFFF00);
 	boundBody->setDynamic(false);
-	edgeSp->setPosition(Vec2(E::visibleWidth / 2, (E::visibleHeight - TITLEBAR_HEIGHT) / 2));
+	edgeSp->setPosition(Vec2(E::visibleWidth / 2, (E::visibleHeight - TITLEBAR_HEIGHT) / 2 - 64));
 	edgeSp->setPhysicsBody(boundBody);
 	edgeSp->setTag(TAG_PHY_EDGE);
 	this->addChild(edgeSp);
+
+	auto edgeBtmSp = Sprite::create();
+	auto boundBtmBody = PhysicsBody::createBox(Size(E::visibleWidth, 64), SMOOTH_MATERIAL);
+	boundBtmBody->setContactTestBitmask(0xFFFFFFFF);
+	boundBtmBody->setCategoryBitmask(0xFFFFFF00);
+	boundBtmBody->setDynamic(false);
+	edgeBtmSp->setPosition(Vec2(E::visibleWidth / 2, -32));
+	edgeBtmSp->setPhysicsBody(boundBtmBody);
+	edgeBtmSp->setTag(TAG_PHY_EDGE_BTM);
+	this->addChild(edgeBtmSp);
 
 	//
 	m_wheel = new MainBall;
@@ -161,6 +170,7 @@ bool S_MainGame::init()
 
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(S_MainGame::onContactBegin, this);
+	contactListener->onContactPreSolve = CC_CALLBACK_2(S_MainGame::onContactPreSolve, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	restartGame();
@@ -208,7 +218,7 @@ bool S_MainGame::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 	}
 	cocos2d::Vec2 p = touch->getLocation() / E::scale;
 
-	if(Rect(0, 0, E::visibleWidth, (E::visibleHeight - TITLEBAR_HEIGHT)*0.3f).containsPoint(p))
+	if(Rect(0, 0, E::visibleWidth, GAME_BTM_HEIGHT).containsPoint(p))
 	{
 		m_stsBackground->setVisible(false);
 		m_stsShine->setVisible(false);
@@ -251,8 +261,42 @@ void S_MainGame::restartGame(){
 	
 	auto wheelBody = PhysicsBody::createCircle(192*0.5f*m_wheel->sprite->getScale(), SMOOTH_MATERIAL);
 	wheelBody->setContactTestBitmask(0xFFFFFFFF);
-	//wheelBody->set
 	m_wheel->sprite->setPhysicsBody(wheelBody);
+	if(m_game && m_game->getLevel() == E::settings.currentLevel){
+		m_game->restart();
+	}else{
+		if(m_game)
+			m_game->removeFromParentAndCleanup(true);
+		m_game = Levels::createLevel(E::settings.currentLevel);
+		m_game->setOpacity(0);
+		addChild(m_game, 2);
+		m_game->runAction(Sequence::create(DelayTime::create(0.6f), FadeIn::create(0.3f), nullptr));
+	}
+	
+}
+
+void S_MainGame::nextLevelDialog(){
+	m_isGameOver = true;
+	m_wheel->sprite->getPhysicsBody()->removeFromWorld();
+	E::settings.currentLevel++;
+	if(E::settings.currentLevel > MAX_LEVEL){
+		E::settings.currentLevel = 1;
+	}
+	if(E::settings.currentLevel > E::settings.unlockedLevel){
+		E::settings.unlockedLevel = E::settings.currentLevel;
+	}
+	auto ud = UserDefault::getInstance();
+	ud->setIntegerForKey(UD_CURRENT_LEVEL, E::settings.currentLevel);
+	ud->setIntegerForKey(UD_UNLOCKED_LEVEL, E::settings.unlockedLevel);
+	auto nextLevelDialog = BallDialog::create(S("Level accomplished!", "恭喜你，过关了！"), CC_CALLBACK_0(S_MainGame::backLevel, this), CC_CALLBACK_0(S_MainGame::restartGame, this), "ui/b_restart.png", "ui/b_next.png");
+	this->addChild(nextLevelDialog, 1000);
+}
+
+void S_MainGame::backLevel(){
+	E::settings.currentLevel--;
+	auto ud = UserDefault::getInstance();
+	ud->setIntegerForKey(UD_CURRENT_LEVEL, E::settings.currentLevel);
+	restartGame();
 }
 
 void S_MainGame::leaveGame(){
@@ -314,6 +358,7 @@ bool S_MainGame::onContactBegin(PhysicsContact& contact)
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 	if (nodeA && nodeB)
 	{
+
 		if (nodeA->getTag() == TAG_PHY_BALL && nodeB->getTag() == TAG_PHY_STRING)
 		{
 			((SmartString*)nodeB)->onContactWithBall();
@@ -345,42 +390,41 @@ bool S_MainGame::onContactBegin(PhysicsContact& contact)
 	}
 	
 	if(nodeA->getTag() == TAG_PHY_EDGE || nodeB->getTag() == TAG_PHY_EDGE){
-		bool b = false;
-#define WHEEL_RADIUS (m_wheel->sprite->getContentSize().width*192/256*m_wheel->sprite->getScale()*E::scale)
-		/*
-		auto cbCloseAS = CallFunc::create([this](){m_physicsWorld->setAutoStep(false);});
-		auto cbOpenAS = CallFunc::create([this](){m_physicsWorld->setAutoStep(true);});
-		//auto delay = DelayTime::create(0.05f)
-		//up
-		if(((E::visibleHeight - TITLEBAR_HEIGHT) - m_wheel->sprite->getPositionY()) <= WHEEL_RADIUS){
-			this->runAction(Sequence::create(cbCloseAS, MoveBy::create(0.05f, Vec2(0, 8)), MoveBy::create(0.05f, Vec2(0, -8)), cbOpenAS, nullptr));
-			b = true;
-		}
-		//left
-		if(m_wheel->sprite->getPositionX() <= WHEEL_RADIUS){
-			this->runAction(Sequence::create(cbCloseAS, MoveBy::create(0.05f, Vec2(-8, 0)), MoveBy::create(0.05f, Vec2(8, 0)), cbOpenAS, nullptr));
-			b = true;
-		}
-		
-		//right
-		if((E::visibleWidth - m_wheel->sprite->getPositionX()) <= WHEEL_RADIUS){
-			this->runAction(Sequence::create(cbCloseAS, MoveBy::create(0.05f, Vec2(8, 0)), MoveBy::create(0.05f, Vec2(-8, 0)), cbOpenAS, nullptr));
-			b = true;
-		}
-
-		if(b){
-			E::playEffect("di");
-		}
-		*/
-
-		//down
-		if(m_wheel->sprite->getPositionY() <= WHEEL_RADIUS){
-			//this->runAction(Sequence::create(MoveBy::create(0.05f, Vec2(0, -8)), MoveBy::create(0.05f, Vec2(0, 8)), nullptr));
-			E::playEffect("beng");
-			gameOver();
-		}else{E::playEffect("di");}
+		E::playEffect("di");
+	}
+	else if(nodeA->getTag() == TAG_PHY_EDGE_BTM || nodeB->getTag() == TAG_PHY_EDGE_BTM){
+		E::playEffect("beng");
+		gameOver();
 	}
 	//bodies can collide
+	return true;
+}
+
+bool S_MainGame::onContactPreSolve(PhysicsContact& contact, PhysicsContactPreSolve& solve){
+	/*
+	if(m_isGameOver || m_bPaused){
+		return false;
+	}
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA && nodeB)
+	{
+		if (nodeA->getTag() == TAG_PHY_BALL || nodeB->getTag() == TAG_PHY_BALL)
+		{
+			Vec2 v = solve.getSurfaceVelocity();
+			if(sqrt(v.x * v.x + v.y * v.y) < 640){
+				float angle = atan2(v.y, v.x);
+				Vec2 newv = Vec2(640 * sin(angle), -640 * cos(angle));
+				solve.setSurfaceVelocity(newv);
+				float newangle = atan2(newv.y, newv.x);
+				if(newangle != angle){
+					printf("error");
+				}
+				return true;
+			}
+		}
+	}
+	*/
 	return true;
 }
 

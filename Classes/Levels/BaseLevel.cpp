@@ -2,6 +2,7 @@
 #include "BaseLevel.h"
 #include "Scene/MainGameScene.h"
 #include "UI/TitleBar.h"
+#include "Element/Target.h"
 
 USING_NS_CC;
 
@@ -14,16 +15,10 @@ bool BaseLevel::init()
 	this->setContentSize(Size(E::visibleWidth, E::visibleHeight - GAME_BTM_HEIGHT - TITLEBAR_HEIGHT));
 	this->setAnchorPoint(Vec2(0, 0));
 	this->setPosition(0, GAME_BTM_HEIGHT);
-
 	return true;
 }
 
-
-void BaseLevel::setOpacity(GLubyte o){
-	LayerColor::setOpacity(o);
-	auto children = this->getChildren();
-	for (Vector<Node*>::iterator it = children.begin() ; it != children.end(); ++it)
-	{
-		(*it)->setOpacity(o);
-	}
+void BaseLevel::restart(){
+	Target::targetNum = 0;
+	this->removeAllChildrenWithCleanup(true);
 }

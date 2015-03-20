@@ -38,18 +38,7 @@ Make sure to setScale before initBody.
 void Ring::initBody(){
 	auto body = PhysicsBody::createCircle(getContentSize().width*getScale()*0.5f, SMOOTH_MATERIAL);
 	body->setDynamic(false);
-	//body->setVelocityLimit(0);
-	//body->setAngularVelocityLimit(0);
 	body->setCategoryBitmask(0xFFFFFFF0);
 	body->setCollisionBitmask(0x000000F0);
 	setPhysicsBody(body);
-}
-
-void Ring::setOpacity(GLubyte o){
-	Sprite::setOpacity(o);
-	auto children = this->getChildren();
-	for (Vector<Node*>::iterator it = children.begin() ; it != children.end(); ++it)
-	{
-		(*it)->setOpacity(o);
-	}
 }
