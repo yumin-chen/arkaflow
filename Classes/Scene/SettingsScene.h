@@ -12,14 +12,14 @@ class S_Settings : public BaseScene
 public:
     static cocos2d::Scene* createScene();
     virtual bool init();  
-	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
+	void onKeyEvent(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
 	void menuCallback(cocos2d::Ref* pSender);
     CREATE_FUNC(S_Settings);
 
 private:
 	void _ok();
 	void _cancel();
-	bool m_bClose;
+	int m_bClose;
 	int m_tempColorAccent;
 	void runAnimations(bool);
 
@@ -31,6 +31,9 @@ private:
 	BallButton* m_cancelBg;
 	BallButton* m_btmBg;
 	TitleBar* m_titleBar;
+
+	cocos2d::Sprite* m_heartIcon;
+	EdgedBallButton* m_heartBtn;
 
 	EdgedBallButton* m_spMusicBtn;
 	EdgedBallButton* m_spSoundBtn;

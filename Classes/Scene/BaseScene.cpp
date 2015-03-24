@@ -31,7 +31,33 @@ bool BaseScene::init(int backgroundColor)
 	listener->onTouchCancelled = CC_CALLBACK_2(BaseScene::onTouchCancelled, this);
 
 	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
+	// creating a keyboard event listener
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyPressed = CC_CALLBACK_2(BaseScene::onKeyPressed, this);
+	keyboardListener->onKeyReleased = CC_CALLBACK_2(BaseScene::onKeyReleased, this);
+
+	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 	return true;
+}
+
+void BaseScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event){
+	for (std::vector<KeyboardEventsFunc>::iterator it = _keyboardEvents.begin() ;it != _keyboardEvents.end(); ++it)
+	{
+		if(it->onKeyPressed && it->onKeyPressed(keyCode, event)){
+			return;
+		}
+	}
+}
+
+void BaseScene::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event){
+	for (std::vector<KeyboardEventsFunc>::iterator it = _keyboardEvents.begin() ;it != _keyboardEvents.end(); ++it)
+	{
+		if(it->onKeyReleased && it->onKeyReleased(keyCode, event)){
+			return;
+		}
+	}
+	onKeyEvent(keyCode, event);
 }
 
 bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
@@ -100,28 +126,55 @@ BaseScene* BaseScene::getCurrentScene(){
 	return s_CurrentScene;
 }
 
-size_t BaseScene::addTouchEvents(TouchEventsFunc touchEvent){
+int BaseScene::addTouchEvents(TouchEventsFunc touchEvent){
+	static int id_generator = 0;
+	id_generator++;
+	touchEvent.id = id_generator;
 	_touchEvents.push_back(touchEvent);
-	return _touchEvents.size() - 1;
+	return id_generator;
 };
 
-/*
-void BaseScene::removeTouchEvents(size_t index){
-	_touchEvents.at(index).onTouchBegan = nullptr;
-	_touchEvents.at(index).onTouchMoved = nullptr;
-	_touchEvents.at(index).onTouchEnded = nullptr;
-	_touchEvents.at(index).onTouchCancelled = nullptr;
+
+bool BaseScene::removeTouchEvents(int id){
+	for (std::vector<TouchEventsFunc>::iterator it = _touchEvents.begin() ;it != _touchEvents.end(); ++it)
+	{
+		if(it->id == id){
+			_touchEvents.erase(it);
+			return (true);
+		}
+	}
+	return false;
 };
-*/
+
+int BaseScene::addKeyboardEvents(KeyboardEventsFunc keyboardEvent){
+	static int id_generator = 0;
+	id_generator++;
+	keyboardEvent.id = id_generator;
+	_keyboardEvents.push_back(keyboardEvent);
+	return id_generator;
+};
+
+
+bool BaseScene::removeKeyboardEvents(int id){
+	for (std::vector<KeyboardEventsFunc>::iterator it = _keyboardEvents.begin() ;it != _keyboardEvents.end(); ++it)
+	{
+		if(it->id == id){
+			_keyboardEvents.erase(it);
+			return (true);
+		}
+	}
+	return false;
+};
+
 
 void BaseScene::putEmitter(Vec2 pos){
 	m_emitterCreated ++;
 
 	auto _emitter = ParticleSystemQuad::createWithTotalParticles(100);
-    _emitter->retain();
+    //_emitter->retain();
 	_emitter->setTag(m_emitterCreated);
 
-    this->addChild(_emitter, 10);
+    this->addChild(_emitter, 10000);
     ////_emitter->release();    // win32 : Remove this line
     _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage("ui/ball_outer.png") );
 
@@ -180,10 +233,10 @@ void BaseScene::putEmitter2(Vec2 pos){
 	m_emitterCreated ++;
 
 	auto _emitter = ParticleSystemQuad::createWithTotalParticles(100);
-    _emitter->retain();
+    //_emitter->retain();
 	_emitter->setTag(m_emitterCreated);
 
-    this->addChild(_emitter, 10);
+    this->addChild(_emitter, 10000);
     ////_emitter->release();    // win32 : Remove this line
     _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage("target.png") );
 

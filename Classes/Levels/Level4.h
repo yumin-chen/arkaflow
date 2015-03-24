@@ -4,7 +4,7 @@
 #include "EngineHelper.h"
 #include "BaseLevel.h"
 #include "Element/Target.h"
-#include "Element/Block.h"
+#include "Element/Diamond.h"
 
 class Level4 : public BaseLevel
 {
@@ -15,7 +15,7 @@ public:
 	virtual int getLevel(){return 4;};
     CREATE_FUNC(Level4); 
 private:
-	Block* block;
+	Diamond* diamond;
 	float angle;
 };
 

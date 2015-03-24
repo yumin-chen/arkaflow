@@ -1,19 +1,19 @@
 #include "stdafx.h"
 #include "Scene/MainGameScene.h"
 #include "EngineHelper.h"
-#include "Triangle.h"
+#include "Diamond.h"
 
 USING_NS_CC;
 
-Triangle::Triangle() {
+Diamond::Diamond() {
 }
 
-Triangle::~Triangle() {
+Diamond::~Diamond() {
 }
 
-Triangle* Triangle::create() {
-	Triangle *sprite = new (std::nothrow) Triangle();
-    if (sprite && sprite->initWithFile("tri_o.png"))
+Diamond* Diamond::create() {
+	Diamond *sprite = new (std::nothrow) Diamond();
+    if (sprite && sprite->initWithFile("diamond_o.png"))
     {
         sprite->autorelease();
 		sprite->initOpt();
@@ -23,10 +23,10 @@ Triangle* Triangle::create() {
     return nullptr;
 }
 
-void Triangle::initOpt() {
+void Diamond::initOpt() {
 	this->setColor(C3B(E::P.C400));
 	this->setTag(TAG_PHY_BLOCK);
-	auto i = Sprite::create("tri_i.png");
+	auto i = Sprite::create("diamond_i.png");
 	i->setColor(C3B(E::P.C800));
 	i->setPosition(this->getContentSize()/2);
 	//i->runAction(RotateBy::create(1E35, 360E35));
@@ -36,10 +36,10 @@ void Triangle::initOpt() {
 /**
 Make sure to setScale before initBody.
 */
-void Triangle::initBody(){
+void Diamond::initBody(){
 	float w = getContentSize().width / 2 * getScale() - 8;
-	Vec2 points[3] = {Vec2(-w, w), Vec2(0, -w), Vec2(w, w)};
-	auto body = PhysicsBody::createEdgePolygon(points, 3, SMOOTH_MATERIAL, 6);
+	Vec2 points[4] = {Vec2(-w/2, 0), Vec2(0, -w), Vec2(w/2, 0), Vec2(0, w)};
+	auto body = PhysicsBody::createEdgePolygon(points, 4, SMOOTH_MATERIAL, 8);
 	body->setDynamic(false);
 	body->setContactTestBitmask(0x0000000F);
 	body->setCategoryBitmask(0xFFFFFFF0);

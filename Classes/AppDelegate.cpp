@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "AppDelegate.h"
 #include "EngineHelper.h"
-#include "scene/WelcomeScene.h"
+#include "Scene/SplashScene.h"
+#include "Scene/WelcomeScene.h"
 
 USING_NS_CC;
 
@@ -15,7 +16,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 		//glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, 320, 640), 1);
-        glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, 800, 640), 1);
+        glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, 800, 600), 1);
 		//glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, DESIGNED_WIDTH, DESIGNED_HEIGHT), 1);
         director->setOpenGLView(glview);
 		//glview->setDesignResolutionSize(DESIGNED_WIDTH, DESIGNED_HEIGHT, ResolutionPolicy::NO_BORDER);
@@ -32,7 +33,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	E::settings.unlockedLevel = ud->getIntegerForKey(UD_UNLOCKED_LEVEL, 1);
 	E::setColorAccent(E::settings.colorAccent);
 	E::playBgMusic();
-	//E::language = 0;
+
 	LanguageType lang = CCApplication::getInstance()->getCurrentLanguage();
 	switch(lang){
 	case LanguageType::ENGLISH:
@@ -45,12 +46,17 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		E::language = 0;
 		break;
 	}
-	
 
     director->setAnimationInterval(1.0 / 60);
 
-    auto scene = S_Welcome::createScene();
+#ifndef NDEBUG
+	auto scene_ = S_Welcome::createScene();
+    director->runWithScene(scene_);
+	return true;
+#endif
 
+
+    auto scene = S_Splash::createScene();
     director->runWithScene(scene);
 
     return true;

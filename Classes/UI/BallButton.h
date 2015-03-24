@@ -19,12 +19,14 @@ class BallButton : public cocos2d::Sprite
 		void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 		void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 		void onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event);
+		void onEnter();
+		void onExit();
 		cocos2d::ccMenuCallback m_callback;
 		int m_state;
 		bool m_isEnabled;
 		int m_normalColor;
 		int m_selectedColor;
-		//size_t m_listenerIndex;
+		int m_listenerId;
 };
 
 #endif // _BALLBUTTON_HPP_

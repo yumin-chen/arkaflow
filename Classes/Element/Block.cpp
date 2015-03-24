@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Scene/MainGameScene.h"
 #include "EngineHelper.h"
 #include "Block.h"
 
@@ -24,6 +25,7 @@ Block* Block::create(float width, float height, int color) {
 
 void Block::initOpt(float width, float height){
 	setContentSize(Size(width, height));
+	this->setTag(TAG_PHY_BLOCK);
 }
 
 /**
@@ -34,6 +36,7 @@ void Block::initBody(){
 	body->setDynamic(false);
 	body->setCategoryBitmask(0xFFFFFFF0);
 	body->setCollisionBitmask(0x000000F0);
+	body->setContactTestBitmask(0x0000000F);
 	body->setPositionOffset(Vec2(getContentSize().width * 0.5 * E::scale, getContentSize().height * 0.5 * E::scale));
 	setPhysicsBody(body);
 }

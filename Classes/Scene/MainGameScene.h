@@ -19,6 +19,7 @@
 #define TAG_PHY_BALL		(TAG_PHY+3)
 #define TAG_PHY_STRING		(TAG_PHY+4)
 #define TAG_PHY_TARGET		(TAG_PHY+5)
+#define TAG_PHY_BLOCK		(TAG_PHY+6)
 
 class S_MainGame : public BaseScene
 {
@@ -29,6 +30,8 @@ public:
 	void restartGame();
 	void leaveGame();    
 	void nextLevelDialog();
+	void backHomeDialog();
+	void pickLevelDialog();
     CREATE_FUNC(S_MainGame);
 
 private:
@@ -37,21 +40,23 @@ private:
 	void checkCollision(MainBall* wheel);
 	bool onContactBegin(cocos2d::PhysicsContact& contact);
 	bool onContactPreSolve(cocos2d::PhysicsContact& contact, cocos2d::PhysicsContactPreSolve& solve);
-	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
+	void onKeyEvent(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 	void menuCallback(cocos2d::Ref* pSender);
 	void collidingWithBorder();
-	void addScore(int);
 	void pause();
 	void gameOver();
 	void backLevel();
+	void pickLevel();
+	void goToAboutPage();
 
 	bool m_isGameOver;
 	bool m_isRestarting;
 	bool m_bPaused;
 	bool m_bStringTouchFocus;
+	double m_dGameTimer;
 
 	cocos2d::MotionStreak* m_ballStreak;
 	cocos2d::PhysicsWorld* m_physicsWorld;
@@ -59,11 +64,12 @@ private:
 	cocos2d::Sprite* m_stsBackground;
 	cocos2d::Sprite* m_stsShine;
 	cocos2d::LayerColor* m_stsLayer;
+	cocos2d::Label* m_minuteLabel;
+	cocos2d::Label* m_secondLabel;
 	TitleBar* m_titleBar;
 	MainBall* m_wheel; 
 	BallButton* m_mbg;
 	BaseLevel* m_game;
-	int m_score;
 
 	SmartString* m_smartstring;
 };

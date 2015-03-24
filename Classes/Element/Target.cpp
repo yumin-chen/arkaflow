@@ -80,6 +80,6 @@ void Target::beHit(){
 	if(targetNum <= 0){
 		((S_MainGame*)BaseScene::getCurrentScene())->nextLevelDialog();
 	}
-
+	E::playEffect("ba");
 
 }

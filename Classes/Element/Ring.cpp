@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EngineHelper.h"
+#include "Scene/MainGameScene.h"
 #include "Ring.h"
 
 USING_NS_CC;
@@ -24,6 +25,7 @@ Ring* Ring::create() {
 
 void Ring::initOpt(){
 	this->setColor(C3B(E::P.C400));
+	this->setTag(TAG_PHY_BLOCK);
 	auto i = Sprite::create("ring_i.png");
 	i->setColor(C3B(E::P.C800));
 	i->setPosition(this->getContentSize()/2);
@@ -40,5 +42,6 @@ void Ring::initBody(){
 	body->setDynamic(false);
 	body->setCategoryBitmask(0xFFFFFFF0);
 	body->setCollisionBitmask(0x000000F0);
+	body->setContactTestBitmask(0x0000000F);
 	setPhysicsBody(body);
 }

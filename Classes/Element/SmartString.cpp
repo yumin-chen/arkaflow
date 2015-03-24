@@ -155,16 +155,15 @@ void SmartString::go(){
 	m_pBody = PhysicsBody::createBox(Size(w, d), SMOOTH_MATERIAL);
 	w-=d/4;
 	w*= E::scale;
-	//w -= d/2;
-	m_pBody->setVelocity(Vec2(0, m_speed * SS_SPEEDRATIO));
+
+	m_pBody->setVelocity(Vec2(0, m_speed * SS_SPEEDRATIO * E::scale));
 #define SS_FORCERATIO -500
-	m_pBody->applyForce(Vec2(0, m_speed * SS_FORCERATIO));
+	m_pBody->applyForce(Vec2(0, m_speed * SS_FORCERATIO * E::scale));
 	m_pBody->setPositionOffset(Vec2((w) / 2 * cos(getRotation() * PI / 180) , - w / 2* sin(getRotation() * PI / 180)));
 	m_pBody->setRotationEnable(false);
 	m_pBody->setCollisionBitmask(0x0000000F);
 	m_pBody->setContactTestBitmask(0x0000000F);
 
-	//m_pBody->
 	this->setPhysicsBody(m_pBody);
 	m_deltaDiff = 0;
 	m_isGoing = true;

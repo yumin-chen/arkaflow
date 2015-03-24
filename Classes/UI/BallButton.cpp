@@ -5,14 +5,11 @@
 #define NORMAL 0
 #define SELECTED 1
 
-BallButton::BallButton() {/*m_listenerIndex = -1;*/}
+BallButton::BallButton() {m_listenerId = -1;}
 
 BallButton::~BallButton() {
-	/*
-	if(m_listenerIndex != -1)
-		BaseScene::getCurrentScene()->removeTouchEvents(m_listenerIndex);
-		*/
 }
+
 
 BallButton* BallButton::create(const int normalColor, const int selectedColor, const cocos2d::ccMenuCallback& callback)
 {
@@ -25,17 +22,33 @@ BallButton* BallButton::create(const int normalColor, const int selectedColor, c
 		btn->m_callback = callback;
 		btn->setColor(cocos2d::C3B(btn->m_normalColor));
 		btn->m_state = NORMAL;
-		if(selectedColor != 0 || callback != nullptr){
-			btn->m_isEnabled = true;
-			btn->addEvents();
-		}
         return btn;
     }
     CC_SAFE_DELETE(btn);
     return nullptr;
 }
 
+void BallButton::onEnter(){
+	Sprite::onEnter();
+	if(m_listenerId != -1)
+	{
+		BaseScene::getCurrentScene()->removeTouchEvents(m_listenerId);
+		m_listenerId = -1;
+	}
+	if(m_selectedColor != 0 || m_callback != nullptr){
+		m_isEnabled = true;
+		addEvents();
+	}
+}
 
+void BallButton::onExit(){
+	Sprite::onExit();
+	if(m_listenerId != -1)
+	{
+		BaseScene::getCurrentScene()->removeTouchEvents(m_listenerId);
+		m_listenerId = -1;
+	}
+}
 
 void BallButton::addEvents()
 {
@@ -44,7 +57,7 @@ void BallButton::addEvents()
 	listener.onTouchMoved = CC_CALLBACK_2(BallButton::onTouchMoved, this);
 	listener.onTouchEnded = CC_CALLBACK_2(BallButton::onTouchEnded, this);
 	listener.onTouchCancelled = CC_CALLBACK_2(BallButton::onTouchCancelled, this);
-	BaseScene::getCurrentScene()->addTouchEvents(listener);
+	m_listenerId = BaseScene::getCurrentScene()->addTouchEvents(listener);
 }
 
 void BallButton::_updateColor(){
@@ -63,24 +76,11 @@ void BallButton::setVisible(bool visibility){
 
 bool BallButton::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {
-
-	//cocos2d::MessageBox((stdp::to_string(this->getTag())).c_str(), "tag");
-
 	if(!m_isEnabled){
 		return false;
 	}
 	cocos2d::Vec2 p = this->getParent()->convertTouchToNodeSpace(touch);
 	cocos2d::Rect rect = this->getBoundingBox();
-
-
-	/*
-	if(this->getTag() == 2100){
-		cocos2d::MessageBox((stdp::to_string(p.x) +", " + stdp::to_string(p.y) + "|" 
-			+ stdp::to_string(rect.origin.x) + ", " + stdp::to_string(rect.origin.y)  + ", " +
-			stdp::to_string(rect.size.width) + ", " + stdp::to_string(rect.size.height) + "|" 
-			+ stdp::to_string(rect.containsPoint(p)) ).c_str() , "TEST");
-	}
-	*/
 
 	if(rect.containsPoint(p) && this->m_state == NORMAL)
 	{

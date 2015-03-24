@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "MainGameScene.h"
+#include "AboutScene.h"
 #include "WelcomeScene.h"
 #include "UI/BallButton.h"
 #include "UI/EdgedBallButton.h"
@@ -12,6 +13,9 @@ USING_NS_CC;
 
 #define	TAG_PAUSE		1002
 #define	TAG_SILENT		1003
+#define	TAG_RESTART		1004
+#define	TAG_HOME		1005
+#define	TAG_PICKLEVEL	1006
 
 Scene* S_MainGame::createScene()
 {
@@ -20,7 +24,7 @@ Scene* S_MainGame::createScene()
 	layer->m_physicsWorld = scene->getPhysicsWorld();
 	scene->getPhysicsWorld()->setGravity(Vec2::ZERO);
 #ifndef NDEBUG
-	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 #endif
 	scene->addChild(layer);
 	return scene;
@@ -34,7 +38,7 @@ bool S_MainGame::init()
 	// super init 
 	if (!BaseScene::init(E::P.C100)){return false;}
 #ifndef NDEBUG
-	E::settings.currentLevel = 4;
+	E::settings.currentLevel = 9;
 #endif
 
 	// disable touch emitter
@@ -56,19 +60,56 @@ bool S_MainGame::init()
 	bgBtm->setPosition(0, 0);
 	this->addChild(bgBtm, 1);
 
-	m_titleBar = TitleBar::create(S("", "乾坤弹球"));
+	m_titleBar = TitleBar::create();
 	this->addChild(m_titleBar, 999);
 
-	auto pauseButton = EdgedBallButton::create(CC_CALLBACK_1(S_MainGame::menuCallback, this));
-	pauseButton->setScale(0.3f);
-	pauseButton->setPosition(Vec2(E::visibleWidth - 48, 40));
-	pauseButton->setTag(TAG_PAUSE);
-	m_titleBar->addChild(pauseButton, 1000);
+	m_minuteLabel = Label::createWithTTF("00'", FONT_BOLD, 40, 
+			Size(E::visibleWidth, TITLEBAR_HEIGHT), TextHAlignment::CENTER, TextVAlignment::CENTER);
+	m_minuteLabel->setPosition(-32, TITLEBAR_HEIGHT/2);
+	m_minuteLabel->setAnchorPoint(Vec2(0, 0.5));
+	m_minuteLabel->enableShadow(Color4B(0, 0, 0, 128), Size(2, -2));
+	m_minuteLabel->setColor(Color3B(255, 255, 255));
+	m_titleBar->addChild(m_minuteLabel, 1);
+	m_secondLabel = Label::createWithTTF("00\"", FONT_BOLD, 40, 
+			Size(E::visibleWidth, TITLEBAR_HEIGHT), TextHAlignment::CENTER, TextVAlignment::CENTER);
+	m_secondLabel->setPosition(+32, TITLEBAR_HEIGHT/2);
+	m_secondLabel->setAnchorPoint(Vec2(0, 0.5));
+	m_secondLabel->enableShadow(Color4B(0, 0, 0, 128), Size(2, -2));
+	m_secondLabel->setColor(Color3B(255, 255, 255));
+	m_titleBar->addChild(m_secondLabel, 1);
 
-	auto pauseIcon = Sprite::create("ui/ob_pause.png");
-	pauseIcon->setColor(C3B(E::P.C700));
-	pauseIcon->setAnchorPoint(Vec2(0, 0));
-	pauseButton->addChild(pauseIcon, 1000);
+	auto homeButton = EdgedBallButton::create(CC_CALLBACK_1(S_MainGame::menuCallback, this));
+	homeButton->setScale(0.3f);
+	homeButton->setPosition(Vec2(48, 40));
+	homeButton->setTag(TAG_HOME);
+	m_titleBar->addChild(homeButton, 1000);
+
+	auto homeIcon = Sprite::create("ui/ob_home.png");
+	homeIcon->setColor(C3B(E::P.C700));
+	homeIcon->setAnchorPoint(Vec2(0, 0));
+	homeButton->addChild(homeIcon, 1000);
+
+	auto pickLevelButton = EdgedBallButton::create(CC_CALLBACK_1(S_MainGame::menuCallback, this));
+	pickLevelButton->setScale(0.3f);
+	pickLevelButton->setPosition(Vec2(128, 40));
+	pickLevelButton->setTag(TAG_PICKLEVEL);
+	m_titleBar->addChild(pickLevelButton, 1000);
+
+	auto pickLevelIcon = Sprite::create("ui/ob_pick_level.png");
+	pickLevelIcon->setColor(C3B(E::P.C700));
+	pickLevelIcon->setAnchorPoint(Vec2(0, 0));
+	pickLevelButton->addChild(pickLevelIcon, 1000);
+
+	auto restartButton = EdgedBallButton::create(CC_CALLBACK_1(S_MainGame::menuCallback, this));
+	restartButton->setScale(0.3f);
+	restartButton->setPosition(Vec2(E::visibleWidth - 48, 40));
+	restartButton->setTag(TAG_RESTART);
+	m_titleBar->addChild(restartButton, 1000);
+
+	auto restartIcon = Sprite::create("ui/ob_restart.png");
+	restartIcon->setColor(C3B(E::P.C700));
+	restartIcon->setAnchorPoint(Vec2(0, 0));
+	restartButton->addChild(restartIcon, 1000);
 
 	auto silentButton = EdgedBallButton::create(CC_CALLBACK_1(S_MainGame::menuCallback, this));
 	silentButton->setScale(0.3f);
@@ -175,32 +216,42 @@ bool S_MainGame::init()
 
 	restartGame();
 
-	// enable keyboard
-	this->setKeyboardEnabled(true);
-
 	// set up the scheduled callbacks
 	this->scheduleUpdate();
 
 	return true;
 }
 
+std::string makeTwoDigits(std::string s){
+	if(s.length() == 1){
+		return "0" + s;
+	}
+	return s;
+}
+
 // the parameter dt stands for delta time, which is the time difference between the previous and the current frame.
 void S_MainGame::update( float dt ) 
 {
 	if(!m_bPaused && !m_isGameOver){
-	auto o = m_wheel->sprite->getChildByTag(0);
-	o->setRotation(o->getRotation() + dt * 360);
-	m_ballStreak->setPosition( m_wheel->sprite->getPosition() );
-	m_smartstring->update(dt);
-	m_game->update(dt);
+		auto o = m_wheel->sprite->getChildByTag(0);
+		o->setRotation(o->getRotation() + dt * 360);
+		m_ballStreak->setPosition( m_wheel->sprite->getPosition() );
+		m_smartstring->update(dt);
+		m_game->update(dt);
+		m_dGameTimer = m_dGameTimer + dt;
+		int intTime = int(m_dGameTimer);
+		
+		m_minuteLabel->setString(makeTwoDigits(stdp::to_string(intTime)) + "'");
+		m_secondLabel->setString(makeTwoDigits(stdp::to_string(int(60 * (m_dGameTimer - intTime)))) + "\"");
+
 	}
 }
 
-void S_MainGame::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
+void S_MainGame::onKeyEvent(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
 {
 	// Back button pressed
-	if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE) {
-		pause();
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACK || keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+		backHomeDialog();
 	}
 	
 	if (keyCode == EventKeyboard::KeyCode::KEY_G) {
@@ -209,6 +260,18 @@ void S_MainGame::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *e
 
 }
 
+void S_MainGame::backHomeDialog(){
+	auto leaveDialog = BallDialog::create(S("If you go back to home page, your current game will be lost, are you sure?", "返回主菜单后当前游戏数据将丢失，您确定要返回主菜单吗？"), CC_CALLBACK_0(S_MainGame::leaveGame, this));
+	this->addChild(leaveDialog, 1000);
+}
+
+void S_MainGame::pickLevelDialog(){
+	auto leaveDialog = BallDialog::create(S("If you pick a new level, your current game will be lost, are you sure?", "选择新的关卡后当前游戏数据将丢失，您确定要选择关卡吗？"), CC_CALLBACK_0(S_MainGame::pickLevel, this));
+	this->addChild(leaveDialog, 1000);
+}
+
+void S_MainGame::pickLevel(){
+}
 
 bool S_MainGame::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
@@ -251,13 +314,14 @@ void S_MainGame::restartGame(){
 	m_stsBackground->setVisible(true);
 	m_stsShine->setVisible(true);
 	m_stsLayer->setVisible(true);
-	m_score = 0;
 	m_wheel->speed = 0;
 	m_wheel->rotate = 0;//60*PI/180.0;
 	m_wheel->angle = 180.0*PI/180.0f;
 	m_wheel->rotatedAngle = m_wheel->angle;
 	m_wheel->setPosition(E::visibleWidth/2, GAME_BTM_HEIGHT/2);
-	m_titleBar->setString(stdp::to_string(m_score));
+	m_dGameTimer = 0;
+	m_minuteLabel->setString("00'");
+	m_secondLabel->setString("00\"");
 	
 	auto wheelBody = PhysicsBody::createCircle(192*0.5f*m_wheel->sprite->getScale(), SMOOTH_MATERIAL);
 	wheelBody->setContactTestBitmask(0xFFFFFFFF);
@@ -272,6 +336,7 @@ void S_MainGame::restartGame(){
 		addChild(m_game, 2);
 		m_game->runAction(Sequence::create(DelayTime::create(0.6f), FadeIn::create(0.3f), nullptr));
 	}
+
 	
 }
 
@@ -281,6 +346,9 @@ void S_MainGame::nextLevelDialog(){
 	E::settings.currentLevel++;
 	if(E::settings.currentLevel > MAX_LEVEL){
 		E::settings.currentLevel = 1;
+		auto nextLevelDialog = BallDialog::create(S("You've completed all levels. Thanks for playing!", "你已通过所有关卡，谢谢您对游戏的支持与喜爱！"), CC_CALLBACK_0(S_MainGame::goToAboutPage, this), CC_CALLBACK_0(S_MainGame::restartGame, this), "ui/b_heart.png", "ui/b_restart.png");
+		this->addChild(nextLevelDialog, 1000);
+		return;
 	}
 	if(E::settings.currentLevel > E::settings.unlockedLevel){
 		E::settings.unlockedLevel = E::settings.currentLevel;
@@ -288,7 +356,7 @@ void S_MainGame::nextLevelDialog(){
 	auto ud = UserDefault::getInstance();
 	ud->setIntegerForKey(UD_CURRENT_LEVEL, E::settings.currentLevel);
 	ud->setIntegerForKey(UD_UNLOCKED_LEVEL, E::settings.unlockedLevel);
-	auto nextLevelDialog = BallDialog::create(S("Level accomplished!", "恭喜你，过关了！"), CC_CALLBACK_0(S_MainGame::backLevel, this), CC_CALLBACK_0(S_MainGame::restartGame, this), "ui/b_restart.png", "ui/b_next.png");
+	auto nextLevelDialog = BallDialog::create(S("Level accomplished!", "恭喜您，过关了！"), CC_CALLBACK_0(S_MainGame::restartGame, this), CC_CALLBACK_0(S_MainGame::backLevel, this), "ui/b_next.png", "ui/b_restart.png");
 	this->addChild(nextLevelDialog, 1000);
 }
 
@@ -301,6 +369,10 @@ void S_MainGame::backLevel(){
 
 void S_MainGame::leaveGame(){
 	Director::getInstance()->replaceScene(S_Welcome::createScene());
+}
+
+void S_MainGame::goToAboutPage(){
+	Director::getInstance()->replaceScene(S_About::createScene(2));
 }
 
 void S_MainGame::gameOver(){
@@ -344,6 +416,24 @@ void S_MainGame::menuCallback(Ref* pSender)
 			}
 			break;
 		}
+
+	case TAG_RESTART:
+		{
+			auto leaveDialog = BallDialog::create(S("Do you want to restart this game?", "是否想要重新开始这一关？"), CC_CALLBACK_0(S_MainGame::restartGame, this));
+			this->addChild(leaveDialog, 1000);
+			break;
+		}
+	case TAG_HOME:
+		{
+			backHomeDialog();
+			break;
+		}
+	case TAG_PICKLEVEL:
+		{
+			pickLevelDialog();
+			break;
+		}
+
 	}
 
 }
@@ -373,12 +463,10 @@ bool S_MainGame::onContactBegin(PhysicsContact& contact)
 		if (nodeA->getTag() == TAG_PHY_BALL && nodeB->getTag() == TAG_PHY_TARGET)
 		{
 			((Target*)nodeB)->beHit();
-			E::playEffect("beng");
 		}
 		else if (nodeA->getTag() == TAG_PHY_TARGET && nodeB->getTag() == TAG_PHY_BALL)
 		{
 			((Target*)nodeA)->beHit();
-			E::playEffect("beng");
 		}
 	}
 
@@ -389,7 +477,7 @@ bool S_MainGame::onContactBegin(PhysicsContact& contact)
 		putEmitter(pos);
 	}
 	
-	if(nodeA->getTag() == TAG_PHY_EDGE || nodeB->getTag() == TAG_PHY_EDGE){
+	if(nodeA->getTag() == TAG_PHY_EDGE || nodeB->getTag() == TAG_PHY_EDGE || nodeA->getTag() == TAG_PHY_BLOCK || nodeB->getTag() == TAG_PHY_BLOCK){
 		E::playEffect("di");
 	}
 	else if(nodeA->getTag() == TAG_PHY_EDGE_BTM || nodeB->getTag() == TAG_PHY_EDGE_BTM){
@@ -426,9 +514,4 @@ bool S_MainGame::onContactPreSolve(PhysicsContact& contact, PhysicsContactPreSol
 	}
 	*/
 	return true;
-}
-
-void S_MainGame::addScore(int score){
-	m_score += score;
-	m_titleBar->setString(stdp::to_string(m_score));
 }

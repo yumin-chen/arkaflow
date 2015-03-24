@@ -4,7 +4,7 @@
 #include "EngineHelper.h"
 #include "BaseLevel.h"
 
-#define MAX_LEVEL 4
+#define MAX_LEVEL 9
 
 class Levels 
 {

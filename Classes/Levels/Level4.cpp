@@ -4,6 +4,7 @@
 #include "Element/Target.h"
 #include "Element/Triangle.h"
 #include "Element/Block.h"
+#include "Element/Diamond.h"
 
 USING_NS_CC;
 
@@ -23,28 +24,29 @@ void Level4::restart(){
 	BaseLevel::restart();
 
 	auto t1 = Target::create();
-	t1->setPosition(E::originX + DESIGNED_WIDTH / 2 - 96, E::originY + 464);
+	t1->setPosition(E::originX + DESIGNED_WIDTH / 2 - 96, E::originY + 480);
 	t1->setRotation(180);
 	t1->initBody();
 	t1->playAnim(1);
 	this->addChild(t1);
 
 	auto t2 = Target::create();
-	t2->setPosition(E::originX + DESIGNED_WIDTH / 2 + 96, E::originY + 464);
+	t2->setPosition(E::originX + DESIGNED_WIDTH / 2 + 96, E::originY + 480);
 	t2->setRotation(180);
 	t2->initBody();
 	t2->playAnim(1);
 	this->addChild(t2);
 
-	block = Block::create(320 );
-	block->setPosition(E::originX + DESIGNED_WIDTH / 2 -160, E::originY + 128 + 24);
-	block->initBody();
-	this->addChild(block);
+	diamond = Diamond::create();
+	diamond->setScale(0.45);
+	diamond->setPosition(E::originX + DESIGNED_WIDTH / 2, E::originY + 128 + 48);
+	diamond->initBody();
+	this->addChild(diamond);
 
 	auto triangle = Triangle::create();
 	triangle->setScale(0.2f);
 	triangle->setRotation(180);
-	triangle->setPosition(E::originX + DESIGNED_WIDTH / 2, E::originY + 424);
+	triangle->setPosition(E::originX + DESIGNED_WIDTH / 2, E::originY + 440);
 	triangle->initBody();
 	this->addChild(triangle);
 
@@ -67,6 +69,6 @@ void Level4::restart(){
 
 void Level4::update(float dt){
 	angle += dt * 100;
-	block->setRotation(angle);
-	//block->updateBody();
+	diamond->setRotation(angle);
+	//diamond->updateBody();
 }

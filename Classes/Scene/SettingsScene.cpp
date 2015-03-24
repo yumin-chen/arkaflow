@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "SettingsScene.h"
 #include "WelcomeScene.h"
+#include "AboutScene.h"
 #include "UI/BallButton.h"
 #include "UI/TitleBar.h"
 #include "UI/BallSlider.h"
@@ -13,15 +14,7 @@ USING_NS_CC;
 
 #define	TAG_OK			2005
 #define TAG_CANCEL		2006
-/*
-#define	TAG_BTM_BG		2000
-#define	TAG_SHADOW		2001
-#define	TAG_BG_TOP		2007
-#define	TAG_OK_NORMAL	2008
-#define	TAG_OK_SELECTED	2009
-#define	TAG_CC_NORMAL	2010
-#define	TAG_CC_SELECTED	2011
-*/
+#define TAG_HEART		2007
 #define TAG_COLOR_MENU  2100
 
 Scene* S_Settings::createScene()
@@ -38,7 +31,7 @@ Scene* S_Settings::createScene()
 // on "init" you need to initialize your instance
 bool S_Settings::init()
 {
-	m_bClose = false;
+	m_bClose = 0;
 	// super init 
 
 	if ( !BaseScene::init((E::P.C50)) )
@@ -48,6 +41,20 @@ bool S_Settings::init()
 
 	m_titleBar = TitleBar::create(S("Settings", "游戏设置"));
 	this->addChild(m_titleBar, 1000);
+
+	m_heartBtn = EdgedBallButton::create(CC_CALLBACK_1(S_Settings::menuCallback, this));
+	m_heartBtn->setScale(0.3f);
+	m_heartBtn->setPosition(Vec2(E::visibleWidth - 48, 40));
+	m_heartBtn->setTag(TAG_HEART);
+	m_titleBar->addChild(m_heartBtn, 1000);
+
+	m_heartIcon = Sprite::create("ui/ob_heart.png");
+	m_heartIcon->setScale(0.9f);
+	m_heartIcon->setAnchorPoint(Vec2(0.5, 0.5));
+	m_heartIcon->setPosition(m_heartBtn->getContentSize() / 2);
+	m_heartBtn->addChild(m_heartIcon, 1000);
+	m_heartIcon->setColor(C3B(E::P.C700));
+	m_heartIcon->runAction(RepeatForever::create(Sequence::create(TintTo::create(0.5f, C3B(E::P.A400)), TintTo::create(0.5f, C3B(E::P.C700)), nullptr)));
 
 	// create solid color background
 	m_btmBg = BallButton::create(E::P.C100);
@@ -252,17 +259,21 @@ bool S_Settings::init()
 
 	runAnimations(false);
 
-	// enable keyboard
-	this->setKeyboardEnabled(true);
-
 	return true;
 }
 
 void S_Settings::runAnimations(bool isReversed){
 	auto cbClose = CallFunc::create([this](){
-		if(m_bClose){
+		if(m_bClose == 1){
 			Director::getInstance()->replaceScene(S_Welcome::createScene());
-			m_bClose = false;
+			m_bClose = 0;
+		}else 
+		if(m_bClose == 2){
+			E::setColorAccent(E::settings.colorAccent);
+			CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
+			CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
+			Director::getInstance()->replaceScene(S_About::createScene(1));
+			m_bClose = 0;
 		}
 	});
 
@@ -322,6 +333,10 @@ void S_Settings::menuCallback(Ref* pSender)
 		m_titleBar->updateColors();
 		m_sliderMusic->updateColors();
 		m_sliderSound->updateColors();
+		m_heartBtn->updateColors();
+		m_heartIcon->setColor(C3B(E::P.C700));
+		m_heartIcon->stopAllActions();
+		m_heartIcon->runAction(RepeatForever::create(Sequence::create(TintTo::create(0.5f, C3B(E::P.A400)), TintTo::create(0.5f, C3B(E::P.C700)), nullptr)));
 		this->setColor(C3B(E::P.C200));
 	}
 	switch(tag)
@@ -359,11 +374,17 @@ void S_Settings::menuCallback(Ref* pSender)
 			}	
 			break;
 		}
+	case TAG_HEART:
+		{
+			m_bClose = 2;
+			runAnimations(true);
+			break;
+		}
 	}
 
 }
 
- void S_Settings::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
+ void S_Settings::onKeyEvent(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
 {
 	// Back button pressed
 	if (keyCode == EventKeyboard::KeyCode::KEY_BACK || keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
@@ -388,7 +409,7 @@ void S_Settings::_ok(){
 			CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
 			CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
 			E::setColorAccent(E::settings.colorAccent);
-			m_bClose = true;			
+			m_bClose = 1;			
 			runAnimations(true);
 }
 
@@ -396,7 +417,7 @@ void S_Settings::_cancel(){
 			E::setColorAccent(E::settings.colorAccent);
 			CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(E::settings.musicVolume/100.0f);
 			CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
-			m_bClose = true;
+			m_bClose = 1;
 			runAnimations(true);
 			//m_tick = ANI_MOVING + ANI_SCALING;
 }

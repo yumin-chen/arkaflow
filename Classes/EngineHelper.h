@@ -1,8 +1,10 @@
-#ifndef  _ENGINE_HELPER_H_
+﻿#ifndef  _ENGINE_HELPER_H_
 #define  _ENGINE_HELPER_H_
 
 #include "cocos2d.h"
 #include <SimpleAudioEngine.h>
+
+#define VERSION "1.0"
 
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286
 
@@ -93,11 +95,19 @@ public:
 };
 
 typedef struct{
+	int id;
 	std::function<bool(cocos2d::Touch*, cocos2d::Event*)> onTouchBegan;
     std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchMoved;
     std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchEnded;
     std::function<void(cocos2d::Touch*, cocos2d::Event*)> onTouchCancelled;
 } TouchEventsFunc;
+
+
+typedef struct{
+	int id;
+	std::function<bool(cocos2d::EventKeyboard::KeyCode, cocos2d::Event*)> onKeyPressed;
+    std::function<bool(cocos2d::EventKeyboard::KeyCode, cocos2d::Event*)> onKeyReleased;
+} KeyboardEventsFunc;
 
 
 namespace stdPatchForMinGW
@@ -122,8 +132,11 @@ namespace stdPatchForMinGW
 #define stdp std
 #endif
 
-#define S(english,chinese) E::language==0?english:chinese
-//#define FONT_MAIN S("Arial", "΢���ź�")
+#define S(english,chinese) E::language==0? english: chinese
+
+#define GAME_TITLE S("Ching Chong Ping Pong", "乾坤弹球")
+
+//#define FONT_MAIN S("Arial", "微软雅黑")
 #define FONT_MAIN S("fonts/SF Theramin Gothic Condensed.ttf", "fonts/Chinese Font.ttf")
 #define FONT_BOLD S("fonts/SF Theramin Gothic Bold.ttf", "fonts/Chinese Font.ttf")
 

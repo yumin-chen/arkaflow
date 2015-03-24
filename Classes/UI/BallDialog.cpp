@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EngineHelper.h"
+#include "Scene/BaseScene.h"
 #include "BallDialog.h"
 #include "BallButton.h"
 
@@ -39,7 +40,7 @@ void BallDialog::initOpt(const std::string ok_sprite, const std::string cancel_s
 	m_innerSprite->setColor(C3B(E::P.C50));
 	m_innerSprite->setAnchorPoint(Vec2(0, 0));
 	//m_contentLabel->setAnchorPoint(Vec2(0, 0));
-	m_contentLabel->setPosition(m_innerSprite->getContentSize().width / 2, m_innerSprite->getContentSize().height / 2);
+	m_contentLabel->setPosition(m_innerSprite->getContentSize().width / 2, m_innerSprite->getContentSize().height / 2 + 32);
 	m_contentLabel->setColor(C3B(E::P.C900));
 	m_innerSprite->addChild(m_contentLabel);
 	addChild(m_innerSprite);
@@ -83,6 +84,50 @@ void BallDialog::initOpt(const std::string ok_sprite, const std::string cancel_s
 	m_menu->setOpacity(0);
 	m_innerSprite->setOpacity(0);
 	m_contentLabel->setOpacity(0);
+}
+
+void BallDialog::onEnter(){
+	Sprite::onEnter();
+	if(m_listenerId != -1)
+	{
+		BaseScene::getCurrentScene()->removeKeyboardEvents(m_listenerId);
+		m_listenerId = -1;
+	}
+	addEvents();
+}
+
+void BallDialog::onExit(){
+	Sprite::onExit();
+	if(m_listenerId != -1)
+	{
+		BaseScene::getCurrentScene()->removeKeyboardEvents(m_listenerId);
+		m_listenerId = -1;
+	}
+}
+
+void BallDialog::addEvents()
+{
+	KeyboardEventsFunc listener;
+	listener.onKeyPressed = nullptr;
+	listener.onKeyReleased = CC_CALLBACK_2(BallDialog::onKeyReleased, this);
+	m_listenerId = BaseScene::getCurrentScene()->addKeyboardEvents(listener);
+}
+
+
+bool BallDialog::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event){
+	// Back button pressed
+	if (keyCode == EventKeyboard::KeyCode::KEY_BACK || keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+		m_resultTag = TAG_CANCEL;
+		runAnimations(true);
+		return true; // event consumed
+	}
+	// Enter key pressed
+	else if (keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER || keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+		m_resultTag = TAG_OK;
+		runAnimations(true);
+		return true; // event consumed
+	}
+	return false; // event pass through
 }
 
 void BallDialog::runAnimations(bool bReverse){
