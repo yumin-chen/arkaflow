@@ -18,7 +18,7 @@ BallDialog::~BallDialog() {
 BallDialog* BallDialog::create(const std::string content, const std::function<void(void)>& callbackOK, const std::function<void(void)>& callbackCancel, const std::string ok_sprite, const std::string cancel_sprite)
 {
 	BallDialog *sprite = new (std::nothrow) BallDialog();
-    if (sprite && sprite->initWithFile("ui/dialog_o.png"))
+	if (sprite && sprite->initWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/dialog_o.png")))
     {
         sprite->autorelease();
 		sprite->m_contentLabel = Label::createWithTTF(content, FONT_MAIN, 60, 
@@ -36,7 +36,7 @@ BallDialog* BallDialog::create(const std::string content, const std::function<vo
 void BallDialog::initOpt(const std::string ok_sprite, const std::string cancel_sprite){
 	setPosition(E::visibleWidth / 2, E::visibleHeight / 2);
 	setColor(C3B(E::P.C600));
-	m_innerSprite = Sprite::create("ui/dialog_i.png");
+	m_innerSprite = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/dialog_i.png"));
 	m_innerSprite->setColor(C3B(E::P.C50));
 	m_innerSprite->setAnchorPoint(Vec2(0, 0));
 	//m_contentLabel->setAnchorPoint(Vec2(0, 0));

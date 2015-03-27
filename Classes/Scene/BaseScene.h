@@ -18,6 +18,7 @@ public:
 	void setTouchEmitterEnabled(bool);
 	void putEmitter(cocos2d::Vec2 pos);
 	void putEmitter2(cocos2d::Vec2 pos);
+	void putEmitter3(cocos2d::Vec2 pos);
 	int addTouchEvents(TouchEventsFunc touchEvent);
 	bool removeTouchEvents(int);
 	int addKeyboardEvents(KeyboardEventsFunc touchEvent);

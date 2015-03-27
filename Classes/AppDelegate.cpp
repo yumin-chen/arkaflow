@@ -11,6 +11,7 @@ AppDelegate::AppDelegate() {}
 AppDelegate::~AppDelegate() {}
 
 bool AppDelegate::applicationDidFinishLaunching() {
+	srand(time(NULL));
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();

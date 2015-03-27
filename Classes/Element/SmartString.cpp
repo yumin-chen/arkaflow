@@ -15,7 +15,7 @@ SmartString::~SmartString() {
 SmartString* SmartString::create()
 {
 	SmartString* pSprite = new SmartString();
-	if (pSprite->initWithFile("ui/ball_outer.png", Rect(0, 0, 128, 256)))
+	if (pSprite->initWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/ball_outer.png"), Rect(0, 0, 128, 256)))
 	{
 		pSprite->autorelease();
 		pSprite->initOpt();
@@ -30,13 +30,13 @@ SmartString* SmartString::create()
 void SmartString::initOpt(){
 	this->setAnchorPoint(Vec2(0, 0.5));
 	m_pBody = nullptr;
-	m_middle = Sprite::create("ui/ball_outer.png", Rect(128, 0, 1, 256));
+	m_middle = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/ball_outer.png"), Rect(128, 0, 1, 256));
 	m_middle->setAnchorPoint(Vec2(0, 0));
-	m_right = Sprite::create("ui/ball_outer.png", Rect(128, 0, 128, 256));
+	m_right = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/ball_outer.png"), Rect(128, 0, 128, 256));
 	m_right->setAnchorPoint(Vec2(0, 0));
-	m_leftInner = Sprite::create("ui/string_inner.png", Rect(0, 0, 128, 256));
-	m_middleInner = Sprite::create("ui/string_inner.png", Rect(128, 0, 1, 256));
-	m_rightInner = Sprite::create("ui/string_inner.png", Rect(128, 0, 128, 256));
+	m_leftInner = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/string_inner.png"), Rect(0, 0, 128, 256));
+	m_middleInner = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/string_inner.png"), Rect(128, 0, 1, 256));
+	m_rightInner = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/string_inner.png"), Rect(128, 0, 128, 256));
 	m_leftInner->setPosition(256/2 - getRadius()/2, 256/2);
 	m_middleInner->setAnchorPoint(Vec2(0, 0));
 	//m_middleInner->setPosition(256/2 - getRadius()/2, 256/2);
@@ -57,6 +57,7 @@ void SmartString::onContactWithBall(){
 	detachBody();
 	m_isGoing = false;
 	animFadeOut();
+	E::playEffect("da");
 }
 
 void SmartString::setColors(int color){

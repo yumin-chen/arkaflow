@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Level9.h"
+#include "Level21.h"
 #include "Element/Ring.h"
 #include "Element/Target.h"
 #include "Element/Triangle.h"
@@ -8,7 +8,7 @@
 
 USING_NS_CC;
 
-bool Level9::init()
+bool Level21::init()
 {
 	if ( !BaseLevel::init() )
 	{
@@ -20,7 +20,7 @@ bool Level9::init()
 	return true;
 }
 
-void Level9::restart(){
+void Level21::restart(){
 	BaseLevel::restart();
 #define MOVE_X_____ 64
 	auto t = Target::create();
@@ -92,7 +92,7 @@ void Level9::restart(){
 	this->addChild(diamond2);
 }
 
-void Level9::update(float dt){
+void Level21::update(float dt){
 	static float tick = 0;
 	static bool isReturning = false;
 	int originX = E::originX + DESIGNED_WIDTH / 2;

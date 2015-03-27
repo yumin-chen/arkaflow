@@ -13,7 +13,7 @@ Ring::~Ring() {
 
 Ring* Ring::create() {
 	Ring *sprite = new (std::nothrow) Ring();
-    if (sprite && sprite->initWithFile("ring_o.png"))
+    if (sprite && sprite->initWithTexture(Director::getInstance()->getTextureCache()->addImage("ring_o.png")))
     {
         sprite->autorelease();
 		sprite->initOpt();
@@ -26,7 +26,7 @@ Ring* Ring::create() {
 void Ring::initOpt(){
 	this->setColor(C3B(E::P.C400));
 	this->setTag(TAG_PHY_BLOCK);
-	auto i = Sprite::create("ring_i.png");
+	auto i = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ring_i.png"));
 	i->setColor(C3B(E::P.C800));
 	i->setPosition(this->getContentSize()/2);
 	i->runAction(RotateBy::create(1E35, 360E35));

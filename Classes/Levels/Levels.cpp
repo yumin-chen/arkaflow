@@ -9,6 +9,19 @@
 #include "Levels/Level7.h"
 #include "Levels/Level8.h"
 #include "Levels/Level9.h"
+#include "Levels/Level10.h"
+#include "Levels/Level11.h"
+#include "Levels/Level12.h"
+#include "Levels/Level13.h"
+#include "Levels/Level14.h"
+#include "Levels/Level15.h"
+#include "Levels/Level16.h"
+#include "Levels/Level17.h"
+#include "Levels/Level18.h"
+#include "Levels/Level19.h"
+#include "Levels/Level20.h"
+#include "Levels/Level21.h"
+#include "Levels/Level22.h"
 
 BaseLevel* Levels::createLevel(int level)
 {
@@ -31,6 +44,32 @@ BaseLevel* Levels::createLevel(int level)
 		return Level8::create();
 	case 9:
 		return Level9::create();
+	case 10:
+		return Level10::create();
+	case 11:
+		return Level11::create();
+	case 12:
+		return Level12::create();
+	case 13:
+		return Level13::create();
+	case 14:
+		return Level14::create();
+	case 15:
+		return Level15::create();
+	case 16:
+		return Level16::create();
+	case 17:
+		return Level17::create();
+	case 18:
+		return Level18::create();
+	case 19:
+		return Level19::create();
+	case 20:
+		return Level20::create();
+	case 21:
+		return Level21::create();
+	case 22:
+		return Level22::create();
 	}
 	return nullptr;
 }

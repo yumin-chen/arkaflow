@@ -1,20 +1,20 @@
-#ifndef __LEVEL_7_H__
-#define __LEVEL_7_H__
+#ifndef __LEVEL_20_H__
+#define __LEVEL_20_H__
 
 #include "EngineHelper.h"
 #include "BaseLevel.h"
 #include "Element/Target.h"
 #include "Element/Ring.h"
 
-class Level7 : public BaseLevel
+class Level20 : public BaseLevel
 {
 public:
     virtual bool init();  
 	virtual void restart();
 	virtual void update(float);
-	virtual int getLevel(){return 7;};
-    CREATE_FUNC(Level7); 
+	virtual int getLevel(){return 20;};
+    CREATE_FUNC(Level20); 
 private:
 };
 
-#endif // __LEVEL_7_H__
+#endif // __LEVEL_20_H__

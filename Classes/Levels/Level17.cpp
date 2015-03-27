@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Level7.h"
+#include "Level17.h"
 #include "Element/Ring.h"
 #include "Element/Target.h"
 #include "Element/Diamond.h"
@@ -7,7 +7,7 @@
 
 USING_NS_CC;
 
-bool Level7::init()
+bool Level17::init()
 {
 	if ( !BaseLevel::init() )
 	{
@@ -19,7 +19,7 @@ bool Level7::init()
 	return true;
 }
 
-void Level7::restart(){
+void Level17::restart(){
 	BaseLevel::restart();
 
 	#define MOVE_BY_Y (128+32)
@@ -87,5 +87,5 @@ void Level7::restart(){
 
 }
 
-void Level7::update(float dt){
+void Level17::update(float dt){
 }

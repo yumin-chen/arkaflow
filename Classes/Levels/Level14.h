@@ -1,19 +1,18 @@
-#ifndef __LEVEL_9_H__
-#define __LEVEL_9_H__
+#ifndef __LEVEL_14_H__
+#define __LEVEL_14_H__
 
 #include "EngineHelper.h"
 #include "BaseLevel.h"
-#include "Element/Target.h"
 #include "Element/Ring.h"
 
-class Level9 : public BaseLevel
+class Level14 : public BaseLevel
 {
 public:
     virtual bool init();  
 	virtual void restart();
 	virtual void update(float);
-	virtual int getLevel(){return 9;};
-    CREATE_FUNC(Level9); 
+	virtual int getLevel(){return 14;};
+    CREATE_FUNC(Level14); 
 private:
 	Ring* ring1;
 	Ring* ring2;
@@ -21,4 +20,4 @@ private:
 	Ring* ring4;
 };
 
-#endif // __LEVEL_9_H__
+#endif // __LEVEL_14_H__

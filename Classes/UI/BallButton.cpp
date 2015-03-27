@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "EngineHelper.h"
 #include "BallButton.h"
 #include "Scene/BaseScene.h"
 
@@ -14,7 +15,7 @@ BallButton::~BallButton() {
 BallButton* BallButton::create(const int normalColor, const int selectedColor, const cocos2d::ccMenuCallback& callback)
 {
 	BallButton *btn = new (std::nothrow) BallButton;
-    if (btn && btn->initWithFile("ui/ball.png"))//btn->init("ball.png", "", "", TextureResType::LOCAL))
+    if (btn && btn->initWithTexture(cocos2d::Director::getInstance()->getTextureCache()->addImage("ui/ball.png")))//btn->init("ball.png", "", "", TextureResType::LOCAL))
     {
         btn->autorelease();
 		btn->m_normalColor = normalColor;

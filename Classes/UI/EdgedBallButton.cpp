@@ -17,7 +17,7 @@ EdgedBallButton::~EdgedBallButton() {
 EdgedBallButton* EdgedBallButton::create(const cocos2d::ccMenuCallback& callback)
 {
 	EdgedBallButton *sprite = new (std::nothrow) EdgedBallButton();
-    if (sprite && sprite->initWithFile("ui/outlined_button_o.png"))
+    if (sprite && sprite->initWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/outlined_button_o.png")))
     {
         sprite->autorelease();
 		sprite->m_state = NORMAL;
@@ -35,7 +35,7 @@ EdgedBallButton* EdgedBallButton::create(const cocos2d::ccMenuCallback& callback
 }
 
 void EdgedBallButton::initOpt(){
-	m_innerSprite = Sprite::create("ui/outlined_button_i.png");
+	m_innerSprite = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/outlined_button_i.png"));
 	m_innerSprite->setAnchorPoint(Vec2(0, 0));
 	addChild(m_innerSprite);
 

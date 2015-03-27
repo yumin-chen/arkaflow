@@ -2,6 +2,7 @@
 #include "Scene/MainGameScene.h"
 #include "EngineHelper.h"
 #include "Target.h"
+#include "Block.h"
 
 USING_NS_CC;
 
@@ -9,6 +10,7 @@ int Target::targetNum = 0;
 
 Target::Target() {
 	bAlreadyHit = false;
+	block1 = nullptr;
 }
 
 Target::~Target() {
@@ -16,8 +18,9 @@ Target::~Target() {
 
 Target* Target::create() {
 	Target *sprite = new (std::nothrow) Target();
-    if (sprite && sprite->initWithFile("target.png"))
+    if (sprite && sprite->initWithTexture(Director::getInstance()->getTextureCache()->addImage("target.png")))
     {
+		sprite->block1 = nullptr;
         sprite->autorelease();
 		sprite->initOpt();
 		targetNum++;
@@ -31,7 +34,7 @@ void Target::initOpt() {
 	this->setScale(0.2);
 	this->setAnchorPoint(Vec2(0.5, 0.5));
 	this->setColor(C3B(E::P.C400));
-	auto i = Sprite::create("target.png");
+	auto i = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("target.png"));
 	i->setColor(C3B(E::P.C800));
 	i->setAnchorPoint(Vec2(0.5, 0.5));
 	i->setScale(0.4);
@@ -82,4 +85,35 @@ void Target::beHit(){
 	}
 	E::playEffect("ba");
 
+}
+
+void Target::setPosition(float x, float y){
+	Sprite::setPosition(x, y);
+	_updateProtectorPosition();
+}
+
+void Target::initProtector(float width){
+	block1 = Block::create(width, width / 8);
+	block2 = Block::create(width / 8, width * 0.75);
+	block3 = Block::create(width / 8, width * 0.75);
+	this->getParent()->addChild(block1);
+	this->getParent()->addChild(block2);
+	this->getParent()->addChild(block3);
+	block1->initBody();
+	block2->initBody();
+	block3->initBody();
+	block1->setRotation(getRotation());
+	block2->setRotation(getRotation());
+	block3->setRotation(getRotation());
+	_updateProtectorPosition();
+}
+
+void Target::_updateProtectorPosition(){
+	if(block1 == nullptr)
+		return;
+	float width = block1->getContentSize().width;
+	float x_offset = width/2;
+	block1->setPosition(getPositionX() -x_offset, getPositionY()-x_offset);
+	block2->setPosition(getPositionX() -x_offset, getPositionY()-x_offset);
+	block3->setPosition(getPositionX() -x_offset + width - width / 8, getPositionY()-x_offset);
 }

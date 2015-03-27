@@ -43,9 +43,6 @@ bool S_Welcome::init()
 	//bg->setTag(TAG_BACKGROUND);
 	this->addChild(m_bg, 0);
 
-
-	srand(time(NULL));
-
 	m_tri = Triangle::create();
 	m_tri->setScale(0.6 + rand() % 40 / 100);
 	m_tri->setRotation(rand());

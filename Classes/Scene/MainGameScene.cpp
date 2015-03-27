@@ -2,6 +2,7 @@
 #include "MainGameScene.h"
 #include "AboutScene.h"
 #include "WelcomeScene.h"
+#include "LevelPickerScene.h"
 #include "UI/BallButton.h"
 #include "UI/EdgedBallButton.h"
 #include "UI/TitleBar.h"
@@ -38,7 +39,8 @@ bool S_MainGame::init()
 	// super init 
 	if (!BaseScene::init(E::P.C100)){return false;}
 #ifndef NDEBUG
-	E::settings.currentLevel = 9;
+	//E::settings.currentLevel = 19;
+	E::settings.unlockedLevel = 22;
 #endif
 
 	// disable touch emitter
@@ -271,6 +273,7 @@ void S_MainGame::pickLevelDialog(){
 }
 
 void S_MainGame::pickLevel(){
+	Director::getInstance()->replaceScene(S_LevelPicker::createScene());
 }
 
 bool S_MainGame::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
@@ -452,12 +455,10 @@ bool S_MainGame::onContactBegin(PhysicsContact& contact)
 		if (nodeA->getTag() == TAG_PHY_BALL && nodeB->getTag() == TAG_PHY_STRING)
 		{
 			((SmartString*)nodeB)->onContactWithBall();
-			E::playEffect("da");
 		}
 		else if (nodeA->getTag() == TAG_PHY_STRING && nodeB->getTag() == TAG_PHY_BALL)
 		{
 			((SmartString*)nodeA)->onContactWithBall();	
-			E::playEffect("da");
 		}
 
 		if (nodeA->getTag() == TAG_PHY_BALL && nodeB->getTag() == TAG_PHY_TARGET)
@@ -468,22 +469,26 @@ bool S_MainGame::onContactBegin(PhysicsContact& contact)
 		{
 			((Target*)nodeA)->beHit();
 		}
+
+		if(nodeA->getTag() == TAG_PHY_BALL || nodeB->getTag() == TAG_PHY_BALL){
+			Vec2 pos;
+			if(nodeA->getTag() == TAG_PHY_BALL){pos = nodeA->getPosition();}
+			else{pos = nodeB->getPosition();}
+			putEmitter3(pos);
+		}
+	
+		if(nodeA->getTag() == TAG_PHY_EDGE || nodeB->getTag() == TAG_PHY_EDGE || nodeA->getTag() == TAG_PHY_BLOCK || nodeB->getTag() == TAG_PHY_BLOCK){
+			float o = 8 * E::scale;
+			auto cbUpdate = CallFunc::create([this](){this->m_physicsWorld->_updateBodyTransform = true;});
+			this->runAction(Sequence::create(MoveBy::create(0.05f, Vec2(o, -o)), MoveBy::create(0.05f, Vec2(-o, o)), DelayTime::create(0.1f), cbUpdate, nullptr));
+			E::playEffect("di");
+		}
+		else if(nodeA->getTag() == TAG_PHY_EDGE_BTM || nodeB->getTag() == TAG_PHY_EDGE_BTM){
+			E::playEffect("beng");
+			gameOver();
+		}
 	}
 
-	if(nodeA->getTag() == TAG_PHY_BALL || nodeB->getTag() == TAG_PHY_BALL){
-		Vec2 pos;
-		if(nodeA->getTag() == TAG_PHY_BALL){pos = nodeA->getPosition();}
-		else{pos = nodeB->getPosition();}
-		putEmitter(pos);
-	}
-	
-	if(nodeA->getTag() == TAG_PHY_EDGE || nodeB->getTag() == TAG_PHY_EDGE || nodeA->getTag() == TAG_PHY_BLOCK || nodeB->getTag() == TAG_PHY_BLOCK){
-		E::playEffect("di");
-	}
-	else if(nodeA->getTag() == TAG_PHY_EDGE_BTM || nodeB->getTag() == TAG_PHY_EDGE_BTM){
-		E::playEffect("beng");
-		gameOver();
-	}
 	//bodies can collide
 	return true;
 }

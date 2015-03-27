@@ -1,19 +1,19 @@
-#ifndef __LEVEL_4_H__
-#define __LEVEL_4_H__
+#ifndef __LEVEL_12_H__
+#define __LEVEL_12_H__
 
 #include "EngineHelper.h"
 #include "BaseLevel.h"
 #include "Element/Target.h"
 
-class Level4 : public BaseLevel
+class Level12 : public BaseLevel
 {
 public:
     virtual bool init();  
 	virtual void restart();
 	virtual void update(float);
-	virtual int getLevel(){return 4;};
-    CREATE_FUNC(Level4); 
+	virtual int getLevel(){return 12;};
+    CREATE_FUNC(Level12); 
 private:
 };
 
-#endif // __LEVEL_4_H__
+#endif // __LEVEL_12_H__

@@ -13,7 +13,7 @@ Triangle::~Triangle() {
 
 Triangle* Triangle::create() {
 	Triangle *sprite = new (std::nothrow) Triangle();
-    if (sprite && sprite->initWithFile("tri_o.png"))
+    if (sprite && sprite->initWithTexture(Director::getInstance()->getTextureCache()->addImage("tri_o.png")))
     {
         sprite->autorelease();
 		sprite->initOpt();
@@ -26,7 +26,7 @@ Triangle* Triangle::create() {
 void Triangle::initOpt() {
 	this->setColor(C3B(E::P.C400));
 	this->setTag(TAG_PHY_BLOCK);
-	auto i = Sprite::create("tri_i.png");
+	auto i = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("tri_i.png"));
 	i->setColor(C3B(E::P.C800));
 	i->setPosition(this->getContentSize()/2);
 	//i->runAction(RotateBy::create(1E35, 360E35));

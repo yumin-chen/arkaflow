@@ -297,6 +297,68 @@ void BaseScene::putEmitter2(Vec2 pos){
 
 }
 
+void BaseScene::putEmitter3(Vec2 pos){
+	m_emitterCreated ++;
+
+	auto _emitter = ParticleSystemQuad::createWithTotalParticles(40);
+    //_emitter->retain();
+	_emitter->setTag(m_emitterCreated);
+
+    this->addChild(_emitter, 10000);
+    ////_emitter->release();    // win32 : Remove this line
+    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage("ui/ball_outer.png") );
+
+	_emitter->setAngleVar(360);
+
+    // duration
+    _emitter->setDuration(-1);
+
+    // gravity
+    _emitter->setGravity(Vec2::ZERO);
+
+    // speed of particles
+    _emitter->setSpeed(320);
+    _emitter->setSpeedVar(80);
+
+    // radial
+    _emitter->setRadialAccel(-30);
+    _emitter->setRadialAccelVar(-10);
+
+    // tagential
+    _emitter->setTangentialAccel(30);
+    _emitter->setTangentialAccelVar(0);
+
+    // emitter position
+    _emitter->setPosition(pos);
+    _emitter->setPosVar(Vec2::ZERO);
+
+    // life of particles
+    _emitter->setLife(1.6f);
+    _emitter->setLifeVar(0.8f);
+
+    // color of particles
+	_emitter->setStartColor(C4F_(E::P.C500, 0.8f));
+    _emitter->setStartColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.2f));
+    _emitter->setEndColor(C4F_(E::P.C300, 0.3f));
+    _emitter->setEndColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.15f));
+
+    // size, in pixels
+    _emitter->setStartSize(32.0f);
+    _emitter->setStartSizeVar(8.0f);
+    _emitter->setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
+
+    // emits per second
+    _emitter->setEmissionRate(_emitter->getTotalParticles()/_emitter->getLife());
+
+    // additive
+
+    _emitter->setBlendAdditive(false);
+	auto cbStopEmitter = CallFunc::create([this](){m_emitterStopped++; ((ParticleSystemQuad*)this->getChildByTag(m_emitterStopped))->stopSystem();});
+	auto cbRemoveEmitter = CallFunc::create([this](){m_emitterReleased++; this->getChildByTag(m_emitterReleased)->removeFromParentAndCleanup(true);});
+	_emitter->runAction(Sequence::create(DelayTime::create(0.3f), cbStopEmitter, DelayTime::create(2.0f), cbRemoveEmitter, nullptr));
+
+}
+
 void BaseScene::setTouchEmitterEnabled(bool enabled){
 	m_touchEmitter = enabled;
 }

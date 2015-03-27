@@ -13,7 +13,7 @@ Diamond::~Diamond() {
 
 Diamond* Diamond::create() {
 	Diamond *sprite = new (std::nothrow) Diamond();
-    if (sprite && sprite->initWithFile("diamond_o.png"))
+    if (sprite && sprite->initWithTexture(Director::getInstance()->getTextureCache()->addImage("diamond_o.png")))
     {
         sprite->autorelease();
 		sprite->initOpt();
@@ -26,7 +26,7 @@ Diamond* Diamond::create() {
 void Diamond::initOpt() {
 	this->setColor(C3B(E::P.C400));
 	this->setTag(TAG_PHY_BLOCK);
-	auto i = Sprite::create("diamond_i.png");
+	auto i = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("diamond_i.png"));
 	i->setColor(C3B(E::P.C800));
 	i->setPosition(this->getContentSize()/2);
 	//i->runAction(RotateBy::create(1E35, 360E35));

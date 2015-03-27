@@ -11,8 +11,9 @@ class Block: public cocos2d::LayerColor
 		static Block* create(float width = 320, float height = 16, int color = E::P.C400);
 		SETOPACITY_FUNC(LayerColor);
 		void initBody();
-    private:
+	protected:
 		void initOpt(float width, float height);
+    private:
 		
 };
 

@@ -22,7 +22,7 @@ TitleBar* TitleBar::create(const std::string title)
 		layer->setPosition(0, E::visibleHeight);
 
 		// create the shadow
-		auto shadow = Sprite::create("ui/shadow.png");
+		auto shadow = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("ui/shadow.png"));
 		//shadow->setScale(1.0f);
 		shadow->setAnchorPoint(Vec2(0, 1));
 		shadow->setScaleX(E::visibleWidth / DESIGNED_WIDTH);
