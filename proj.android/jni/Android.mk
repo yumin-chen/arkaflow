@@ -25,16 +25,37 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/Element/Target.cpp \
                    ../../Classes/Element/Block.cpp \
                    ../../Classes/Element/Triangle.cpp \
+                   ../../Classes/Element/Diamond.cpp \
                    ../../Classes/Scene/BaseScene.cpp \
+                   ../../Classes/Scene/SplashScene.cpp \
                    ../../Classes/Scene/WelcomeScene.cpp \
                    ../../Classes/Scene/MainGameScene.cpp \
                    ../../Classes/Scene/SettingsScene.cpp \
+                   ../../Classes/Scene/LevelPickerScene.cpp \
+                   ../../Classes/Scene/AboutScene.cpp \
                    ../../Classes/Levels/BaseLevel.cpp \
                    ../../Classes/Levels/Levels.cpp \
                    ../../Classes/Levels/Level1.cpp \
                    ../../Classes/Levels/Level2.cpp \
                    ../../Classes/Levels/Level3.cpp \
                    ../../Classes/Levels/Level4.cpp \
+                   ../../Classes/Levels/Level5.cpp \
+                   ../../Classes/Levels/Level6.cpp \
+                   ../../Classes/Levels/Level7.cpp \
+                   ../../Classes/Levels/Level8.cpp \
+                   ../../Classes/Levels/Level9.cpp \
+                   ../../Classes/Levels/Level10.cpp \
+                   ../../Classes/Levels/Level11.cpp \
+                   ../../Classes/Levels/Level12.cpp \
+                   ../../Classes/Levels/Level13.cpp \
+                   ../../Classes/Levels/Level14.cpp \
+                   ../../Classes/Levels/Level15.cpp \
+                   ../../Classes/Levels/Level16.cpp \
+                   ../../Classes/Levels/Level17.cpp \
+                   ../../Classes/Levels/Level18.cpp \
+                   ../../Classes/Levels/Level19.cpp \
+                   ../../Classes/Levels/Level20.cpp \
+                   ../../Classes/Levels/Level21.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

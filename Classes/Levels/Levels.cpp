@@ -21,7 +21,6 @@
 #include "Levels/Level19.h"
 #include "Levels/Level20.h"
 #include "Levels/Level21.h"
-#include "Levels/Level22.h"
 
 BaseLevel* Levels::createLevel(int level)
 {
@@ -68,8 +67,6 @@ BaseLevel* Levels::createLevel(int level)
 		return Level20::create();
 	case 21:
 		return Level21::create();
-	case 22:
-		return Level22::create();
 	}
 	return nullptr;
 }

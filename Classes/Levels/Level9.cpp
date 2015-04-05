@@ -97,7 +97,7 @@ void Level9::update(float dt){
 	static bool isReturning = false;
 	int originX = E::originX + DESIGNED_WIDTH / 2;
 	int originY = E::originY + 192;
-	tick += dt * - (int(isReturning) * 2 - 1);
+	tick += dt * 0.75 * - (int(isReturning) * 2 - 1);
 	if(tick > 0.5){
 		isReturning = true;
 	}

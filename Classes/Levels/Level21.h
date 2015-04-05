@@ -19,6 +19,11 @@ private:
 	Ring* ring2;
 	Ring* ring3;
 	Ring* ring4;
+	
+	Ring* ring21;
+	Ring* ring22;
+	Ring* ring23;
+	Ring* ring24;
 };
 
 #endif // __LEVEL_21_H__
