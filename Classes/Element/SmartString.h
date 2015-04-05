@@ -12,6 +12,7 @@ class SmartString : public cocos2d::Sprite
         ~SmartString();
         static SmartString* create();
 		void go();
+		void stopGoing();
 		void update(float dt);
 		void onContactWithBall();
 		virtual void setPosition(const cocos2d::Vec2& pos);

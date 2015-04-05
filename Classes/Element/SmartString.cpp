@@ -170,6 +170,11 @@ void SmartString::go(){
 	m_isGoing = true;
 	this->setVisible(true);
 }
+void SmartString::stopGoing(){
+	detachBody();
+	m_isGoing = false;
+	this->setVisible(false);
+}
 
 #define MOVING_TIME 0.3f
 void SmartString::update(float dt){
