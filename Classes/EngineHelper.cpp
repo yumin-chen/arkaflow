@@ -31,18 +31,15 @@ void E::calculateScreen(){
 }
 
 void E::playEffect(const char* pszFilePath){
+	return;
 	if(!E::settings.soundEnabled || E::settings.soundVolume < 1) return;
-	static unsigned int last_time_frames = 0;
 	char *fp = new char[strlen(pszFilePath) + 10];
 	strcpy (fp, "audio/");
 	strcat (fp, pszFilePath);
 	strcat (fp, AEX);
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 	CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(E::settings.soundVolume/100.0f);
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(fp);
-	if(cocos2d::Director::getInstance()->getTotalFrames() - last_time_frames > (1 / cocos2d::Director::getInstance()->getSecondsPerFrame()) * 3){
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(fp);
-		last_time_frames = cocos2d::Director::getInstance()->getTotalFrames();
-	}
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(fp);
 }
 
 void E::playBgMusic(){
