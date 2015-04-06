@@ -10,6 +10,7 @@ USING_NS_CC;
 #define TAG_CANCEL		1
 
 BallDialog::BallDialog() {
+	m_referencer = nullptr;
 }
 
 BallDialog::~BallDialog() {
@@ -152,7 +153,6 @@ void BallDialog::runAnimations(bool bReverse){
 						E::playEffect("da");
 						m_callbackOK();
 					}
-					this->removeFromParentAndCleanup(true);
 					break;
 				}
 
@@ -163,17 +163,18 @@ void BallDialog::runAnimations(bool bReverse){
 						E::playEffect("da");
 						m_callbackCancel();
 					}
-					this->removeFromParentAndCleanup(true);
 					break;
 				}
 			default:
 				{
-					this->removeFromParentAndCleanup(true);
 					break;
 				}
 			}
-
-
+			this->removeFromParentAndCleanup(true);
+			if(m_referencer != nullptr && *m_referencer != nullptr){
+				*m_referencer = nullptr;
+				m_referencer = nullptr;
+			}
 		});
 		auto seq = Sequence::create(DelayTime::create(0.4f), callback, nullptr);
 		this->runAction(seq);

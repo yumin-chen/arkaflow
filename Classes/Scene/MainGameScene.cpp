@@ -39,7 +39,7 @@ bool S_MainGame::init()
 	// super init 
 	if (!BaseScene::init(E::P.C100)){return false;}
 #ifndef NDEBUG
-	//E::settings.currentLevel = 19;
+	//E::settings.currentLevel = 21;
 	E::settings.unlockedLevel = 22;
 #endif
 
@@ -263,13 +263,21 @@ void S_MainGame::onKeyEvent(EventKeyboard::KeyCode keyCode, cocos2d::Event *even
 }
 
 void S_MainGame::backHomeDialog(){
-	auto leaveDialog = BallDialog::create(S("If you go back to home page, your current game will be lost, are you sure?", "返回主菜单后当前游戏数据将丢失，您确定要返回主菜单吗？"), CC_CALLBACK_0(S_MainGame::leaveGame, this));
-	this->addChild(leaveDialog, 1000);
+	static BallDialog* leaveDialog = nullptr;
+	if(leaveDialog == nullptr || leaveDialog->isValid() == false){
+		leaveDialog = BallDialog::create(S("If you go back to home page, your current game will be lost, are you sure?", "返回主菜单后当前游戏数据将丢失，您确定要返回主菜单吗？"), CC_CALLBACK_0(S_MainGame::leaveGame, this));
+		leaveDialog->setReferencer(&leaveDialog);
+		this->addChild(leaveDialog, 1000);
+	}
 }
 
 void S_MainGame::pickLevelDialog(){
-	auto leaveDialog = BallDialog::create(S("If you pick a new level, your current game will be lost, are you sure?", "选择新的关卡后当前游戏数据将丢失，您确定要选择关卡吗？"), CC_CALLBACK_0(S_MainGame::pickLevel, this));
-	this->addChild(leaveDialog, 1000);
+	static BallDialog* pickLevelDialog = nullptr;
+	if(pickLevelDialog == nullptr || pickLevelDialog->isValid() == false){
+		pickLevelDialog =  BallDialog::create(S("If you pick a new level, your current game will be lost, are you sure?", "选择新的关卡后当前游戏数据将丢失，您确定要选择关卡吗？"), CC_CALLBACK_0(S_MainGame::pickLevel, this));
+		pickLevelDialog->setReferencer(&pickLevelDialog);
+		this->addChild(pickLevelDialog, 1000);
+	}
 }
 
 void S_MainGame::pickLevel(){
@@ -339,6 +347,8 @@ void S_MainGame::restartGame(){
 		addChild(m_game, 2);
 		m_game->runAction(Sequence::create(DelayTime::create(0.6f), FadeIn::create(0.3f), nullptr));
 	}
+	m_smartstring->stopGoing();
+	
 
 	
 }
@@ -422,8 +432,12 @@ void S_MainGame::menuCallback(Ref* pSender)
 
 	case TAG_RESTART:
 		{
-			auto leaveDialog = BallDialog::create(S("Do you want to restart this game?", "是否想要重新开始这一关？"), CC_CALLBACK_0(S_MainGame::restartGame, this));
-			this->addChild(leaveDialog, 1000);
+			static BallDialog* restartDialog = nullptr;
+			if(restartDialog == nullptr || restartDialog->isValid() == false){
+				restartDialog = BallDialog::create(S("Do you want to restart this game?", "是否想要重新开始这一关？"), CC_CALLBACK_0(S_MainGame::restartGame, this));
+				restartDialog->setReferencer(&restartDialog);
+				this->addChild(restartDialog, 1000);
+			}
 			break;
 		}
 	case TAG_HOME:

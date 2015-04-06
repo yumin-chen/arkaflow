@@ -62,6 +62,7 @@ void BaseScene::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::
 
 bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
+	utils::captureScreen(nullptr, "D:/a.png");
 	/*
 #ifndef NDEBUG
 	Vec2 p = touch->getLocation() / E::scale;
@@ -232,7 +233,7 @@ void BaseScene::putEmitter(Vec2 pos){
 void BaseScene::putEmitter2(Vec2 pos){
 	m_emitterCreated ++;
 
-	auto _emitter = ParticleSystemQuad::createWithTotalParticles(100);
+	auto _emitter = ParticleSystemQuad::createWithTotalParticles(60);
     //_emitter->retain();
 	_emitter->setTag(m_emitterCreated);
 
@@ -275,13 +276,13 @@ void BaseScene::putEmitter2(Vec2 pos){
     _emitter->setEndSpinVar(360);
 
     // color of particles
-	_emitter->setStartColor(C4F_(E::P.C700, 0.7f));
+	_emitter->setStartColor(C4F_(E::P.C700, 0.5f));
     _emitter->setStartColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.2f));
     _emitter->setEndColor(C4F_(E::P.C700, 0.15f));
     _emitter->setEndColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.15f));
 
     // size, in pixels
-    _emitter->setStartSize(28.0f);
+    _emitter->setStartSize(32.0f);
     _emitter->setStartSizeVar(4.0f);
     _emitter->setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
 
@@ -300,7 +301,7 @@ void BaseScene::putEmitter2(Vec2 pos){
 void BaseScene::putEmitter3(Vec2 pos){
 	m_emitterCreated ++;
 
-	auto _emitter = ParticleSystemQuad::createWithTotalParticles(40);
+	auto _emitter = ParticleSystemQuad::createWithTotalParticles(20);
     //_emitter->retain();
 	_emitter->setTag(m_emitterCreated);
 
@@ -337,10 +338,10 @@ void BaseScene::putEmitter3(Vec2 pos){
     _emitter->setLifeVar(0.8f);
 
     // color of particles
-	_emitter->setStartColor(C4F_(E::P.C500, 0.8f));
-    _emitter->setStartColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.2f));
+	_emitter->setStartColor(C4F_(E::P.C500, 0.4f));
+    _emitter->setStartColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.3f));
     _emitter->setEndColor(C4F_(E::P.C300, 0.3f));
-    _emitter->setEndColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.15f));
+    _emitter->setEndColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.2f));
 
     // size, in pixels
     _emitter->setStartSize(32.0f);

@@ -99,6 +99,75 @@
     <ClCompile Include="..\Classes\Levels\Level4.cpp">
       <Filter>src\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Scene\AboutScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Element\Diamond.cpp">
+      <Filter>src\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level5.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level6.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level7.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level8.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level9.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\SplashScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level10.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level11.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level12.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level13.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level15.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level14.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\LevelPickerScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level16.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level17.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level18.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level19.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level20.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level21.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level22.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level24.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -174,6 +243,75 @@
       <Filter>src\Element</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Levels\Level4.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\AboutScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Element\Diamond.h">
+      <Filter>src\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level5.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level6.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level7.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level8.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level9.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\SplashScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level10.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level11.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level12.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level13.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level15.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level14.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\LevelPickerScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level16.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level17.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level18.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level19.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level20.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level21.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level22.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level24.h">
       <Filter>src\Levels</Filter>
     </ClInclude>
   </ItemGroup>

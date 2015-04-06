@@ -10,6 +10,8 @@ class BallDialog : public cocos2d::Sprite
         ~BallDialog();
         static BallDialog* create(const std::string = "", const std::function<void(void)>& callbackOK = nullptr, const std::function<void(void)>& callbackCancel = nullptr, const std::string ok = "ui/b_ok.png", const std::string cancel = "ui/b_cancel.png");
 		void runAnimations(bool);
+		bool isValid(){return m_listenerId != -1;};
+		void setReferencer(BallDialog** referencer){m_referencer = referencer;};
 
     private:
 		void addEvents();
@@ -25,6 +27,7 @@ class BallDialog : public cocos2d::Sprite
 		void initOpt(std::string, std::string);
 		void menuCallback(cocos2d::Ref* pSender);
 		int m_listenerId;
+		BallDialog** m_referencer;
 
 };
 

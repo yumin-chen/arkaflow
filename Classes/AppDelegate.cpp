@@ -12,12 +12,15 @@ AppDelegate::~AppDelegate() {}
 
 bool AppDelegate::applicationDidFinishLaunching() {
 	srand(time(NULL));
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	FileUtils::getInstance()->setDefaultResourceRootPath("res/");
+#endif
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
 		//glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, 320, 640), 1);
-        glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, 800, 600), 1);
+        glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, 2048*0.45, 1536*0.45), 1);
 		//glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, DESIGNED_WIDTH, DESIGNED_HEIGHT), 1);
         director->setOpenGLView(glview);
 		//glview->setDesignResolutionSize(DESIGNED_WIDTH, DESIGNED_HEIGHT, ResolutionPolicy::NO_BORDER);

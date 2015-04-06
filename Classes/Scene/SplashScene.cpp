@@ -22,7 +22,7 @@ bool S_Splash::init()
 	}
 
 	auto iconCharmy = Sprite::create("g_charmysoft_logo.png");
-	iconCharmy->setScale(0.8f);
+	iconCharmy->setScale(0.75f);
 	iconCharmy->setAnchorPoint(Vec2(0.5, 0.5));
 	iconCharmy->setOpacity(0);
 	iconCharmy->setPosition(E::visibleWidth / 2, E::visibleHeight / 2);

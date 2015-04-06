@@ -103,15 +103,15 @@ bool S_About::init()
 
 #define OFFSET_Y__ (320)
 	
-	auto iconCharmy = Sprite::create("g_charmysoft_logo.png");
-	iconCharmy->setScale(0.5f);
+	auto iconCharmy = Sprite::create("g_charmy_av.png");
+	iconCharmy->setScale(0.6f);
 	iconCharmy->setAnchorPoint(Vec2(0, 0.5));
 	iconCharmy->setPosition(E::originX + 24, E::originY + OFFSET_Y__);
 	this->addChild(iconCharmy, 0);
 
 	auto lbCharmy = Label::createWithTTF(S("CharmySoft", "尘泯网络"), FONT_BOLD, 28, 
 		Size(320, 64), TextHAlignment::CENTER, TextVAlignment::CENTER);
-	lbCharmy->setPosition(E::visibleWidth/2 + 80, E::originY + OFFSET_Y__ + 40);
+	lbCharmy->setPosition(E::visibleWidth/2 + 80, E::originY + OFFSET_Y__ + 48);
 	lbCharmy->setAnchorPoint(Vec2(0.5, 0.5));
 	lbCharmy->setColor(C3B(E::P.C900));
 	this->addChild(lbCharmy, 0);

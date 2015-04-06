@@ -169,7 +169,7 @@ bool S_LevelPicker::init()
 		CPalette[i]->setScale(0.3f);
 		CPalette[i]->setAnchorPoint(Vec2(0, 0));
 		CPalette[i]->setTag(TAG_COLOR_MENU+i);
-		auto lbLevel = Label::createWithTTF(stdp::to_string(i+1), FONT_BOLD, 128, 
+		auto lbLevel = Label::createWithTTF(i+1 > E::settings.unlockedLevel? "?": stdp::to_string(i+1), FONT_BOLD, 128, 
 			CPalette[i]->getContentSize(), TextHAlignment::CENTER, TextVAlignment::CENTER);
 		lbLevel->setPosition(CPalette[i]->getContentSize()/2);
 		//lbLevel->setAnchorPoint(Vec2(0.5, 0.5));
@@ -273,6 +273,7 @@ void S_LevelPicker::menuCallback(Ref* pSender)
 
 void S_LevelPicker::_ok(){
 	E::settings.currentLevel = m_tempLevel;
+	UserDefault::getInstance()->setIntegerForKey(UD_CURRENT_LEVEL, E::settings.currentLevel);
 	m_bClose = 1;
 	runAnimations(true);
 }
