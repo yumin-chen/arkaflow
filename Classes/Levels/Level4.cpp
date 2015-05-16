@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Level4.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Triangle.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Triangle.h"
 
 USING_NS_CC;
 
@@ -44,22 +44,22 @@ void Level4::restart(){
 	this->addChild(t3);
 
 	#define MOVE_BY_X 64
-	auto b1 = Block::create(128, 24);
+	auto b1 = Brick::create(128, 24);
 	b1->setPosition(E::originX + DESIGNED_WIDTH / 2 - 64, E::originY + 320 + 16);
 	b1->initBody();
 	this->addChild(b1);
-	auto b12 = Block::create(96, 16, E::P.C800);
+	auto b12 = Brick::create(96, 16, E::P.C800);
 	b12->setPosition(E::originX + DESIGNED_WIDTH/2 - 48, E::originY + 320);
 	b12->initBody();
 	b12->runAction(RepeatForever::create(Sequence::create(MoveBy::create(0.5f, Vec2(MOVE_BY_X/2, 0)), MoveBy::create(1.0f, Vec2(-MOVE_BY_X, 0)), MoveBy::create(0.5f, Vec2(MOVE_BY_X/2, 0)), nullptr)));
 	b12->runAction(RepeatForever::create(Sequence::create(TintTo::create(1.0f, C3B(E::P.C400)), TintTo::create(1.0f, C3B(E::P.C800)), nullptr)));
 	this->addChild(b12);
 
-	auto b2 = Block::create(128, 24);
+	auto b2 = Brick::create(128, 24);
 	b2->setPosition(E::originX + DESIGNED_WIDTH / 2 - 64, E::originY + 320 + 16 - 180);
 	b2->initBody();
 	this->addChild(b2);
-	auto b22 = Block::create(96, 16, E::P.C800);
+	auto b22 = Brick::create(96, 16, E::P.C800);
 	b22->setPosition(E::originX + DESIGNED_WIDTH/2 - 48, E::originY + 320 - 180);
 	b22->initBody();
 	b22->runAction(RepeatForever::create(Sequence::create(MoveBy::create(0.5f, Vec2(MOVE_BY_X/2, 0)), MoveBy::create(1.0f, Vec2(-MOVE_BY_X, 0)), MoveBy::create(0.5f, Vec2(MOVE_BY_X/2, 0)), nullptr)));

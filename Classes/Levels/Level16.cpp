@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Level16.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Triangle.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Triangle.h"
 
 USING_NS_CC;
 
@@ -40,11 +40,11 @@ void Level16::restart(){
 	t2->initProtector();
 
 	#define MOVE_BY_X 64
-	auto b1 = Block::create(128, 24);
+	auto b1 = Brick::create(128, 24);
 	b1->setPosition(E::originX + DESIGNED_WIDTH / 2 - 64, E::originY + 320 + 16 - 64);
 	b1->initBody();
 	this->addChild(b1);
-	auto b12 = Block::create(96, 16, E::P.C800);
+	auto b12 = Brick::create(96, 16, E::P.C800);
 	b12->setPosition(E::originX + DESIGNED_WIDTH/2 - 48, E::originY + 320 - 64);
 	b12->initBody();
 	b12->runAction(RepeatForever::create(Sequence::create(MoveBy::create(0.5f, Vec2(MOVE_BY_X/2, 0)), MoveBy::create(1.0f, Vec2(-MOVE_BY_X, 0)), MoveBy::create(0.5f, Vec2(MOVE_BY_X/2, 0)), nullptr)));

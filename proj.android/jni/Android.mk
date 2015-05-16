@@ -19,11 +19,10 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/UI/EdgedBallButton.cpp \
                    ../../Classes/UI/BallSlider.cpp \
                    ../../Classes/UI/BallDialog.cpp \
-                   ../../Classes/Element/MainBall.cpp \
                    ../../Classes/Element/SmartString.cpp \
                    ../../Classes/Element/Ring.cpp \
                    ../../Classes/Element/Target.cpp \
-                   ../../Classes/Element/Block.cpp \
+                   ../../Classes/Element/Brick.cpp \
                    ../../Classes/Element/Triangle.cpp \
                    ../../Classes/Element/Diamond.cpp \
                    ../../Classes/Scene/BaseScene.cpp \
@@ -56,6 +55,9 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/Levels/Level19.cpp \
                    ../../Classes/Levels/Level20.cpp \
                    ../../Classes/Levels/Level21.cpp \
+                   ../../Classes/Levels/Level22.cpp \
+                   ../../Classes/Levels/Level23.cpp \
+                   ../../Classes/Levels/Level24.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

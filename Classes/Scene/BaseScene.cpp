@@ -61,8 +61,8 @@ void BaseScene::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::
 }
 
 bool BaseScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
-{   
-	utils::captureScreen(nullptr, "D:/a.png");
+{
+	//utils::captureScreen(nullptr, "D:/a.png");
 	/*
 #ifndef NDEBUG
 	Vec2 p = touch->getLocation() / E::scale;

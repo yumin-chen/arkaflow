@@ -2,10 +2,10 @@
 #define __ABOUT_SCENE_H__
 
 #include "BaseScene.h"
-#include "UI/BallButton.h"
-#include "UI/EdgedBallButton.h"
-#include "UI/BallSlider.h"
-#include "UI/TitleBar.h"
+#include "../UI/BallButton.h"
+#include "../UI/EdgedBallButton.h"
+#include "../UI/BallSlider.h"
+#include "../UI/TitleBar.h"
 
 class S_About : public BaseScene
 {

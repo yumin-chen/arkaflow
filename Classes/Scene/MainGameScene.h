@@ -1,12 +1,11 @@
 #ifndef __MAIN_GAME_SCENE_H__
 #define __MAIN_GAME_SCENE_H__
 
-#include "scene/BaseScene.h"
-#include "element/SmartString.h"
-#include "element/MainBall.h"
-#include "UI/BallButton.h"
-#include "UI/TitleBar.h"
-#include "Levels/BaseLevel.h"
+#include "BaseScene.h"
+#include "../Element/SmartString.h"
+#include "../UI/BallButton.h"
+#include "../UI/TitleBar.h"
+#include "../Levels/BaseLevel.h"
 
 #define MAIN_BALL_DIAMETER (192*0.2)
 #define MAIN_BALL_RADIUS (MAIN_BALL_DIAMETER/2)
@@ -24,6 +23,7 @@
 class S_MainGame : public BaseScene
 {
 public:
+	S_MainGame();
     static cocos2d::Scene* createScene();
     virtual bool init();      
     void update( float dt );
@@ -32,12 +32,12 @@ public:
 	void nextLevelDialog();
 	void backHomeDialog();
 	void pickLevelDialog();
+	void static printString(std::string);
+	cocos2d::Sprite* getMainBall();
     CREATE_FUNC(S_MainGame);
 
 private:
 	void initAnim();
-	void updateEnemyAI();
-	void checkCollision(MainBall* wheel);
 	bool onContactBegin(cocos2d::PhysicsContact& contact);
 	bool onContactPreSolve(cocos2d::PhysicsContact& contact, cocos2d::PhysicsContactPreSolve& solve);
 	void onKeyEvent(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
@@ -66,8 +66,8 @@ private:
 	cocos2d::LayerColor* m_stsLayer;
 	cocos2d::Label* m_minuteLabel;
 	cocos2d::Label* m_secondLabel;
+	cocos2d::Label* m_printer;
 	TitleBar* m_titleBar;
-	MainBall* m_wheel; 
 	BallButton* m_mbg;
 	BaseLevel* m_game;
 

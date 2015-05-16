@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Level13.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Diamond.h"
-#include "Element/Block.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Diamond.h"
+#include "../Element/Brick.h"
 
 USING_NS_CC;
 
@@ -47,13 +47,13 @@ void Level13::restart(){
 	t1->initProtector();
 
 	/*
-	auto b_l = Block::create(E::originX + 96, 32);
+	auto b_l = Brick::create(E::originX + 96, 32);
 	b_l->setPosition(0, E::originY + 32);
 	b_l->setRotation(30);
 	b_l->initBody();
 	this->addChild(b_l);
 
-	auto b_r = Block::create(E::originX + 96, 32);
+	auto b_r = Brick::create(E::originX + 96, 32);
 	b_r->setPosition(E::originX + DESIGNED_WIDTH - 96, E::originY + 32);
 	b_r->setRotation(-30);
 	b_r->initBody();

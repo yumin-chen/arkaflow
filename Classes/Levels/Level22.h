@@ -3,7 +3,6 @@
 
 #include "EngineHelper.h"
 #include "BaseLevel.h"
-#include "Element/Ring.h"
 
 class Level22 : public BaseLevel
 {
@@ -14,7 +13,6 @@ public:
 	virtual int getLevel(){return 22;};
     CREATE_FUNC(Level22); 
 private:
-	Ring* ring;
 };
 
 #endif // __LEVEL_22_H__

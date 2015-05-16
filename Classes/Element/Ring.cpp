@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EngineHelper.h"
-#include "Scene/MainGameScene.h"
+#include "../Scene/MainGameScene.h"
 #include "Ring.h"
 
 USING_NS_CC;

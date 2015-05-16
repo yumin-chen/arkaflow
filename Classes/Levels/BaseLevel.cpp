@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "BaseLevel.h"
-#include "Scene/MainGameScene.h"
-#include "UI/TitleBar.h"
-#include "Element/Target.h"
+#include "../Scene/MainGameScene.h"
+#include "../UI/TitleBar.h"
+#include "../Element/Target.h"
 
 USING_NS_CC;
 

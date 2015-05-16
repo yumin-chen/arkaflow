@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SmartString.h"
-#include "Scene/MainGameScene.h"
+#include "../Scene/MainGameScene.h"
 #include "EngineHelper.h"
 #include "math.h"
 

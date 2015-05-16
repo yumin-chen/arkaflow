@@ -1,8 +1,9 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Level1.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Triangle.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Triangle.h"
+#include "../Scene/MainGameScene.h"
 
 USING_NS_CC;
 
@@ -14,7 +15,7 @@ bool Level1::init()
 	}
 
 	restart();
-
+	S_MainGame::printString(S("Draw a line down here to fly the ball", "滑动手指画条直线来弹飞圈圈吧~"));
 	return true;
 }
 

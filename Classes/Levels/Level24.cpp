@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Level24.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Diamond.h"
-#include "Element/Triangle.h"
-#include "Element/Block.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Diamond.h"
+#include "../Element/Triangle.h"
+#include "../Element/Brick.h"
 
 USING_NS_CC;
 
@@ -31,18 +31,21 @@ void Level24::restart(){
 	t->initBody();
 	this->addChild(t);
 	t->playAnim(1);
+	t->enableArtificialIntelligence();
 
 	auto t2 = Target::create();
 	t2->setPosition(E::originX + DESIGNED_WIDTH / 2 - 128 - 32, E::originY + 320 + 160 + 48 + Y__OFFSET);
 	t2->initBody();
 	this->addChild(t2);
 	t2->playAnim(1);
+	t2->enableArtificialIntelligence();
 
 	auto t3 = Target::create();
 	t3->setPosition(E::originX + DESIGNED_WIDTH / 2 + 128 + 32, E::originY + 320 + 160 + 48 + Y__OFFSET);
 	t3->initBody();
 	this->addChild(t3);
 	t3->playAnim(1);
+	t3->enableArtificialIntelligence();
 
 	auto ring1 = Ring::create();
 	ring1->setPosition(E::originX + DESIGNED_WIDTH / 2 - 64, E::originY + 320 - 80 + Y__OFFSET);

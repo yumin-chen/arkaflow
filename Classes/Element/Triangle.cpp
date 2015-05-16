@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Scene/MainGameScene.h"
+#include "../Scene/MainGameScene.h"
 #include "EngineHelper.h"
 #include "Triangle.h"
 

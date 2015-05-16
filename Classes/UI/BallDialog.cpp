@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EngineHelper.h"
-#include "Scene/BaseScene.h"
+#include "../Scene/BaseScene.h"
 #include "BallDialog.h"
 #include "BallButton.h"
 

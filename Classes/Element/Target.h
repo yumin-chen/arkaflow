@@ -2,7 +2,7 @@
 #define _TARGET_H_
 
 #include "EngineHelper.h"
-#include "Block.h"
+#include "Brick.h"
 
 class Target: public cocos2d::Sprite
 {
@@ -18,12 +18,14 @@ class Target: public cocos2d::Sprite
 		SETOPACITY_FUNC(Sprite);
 		static int targetNum;
 		bool bAlreadyHit;
+		void enableArtificialIntelligence();
     private:
 		void initOpt();
 		void _updateProtectorPosition();
-		Block* block1;
-		Block* block2;
-		Block* block3;
+		void _updateAI();
+		Brick* block1;
+		Brick* block2;
+		Brick* block3;
 		
 };
 

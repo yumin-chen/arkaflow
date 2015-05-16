@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Level11.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Triangle.h"
-#include "Element/Block.h"
-#include "Element/Diamond.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Triangle.h"
+#include "../Element/Brick.h"
+#include "../Element/Diamond.h"
 
 USING_NS_CC;
 

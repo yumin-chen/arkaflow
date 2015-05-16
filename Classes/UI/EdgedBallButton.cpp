@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EngineHelper.h"
-#include "Scene/BaseScene.h"
+#include "../Scene/BaseScene.h"
 #include "EdgedBallButton.h"
 
 USING_NS_CC;

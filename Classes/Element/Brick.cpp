@@ -1,18 +1,18 @@
 #include "stdafx.h"
-#include "Scene/MainGameScene.h"
+#include "../Scene/MainGameScene.h"
 #include "EngineHelper.h"
-#include "Block.h"
+#include "Brick.h"
 
 USING_NS_CC;
 
-Block::Block() {
+Brick::Brick() {
 }
 
-Block::~Block() {
+Brick::~Brick() {
 }
 
-Block* Block::create(float width, float height, int color) {
-	Block *block = new (std::nothrow) Block();
+Brick* Brick::create(float width, float height, int color) {
+	Brick *block = new (std::nothrow) Brick();
 	if (block && block->initWithColor(C4B(color)))
     {
         block->autorelease();
@@ -23,7 +23,7 @@ Block* Block::create(float width, float height, int color) {
     return nullptr;
 }
 
-void Block::initOpt(float width, float height){
+void Brick::initOpt(float width, float height){
 	setContentSize(Size(width, height));
 	this->setTag(TAG_PHY_BLOCK);
 }
@@ -31,7 +31,7 @@ void Block::initOpt(float width, float height){
 /**
 Make sure to setScale before initBody.
 */
-void Block::initBody(){
+void Brick::initBody(){
 	auto body = PhysicsBody::createBox(getContentSize(), SMOOTH_MATERIAL);
 	body->setDynamic(false);
 	body->setCategoryBitmask(0xFFFFFFF0);

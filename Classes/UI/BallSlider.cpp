@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EngineHelper.h"
 #include "BallSlider.h"
-#include "scene/BaseScene.h"
+#include "../Scene/BaseScene.h"
 
 USING_NS_CC;
 

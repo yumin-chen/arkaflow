@@ -2,10 +2,10 @@
 #include "SettingsScene.h"
 #include "WelcomeScene.h"
 #include "AboutScene.h"
-#include "UI/BallButton.h"
-#include "UI/TitleBar.h"
-#include "UI/BallSlider.h"
-#include "UI/EdgedBallButton.h"
+#include "../UI/BallButton.h"
+#include "../UI/TitleBar.h"
+#include "../UI/BallSlider.h"
+#include "../UI/EdgedBallButton.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;

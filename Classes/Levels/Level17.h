@@ -3,8 +3,8 @@
 
 #include "EngineHelper.h"
 #include "BaseLevel.h"
-#include "Element/Target.h"
-#include "Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Ring.h"
 
 class Level17 : public BaseLevel
 {

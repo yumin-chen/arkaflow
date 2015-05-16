@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Level20.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Diamond.h"
-#include "Element/Block.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Diamond.h"
+#include "../Element/Brick.h"
 
 USING_NS_CC;
 
@@ -52,23 +52,23 @@ void Level20::restart(){
 	ring2->initBody();
 	this->addChild(ring2);
 
-	auto b1 = Block::create(192, 24);
+	auto b1 = Brick::create(192, 24);
 	b1->setRotation(45);
 	b1->setPosition(E::originX + DESIGNED_WIDTH / 2 - 192 + 32, E::originY + 96 );
 	b1->initBody();
 	this->addChild(b1);
-	auto b12 = Block::create(192, 16, E::P.C800);
+	auto b12 = Brick::create(192, 16, E::P.C800);
 	b12->setRotation(45);
 	b12->setPosition(E::originX + DESIGNED_WIDTH / 2 - 192 + 32 + 16, E::originY + 96 + 8);
 	b12->initBody();
 	this->addChild(b12);
 
-	auto b2 = Block::create(192, 24);
+	auto b2 = Brick::create(192, 24);
 	b2->setRotation(-45);
 	b2->setPosition(E::originX + DESIGNED_WIDTH / 2 - 192 + 32 + 128, E::originY + 96 );
 	b2->initBody();
 	this->addChild(b2);
-	auto b22 = Block::create(192, 16, E::P.C800);
+	auto b22 = Brick::create(192, 16, E::P.C800);
 	b22->setRotation(-45);
 	b22->setPosition(E::originX + DESIGNED_WIDTH / 2 - 192 + 32 - 16 + 128, E::originY + 96 + 8);
 	b22->initBody();

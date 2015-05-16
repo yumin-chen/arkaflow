@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Level17.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Diamond.h"
-#include "Element/Block.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Diamond.h"
+#include "../Element/Brick.h"
 
 USING_NS_CC;
 

@@ -3,12 +3,12 @@
 #include "AboutScene.h"
 #include "WelcomeScene.h"
 #include "LevelPickerScene.h"
-#include "UI/BallButton.h"
-#include "UI/EdgedBallButton.h"
-#include "UI/TitleBar.h"
-#include "UI/BallDialog.h"
-#include "Levels/Levels.h"
-#include "Element/Target.h"
+#include "../UI/BallButton.h"
+#include "../UI/EdgedBallButton.h"
+#include "../UI/TitleBar.h"
+#include "../UI/BallDialog.h"
+#include "../Levels/Levels.h"
+#include "../Element/Target.h"
 
 USING_NS_CC;
 
@@ -17,6 +17,10 @@ USING_NS_CC;
 #define	TAG_RESTART		1004
 #define	TAG_HOME		1005
 #define	TAG_PICKLEVEL	1006
+
+S_MainGame::S_MainGame(){
+	m_printer = nullptr;
+}
 
 Scene* S_MainGame::createScene()
 {
@@ -40,7 +44,7 @@ bool S_MainGame::init()
 	if (!BaseScene::init(E::P.C100)){return false;}
 #ifndef NDEBUG
 	//E::settings.currentLevel = 21;
-	E::settings.unlockedLevel = 22;
+	E::settings.unlockedLevel = 24;
 #endif
 
 	// disable touch emitter
@@ -183,9 +187,6 @@ bool S_MainGame::init()
 	edgeBtmSp->setTag(TAG_PHY_EDGE_BTM);
 	this->addChild(edgeBtmSp);
 
-	//
-	m_wheel = new MainBall;
-	m_wheel->isReal = true;
 	// create the spinning wheel
 	auto wheel_inner = Sprite::create("ui/ball_inner.png");
 	wheel_inner->setPosition(256/2, 256/2);
@@ -206,7 +207,6 @@ bool S_MainGame::init()
 	m_ballStreak = MotionStreak::create(2.0f, 0, 4, C3B(E::P.C600), "ui/streak.png");
 	this->addChild(m_ballStreak, 9);
 
-	m_wheel->sprite = wheel;
 
 	m_smartstring = SmartString::create();
 	this->addChild(m_smartstring, 11);
@@ -235,9 +235,9 @@ std::string makeTwoDigits(std::string s){
 void S_MainGame::update( float dt ) 
 {
 	if(!m_bPaused && !m_isGameOver){
-		auto o = m_wheel->sprite->getChildByTag(0);
+		auto o = getMainBall()->getChildByTag(0);
 		o->setRotation(o->getRotation() + dt * 360);
-		m_ballStreak->setPosition( m_wheel->sprite->getPosition() );
+		m_ballStreak->setPosition( getMainBall()->getPosition() );
 		m_smartstring->update(dt);
 		m_game->update(dt);
 		m_dGameTimer = m_dGameTimer + dt;
@@ -284,6 +284,26 @@ void S_MainGame::pickLevel(){
 	Director::getInstance()->replaceScene(S_LevelPicker::createScene());
 }
 
+void S_MainGame::printString(std::string s){
+	S_MainGame* _this = (S_MainGame*)BaseScene::getCurrentScene();
+	if(_this->m_printer == nullptr){
+		_this->m_printer = Label::createWithTTF(s, FONT_MAIN, 32, 
+				Size(E::visibleWidth, GAME_BTM_HEIGHT - 32), TextHAlignment::CENTER, TextVAlignment::BOTTOM);
+		_this->m_printer->setPosition(0, 8);
+		_this->m_printer->setAnchorPoint(Vec2(0, 0));
+		_this->m_printer->enableShadow(Color4B(0, 0, 0, 128), Size(2, -2));
+		_this->m_printer->setColor(Color3B(255, 255, 255));
+		_this->addChild(_this->m_printer, 100);
+	}
+	auto cbm_visible = CallFunc::create([_this](){_this->m_printer->setVisible(false);});
+	_this->m_printer->setVisible(true);
+	_this->m_printer->setOpacity(255);
+	_this->m_printer->setString(s);
+	_this->m_printer->stopAllActions();
+	_this->m_printer->runAction(Sequence::create(DelayTime::create(2.0f), FadeOut::create(0.5), cbm_visible, nullptr));
+	
+}
+
 bool S_MainGame::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {   
 	m_bStringTouchFocus = false;
@@ -300,6 +320,8 @@ bool S_MainGame::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 		m_smartstring->setStartingPoint(p);
 		m_bStringTouchFocus = true;
 		return true; // event consumed
+	}else{
+		printString(S("You can only draw the bat down here", "只能在屏幕下方画出冲击板哦~"));
 	}
 
 	return false; // event past thru
@@ -325,18 +347,13 @@ void S_MainGame::restartGame(){
 	m_stsBackground->setVisible(true);
 	m_stsShine->setVisible(true);
 	m_stsLayer->setVisible(true);
-	m_wheel->speed = 0;
-	m_wheel->rotate = 0;//60*PI/180.0;
-	m_wheel->angle = 180.0*PI/180.0f;
-	m_wheel->rotatedAngle = m_wheel->angle;
-	m_wheel->setPosition(E::visibleWidth/2, GAME_BTM_HEIGHT/2);
 	m_dGameTimer = 0;
 	m_minuteLabel->setString("00'");
 	m_secondLabel->setString("00\"");
-	
-	auto wheelBody = PhysicsBody::createCircle(192*0.5f*m_wheel->sprite->getScale(), SMOOTH_MATERIAL);
+	getMainBall()->setPosition(E::visibleWidth/2, GAME_BTM_HEIGHT/2);
+	auto wheelBody = PhysicsBody::createCircle(192*0.5f*getMainBall()->getScale(), SMOOTH_MATERIAL);
 	wheelBody->setContactTestBitmask(0xFFFFFFFF);
-	m_wheel->sprite->setPhysicsBody(wheelBody);
+	getMainBall()->setPhysicsBody(wheelBody);
 	if(m_game && m_game->getLevel() == E::settings.currentLevel){
 		m_game->restart();
 	}else{
@@ -355,7 +372,7 @@ void S_MainGame::restartGame(){
 
 void S_MainGame::nextLevelDialog(){
 	m_isGameOver = true;
-	m_wheel->sprite->getPhysicsBody()->removeFromWorld();
+	getMainBall()->getPhysicsBody()->removeFromWorld();
 	E::settings.currentLevel++;
 	if(E::settings.currentLevel > MAX_LEVEL){
 		E::settings.currentLevel = 1;
@@ -390,7 +407,7 @@ void S_MainGame::goToAboutPage(){
 
 void S_MainGame::gameOver(){
 	m_isGameOver = true;
-	m_wheel->sprite->getPhysicsBody()->removeFromWorld();
+	getMainBall()->getPhysicsBody()->removeFromWorld();
 	auto gameOverDialog = BallDialog::create(S("Game Over", "游戏结束"), CC_CALLBACK_0(S_MainGame::restartGame, this), CC_CALLBACK_0(S_MainGame::leaveGame, this), "ui/b_restart.png", "ui/b_leave.png");
 	this->addChild(gameOverDialog, 1000);
 }
@@ -483,7 +500,6 @@ bool S_MainGame::onContactBegin(PhysicsContact& contact)
 		{
 			((Target*)nodeA)->beHit();
 		}
-
 		if(nodeA->getTag() == TAG_PHY_BALL || nodeB->getTag() == TAG_PHY_BALL){
 			Vec2 pos;
 			if(nodeA->getTag() == TAG_PHY_BALL){pos = nodeA->getPosition();}
@@ -505,6 +521,10 @@ bool S_MainGame::onContactBegin(PhysicsContact& contact)
 
 	//bodies can collide
 	return true;
+}
+
+Sprite* S_MainGame::getMainBall(){
+	return (Sprite*)getChildByTag(TAG_PHY_BALL);
 }
 
 bool S_MainGame::onContactPreSolve(PhysicsContact& contact, PhysicsContactPreSolve& solve){

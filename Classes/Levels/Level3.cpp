@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Level3.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Triangle.h"
-#include "Element/Block.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Triangle.h"
+#include "../Element/Brick.h"
 
 USING_NS_CC;
 
@@ -47,11 +47,11 @@ void Level3::restart(){
 	t1->playAnim(1);
 	this->addChild(t1);
 
-	auto b = Block::create(128, 32);
+	auto b = Brick::create(128, 32);
 	b->setPosition(E::originX + DESIGNED_WIDTH / 2 -64, E::originY + 128);
 	b->initBody();
 	this->addChild(b);
-	auto b2 = Block::create(96, 16, E::P.C800);
+	auto b2 = Brick::create(96, 16, E::P.C800);
 	b2->setPosition(E::originX + DESIGNED_WIDTH / 2 -48, E::originY + 128 - 8);
 	b2->initBody();
 	b2->runAction(RepeatForever::create(Sequence::create(MoveBy::create(0.5f, Vec2(48, 0)), MoveBy::create(1.0f, Vec2(-96, 0)), MoveBy::create(0.5f, Vec2(48, 0)), nullptr)));

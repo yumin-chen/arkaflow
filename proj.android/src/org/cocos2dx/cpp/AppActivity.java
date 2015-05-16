@@ -59,12 +59,12 @@ public class AppActivity extends Cocos2dxActivity {
 		   public void run() {
 			   if(file == null || !file.exists()){
 				   CopyShareToSdCard();
-				   file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/ccpp.png");
+				   file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/arkaflow.jpg");
 			   }
 			   Intent intent = new Intent(Intent.ACTION_SEND);
 			   intent.setType("image/*");
-			   intent.putExtra(Intent.EXTRA_SUBJECT, "Ching Chong Ping Pong");
-			   intent.putExtra(Intent.EXTRA_TEXT, "Check out this extradinary game, Ching Chong Ping Pong! It's real fun! http://www.CharmySoft.com");
+			   intent.putExtra(Intent.EXTRA_SUBJECT, "Arkaflow");
+			   intent.putExtra(Intent.EXTRA_TEXT, "Check out this extradinary game, Arkaflow! It's real fun! http://www.CharmySoft.com");
 			   intent.putExtra(Intent.EXTRA_STREAM, 
 					   Uri.fromFile(file));
 			   a.startActivity(Intent.createChooser(intent, "Share Game")); 
@@ -85,8 +85,8 @@ public class AppActivity extends Cocos2dxActivity {
     private static void CopyShareToSdCard() {
         try{
         AssetManager assetManager = a.getApplicationContext().getAssets();
-        InputStream in = assetManager.open("share.png");   
-        OutputStream out = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/ccpp.png");
+        InputStream in = assetManager.open("share.jpg");   
+        OutputStream out = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/arkaflow.jpg");
         copyAssetFiles(in, out);
         in.close();
         in = null;

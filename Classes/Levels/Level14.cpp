@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Level14.h"
-#include "Element/Ring.h"
-#include "Element/Triangle.h"
-#include "Element/Target.h"
-#include "Element/Block.h"
+#include "../Element/Ring.h"
+#include "../Element/Triangle.h"
+#include "../Element/Target.h"
+#include "../Element/Brick.h"
 
 USING_NS_CC;
 
@@ -33,11 +33,11 @@ void Level14::restart(){
 	t->runAction(RepeatForever::create(Sequence::create(MoveBy::create(1.6f, Vec2(MOVE_BY_X, 0)), MoveBy::create(1.6f, Vec2(-MOVE_BY_X, 0)), nullptr)));
 	t->initProtector(192);
 #define MOVE_BY_X 64
-	auto b1 = Block::create(E::originX + DESIGNED_WIDTH - 128, 24);
+	auto b1 = Brick::create(E::originX + DESIGNED_WIDTH - 128, 24);
 	b1->setPosition(0, E::originY + 320);
 	b1->initBody();
 	this->addChild(b1);
-	auto b12 = Block::create(E::originX + DESIGNED_WIDTH - 128, 16, E::P.C800);
+	auto b12 = Brick::create(E::originX + DESIGNED_WIDTH - 128, 16, E::P.C800);
 	b12->setPosition(0, E::originY + 320 - 16);
 	b12->initBody();
 	b12->runAction(RepeatForever::create(Sequence::create(MoveBy::create(1.0f, Vec2(MOVE_BY_X, 0)), MoveBy::create(1.0f, Vec2(-MOVE_BY_X, 0)), nullptr)));

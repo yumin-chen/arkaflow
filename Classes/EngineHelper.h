@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include <SimpleAudioEngine.h>
 
-#define VERSION "1.0"
+#define VERSION "1.2"
 
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286
 
@@ -134,7 +134,7 @@ namespace stdPatchForMinGW
 
 #define S(english,chinese) E::language==0? english: chinese
 
-#define GAME_TITLE S("Ching Chong Ping Pong", "乾坤弹球")
+#define GAME_TITLE S("Arkaflow", "溜溜的圈圈")
 
 //#define FONT_MAIN S("Arial", "微软雅黑")
 #define FONT_MAIN S("fonts/SF Theramin Gothic Condensed.ttf", "fonts/Chinese Font.ttf")

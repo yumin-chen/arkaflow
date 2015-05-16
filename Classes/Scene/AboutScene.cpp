@@ -3,10 +3,10 @@
 #include "WelcomeScene.h"
 #include "SettingsScene.h"
 #include "MainGameScene.h"
-#include "UI/BallButton.h"
-#include "UI/TitleBar.h"
-#include "UI/BallSlider.h"
-#include "UI/EdgedBallButton.h"
+#include "../UI/BallButton.h"
+#include "../UI/TitleBar.h"
+#include "../UI/BallSlider.h"
+#include "../UI/EdgedBallButton.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
@@ -123,7 +123,7 @@ bool S_About::init()
 	lbCharmyDetail->setColor(C3B(E::P.C900));
 	this->addChild(lbCharmyDetail, 0);
 
-	auto lbLink = Label::createWithTTF("http://www.CharmySoft.com", FONT_MAIN, 24, 
+	auto lbLink = Label::createWithTTF(S("http://www.CharmySoft.com", "www.CharmySoft.com"), FONT_MAIN, 24, 
 		Size(256, 64), TextHAlignment::CENTER, TextVAlignment::CENTER);
 	lbLink->setPosition(E::visibleWidth/2 + 80, E::originY + OFFSET_Y__ - 48);
 	lbLink->setAnchorPoint(Vec2(0.5, 0.5));

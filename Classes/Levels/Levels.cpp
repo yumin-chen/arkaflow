@@ -1,26 +1,29 @@
 #include "stdafx.h"
 #include "Levels.h"
-#include "Levels/Level1.h"
-#include "Levels/Level2.h"
-#include "Levels/Level3.h"
-#include "Levels/Level4.h"
-#include "Levels/Level5.h"
-#include "Levels/Level6.h"
-#include "Levels/Level7.h"
-#include "Levels/Level8.h"
-#include "Levels/Level9.h"
-#include "Levels/Level10.h"
-#include "Levels/Level11.h"
-#include "Levels/Level12.h"
-#include "Levels/Level13.h"
-#include "Levels/Level14.h"
-#include "Levels/Level15.h"
-#include "Levels/Level16.h"
-#include "Levels/Level17.h"
-#include "Levels/Level18.h"
-#include "Levels/Level19.h"
-#include "Levels/Level20.h"
-#include "Levels/Level21.h"
+#include "Level1.h"
+#include "Level2.h"
+#include "Level3.h"
+#include "Level4.h"
+#include "Level5.h"
+#include "Level6.h"
+#include "Level7.h"
+#include "Level8.h"
+#include "Level9.h"
+#include "Level10.h"
+#include "Level11.h"
+#include "Level12.h"
+#include "Level13.h"
+#include "Level14.h"
+#include "Level15.h"
+#include "Level16.h"
+#include "Level17.h"
+#include "Level18.h"
+#include "Level19.h"
+#include "Level20.h"
+#include "Level21.h"
+#include "Level22.h"
+#include "Level23.h"
+#include "Level24.h"
 
 BaseLevel* Levels::createLevel(int level)
 {
@@ -67,6 +70,12 @@ BaseLevel* Levels::createLevel(int level)
 		return Level20::create();
 	case 21:
 		return Level21::create();
+	case 22:
+		return Level22::create();
+	case 23:
+		return Level23::create();
+	case 24:
+		return Level24::create();
 	}
 	return nullptr;
 }

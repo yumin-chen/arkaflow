@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Level21.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Triangle.h"
-#include "Element/Block.h"
-#include "Element/Diamond.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Triangle.h"
+#include "../Element/Brick.h"
+#include "../Element/Diamond.h"
 
 USING_NS_CC;
 
@@ -45,11 +45,11 @@ void Level21::restart(){
 	this->addChild(t3);
 
 	#define MOVE_BY_X 64
-	auto b1 = Block::create(128, 32);
+	auto b1 = Brick::create(128, 32);
 	b1->setPosition(E::originX + (DESIGNED_WIDTH - 128) / 2, E::originY + 400);
 	b1->initBody();
 	this->addChild(b1);
-	auto b12 = Block::create(128, 24, E::P.C800);
+	auto b12 = Brick::create(128, 24, E::P.C800);
 	b12->setPosition(E::originX + (DESIGNED_WIDTH - 128) / 2, E::originY + 400 - 16);
 	b12->initBody();
 	b12->runAction(RepeatForever::create(Sequence::create(MoveBy::create(0.5f, Vec2(MOVE_BY_X/2, 0)), MoveBy::create(1.0f, Vec2(-MOVE_BY_X, 0)), MoveBy::create(0.5f, Vec2(MOVE_BY_X/2, 0)), nullptr)));

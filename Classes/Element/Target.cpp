@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "Scene/MainGameScene.h"
+#include "../Scene/MainGameScene.h"
 #include "EngineHelper.h"
 #include "Target.h"
-#include "Block.h"
+#include "Brick.h"
 
 USING_NS_CC;
 
@@ -57,6 +57,37 @@ void Target::playAnim(int index){
 	}
 }
 
+void Target::enableArtificialIntelligence(){
+	auto func = CallFunc::create([this](){_updateAI();});
+	runAction(RepeatForever::create(Sequence::create(func, nullptr)));
+}
+
+void Target::_updateAI(){
+#define MOVING_TAG 10000
+	if(bAlreadyHit)
+		return;
+	S_MainGame *scene = ((S_MainGame *)S_MainGame::getCurrentScene());
+	if(scene == nullptr || scene->getMainBall() == nullptr)
+		return;
+	Vec2 pos = scene->getMainBall()->getPosition();
+			auto pos2 = getParent()->convertToWorldSpace(getPosition()) / E::scale;
+			//CCLog("pos: %f, %f; pos2: %f, %f;", pos.x, pos.y, pos2.x, pos2.y);
+		if(pos.getDistance(pos2) < 128)
+		{
+			stopActionByTag(MOVING_TAG);
+			MoveBy* mb;
+			if(pos2.y < 320)
+			{
+				mb = MoveBy::create(0.5f, Vec2(0, +320));
+			}
+			else{
+				mb = MoveBy::create(0.5f, Vec2(0, -320));
+			}
+			mb->setTag(MOVING_TAG);
+			runAction(mb);
+		}
+}
+
 /**
 Make sure to setScale before initBody.
 */
@@ -73,12 +104,13 @@ void Target::initBody(){
 void Target::beHit(){
 	if(bAlreadyHit)
 		return;
+	bAlreadyHit = true;
 	getPhysicsBody()->removeFromWorld();
 	Vec2 pos = getPosition() + getParent()->getPosition();
 	BaseScene::getCurrentScene()->putEmitter2(Vec2(pos.x, pos.y));
 	auto cbRemove = CallFunc::create([this](){removeFromParentAndCleanup(true);});
+	stopAllActions();
 	runAction(Sequence::create(FadeOut::create(0.6), cbRemove, nullptr));
-	bAlreadyHit = true;
 	targetNum --;
 	if(targetNum <= 0){
 		((S_MainGame*)BaseScene::getCurrentScene())->nextLevelDialog();
@@ -93,9 +125,9 @@ void Target::setPosition(float x, float y){
 }
 
 void Target::initProtector(float width){
-	block1 = Block::create(width, width / 8);
-	block2 = Block::create(width / 8, width * 0.75);
-	block3 = Block::create(width / 8, width * 0.75);
+	block1 = Brick::create(width, width / 8);
+	block2 = Brick::create(width / 8, width * 0.75);
+	block3 = Brick::create(width / 8, width * 0.75);
 	this->getParent()->addChild(block1);
 	this->getParent()->addChild(block2);
 	this->getParent()->addChild(block3);

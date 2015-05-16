@@ -20,7 +20,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 		//glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, 320, 640), 1);
-        glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, 2048*0.45, 1536*0.45), 1);
+        glview = GLViewImpl::createWithRect("Arkaflow", Rect(0, 0, 2048*0.45, 1536*0.45), 1);
 		//glview = GLViewImpl::createWithRect("Ching Chong Ping Pong", Rect(0, 0, DESIGNED_WIDTH, DESIGNED_HEIGHT), 1);
         director->setOpenGLView(glview);
 		//glview->setDesignResolutionSize(DESIGNED_WIDTH, DESIGNED_HEIGHT, ResolutionPolicy::NO_BORDER);

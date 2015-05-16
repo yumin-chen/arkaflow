@@ -2,10 +2,10 @@
 #include "WelcomeScene.h"
 #include "MainGameScene.h"
 #include "SettingsScene.h"
-#include "Element/Triangle.h"
-#include "Element/Ring.h"
-#include "UI/BallButton.h"
-#include "UI/BallDialog.h"
+#include "../Element/Triangle.h"
+#include "../Element/Ring.h"
+#include "../UI/BallButton.h"
+#include "../UI/BallDialog.h"
 
 USING_NS_CC;
 
@@ -63,8 +63,6 @@ bool S_Welcome::init()
 		m_tri->setPosition(E::visibleWidth  - rand() % 160, E:: originY + DESIGNED_HEIGHT / 2 + 256 + rand() % 160);	
 	}
 
-	putEmitterOnBackground();
-
 	m_newGameBg = BallButton::create(E::P.C700);
 	m_newGameBg->setScale(0.2f);
 	m_newGameBg->setPosition(Vec2(E::visibleWidth/2 -(m_newGameBg->getContentSize().width*0.5f + 24)/2, 0));
@@ -90,17 +88,31 @@ bool S_Welcome::init()
 	std::string title1_str = "";
 	std::string title2_str = "";
 	// create title
-	if(strcmp(GAME_TITLE, "Ching Chong Ping Pong") == 0){
-		title1_str = "Ching\nChong";
-		title2_str = "Ping\nPong";
-	}else if(strcmp(GAME_TITLE, "乾坤弹球") == 0){
-		title1_str = "乾坤";
-		title2_str = "弹球";
+	if(strcmp(GAME_TITLE, "Arkaflow") == 0){
+		if(E::visibleWidth > E::visibleHeight)
+		{
+			title2_str = GAME_TITLE;
+		}
+		else
+		{
+			title1_str = "Arka";
+			title2_str = "flow"; 
+		}
+	}else if(strcmp(GAME_TITLE, "溜溜的圈圈") == 0){
+		if(E::visibleWidth > E::visibleHeight)
+		{
+			title2_str = GAME_TITLE;
+		}
+		else
+		{
+			title1_str = "溜溜的";
+			title2_str = "圈圈";
+		}
 	}
 
 	m_title = Label::createWithTTF(title1_str, FONT_BOLD, 128,
 				Size(E::visibleWidth, 256), TextHAlignment::CENTER, TextVAlignment::CENTER);
-	m_title->setPosition(Vec2(E::visibleWidth/2 - 48, E::visibleHeight/2 + 256));
+	m_title->setPosition(Vec2(E::visibleWidth/2 - 48, E::visibleHeight/2 + 192));
 	//m_title->enableShadow(Color4B(0, 0, 0, 128), Size(2, -2));
 	m_title->setColor(C3B(E::P.C900));
 	m_title->setOpacity(0);
@@ -108,7 +120,7 @@ bool S_Welcome::init()
 
 	m_title2 = Label::createWithTTF(title2_str, FONT_BOLD, 128,
 				Size(E::visibleWidth, 256), TextHAlignment::CENTER, TextVAlignment::CENTER);
-	m_title2->setPosition(Vec2(E::visibleWidth/2 + 64, E::visibleHeight/2 + 128 * int(E::language == 1)));
+	m_title2->setPosition(Vec2(E::visibleWidth/2 + 32 + 64 * int(E::language == 1), E::visibleHeight/2 + 64));
 	m_title2->setColor(C3B(E::P.C900));
 	m_title2->setOpacity(0);
 	this->addChild(m_title2, 0);
@@ -237,71 +249,3 @@ void S_Welcome::menuCallback(Ref* pSender)
         exit(0);
 #endif
  }
-
-
- 
-void S_Welcome::putEmitterOnBackground(){
-	auto _emitter = ParticleSystemQuad::createWithTotalParticles(100);
-
-    this->addChild(_emitter, 10);
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage("target.png") );
-
-	_emitter->setAngle(45);
-	_emitter->setAngleVar(30);
-
-    // duration
-    _emitter->setDuration(-1);
-
-    // gravity
-    _emitter->setGravity(Vec2::ZERO);
-
-    // speed of particles
-    _emitter->setSpeed(160);
-    _emitter->setSpeedVar(20);
-
-    // radial
-    //_emitter->setRadialAccel(-30);
-    //_emitter->setRadialAccelVar(-10);
-
-    // tagential
-    //_emitter->setTangentialAccel(30);
-    //_emitter->setTangentialAccelVar(0);
-
-    // emitter position
-    _emitter->setPosition(-128, -128);
-    _emitter->setPosVar(Vec2::ZERO);
-
-    // life of particles
-    _emitter->setLife(12.0f);
-    _emitter->setLifeVar(2.0f);
-
-
-	// spin of particles
-    _emitter->setStartSpin(0);
-    _emitter->setStartSpinVar(30);
-    _emitter->setEndSpin(360);
-    _emitter->setEndSpinVar(360);
-
-
-    // color of particles
-	_emitter->setStartColor(C4F_(E::P.C700, 0.15f));
-    _emitter->setStartColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.1f));
-    _emitter->setEndColor(C4F_(E::P.C500, 0.1f));
-    _emitter->setEndColorVar(Color4F(0.1f, 0.1f, 0.1f, 0.1f));
-
-    // size, in pixels
-    _emitter->setStartSize(28.0f);
-    _emitter->setStartSizeVar(4.0f);
-    _emitter->setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
-
-    // emits per second
-    _emitter->setEmissionRate(_emitter->getTotalParticles()/_emitter->getLife());
-
-    // additive
-
-    _emitter->setBlendAdditive(false);
-	//auto cbStopEmitter = CallFunc::create([this](){m_emitterStopped++; ((ParticleSystemQuad*)this->getChildByTag(m_emitterStopped))->stopSystem();});
-	//auto cbRemoveEmitter = CallFunc::create([this](){m_emitterReleased++; this->getChildByTag(m_emitterReleased)->removeFromParentAndCleanup(true);});
-	//_emitter->runAction(Sequence::create(DelayTime::create(0.3f), cbStopEmitter, DelayTime::create(2.0f), cbRemoveEmitter, nullptr));
-
-}

@@ -2,9 +2,9 @@
 #define __WELCOME_SCENE_H__
 
 #include "BaseScene.h"
-#include "Element/Triangle.h"
-#include "Element/Ring.h"
-#include "UI/BallButton.h"
+#include "../Element/Triangle.h"
+#include "../Element/Ring.h"
+#include "../UI/BallButton.h"
 
 class S_Welcome : public BaseScene
 {
@@ -18,7 +18,6 @@ private:
 	int m_bClose;
 	void runAnimations(bool);
 	void _exitGame();
-	void putEmitterOnBackground();
 	cocos2d::Menu* m_menu;
 	cocos2d::Label* m_title;
 	cocos2d::Label* m_title2;

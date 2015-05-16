@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Level12.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Triangle.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Triangle.h"
 
 USING_NS_CC;
 

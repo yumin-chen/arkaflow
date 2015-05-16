@@ -3,8 +3,8 @@
 
 #include "EngineHelper.h"
 #include "BaseLevel.h"
-#include "Element/Target.h"
-#include "Element/Diamond.h"
+#include "../Element/Target.h"
+#include "../Element/Diamond.h"
 
 class Level11 : public BaseLevel
 {

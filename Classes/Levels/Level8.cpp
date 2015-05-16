@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Level8.h"
-#include "Element/Ring.h"
-#include "Element/Target.h"
-#include "Element/Block.h"
-#include "Element/Diamond.h"
+#include "../Element/Ring.h"
+#include "../Element/Target.h"
+#include "../Element/Brick.h"
+#include "../Element/Diamond.h"
 
 USING_NS_CC;
 
@@ -35,11 +35,11 @@ void Level8::restart(){
 	t->playAnim(0);
 	
 #define MOVE_BY_X 64
-	auto b1 = Block::create(256, 24);
+	auto b1 = Brick::create(256, 24);
 	b1->setPosition(E::originX, E::originY + 320);
 	b1->initBody();
 	this->addChild(b1);
-	auto b12 = Block::create(256, 16, E::P.C800);
+	auto b12 = Brick::create(256, 16, E::P.C800);
 	b12->setPosition(E::originX, E::originY + 320 - 16);
 	b12->initBody();
 	b12->runAction(RepeatForever::create(Sequence::create(MoveBy::create(1.0f, Vec2(MOVE_BY_X, 0)), MoveBy::create(1.0f, Vec2(-MOVE_BY_X, 0)), nullptr)));

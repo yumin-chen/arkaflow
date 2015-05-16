@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EngineHelper.h"
 #include "BallButton.h"
-#include "Scene/BaseScene.h"
+#include "../Scene/BaseScene.h"
 
 #define NORMAL 0
 #define SELECTED 1
