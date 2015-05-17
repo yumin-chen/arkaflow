@@ -54,9 +54,6 @@
     <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Element\MainBall.cpp">
-      <Filter>src\Element</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Element\SmartString.cpp">
       <Filter>src\Element</Filter>
     </ClCompile>
@@ -86,9 +83,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Levels\Levels.cpp">
       <Filter>src\Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Element\Block.cpp">
-      <Filter>src\Element</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Levels\Level3.cpp">
       <Filter>src\Levels</Filter>
@@ -168,6 +162,12 @@
     <ClCompile Include="..\Classes\Levels\Level24.cpp">
       <Filter>src\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Element\Brick.cpp">
+      <Filter>src\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Levels\Level23.cpp">
+      <Filter>src\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -200,9 +200,6 @@
     <ClInclude Include="..\Classes\Scene\WelcomeScene.h">
       <Filter>src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Element\MainBall.h">
-      <Filter>src\Element</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Element\SmartString.h">
       <Filter>src\Element</Filter>
     </ClInclude>
@@ -232,9 +229,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Levels\Levels.h">
       <Filter>src\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Element\Block.h">
-      <Filter>src\Element</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Levels\Level3.h">
       <Filter>src\Levels</Filter>
@@ -312,6 +306,12 @@
       <Filter>src\Levels</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Levels\Level24.h">
+      <Filter>src\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Element\Brick.h">
+      <Filter>src\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels\Level23.h">
       <Filter>src\Levels</Filter>
     </ClInclude>
   </ItemGroup>
