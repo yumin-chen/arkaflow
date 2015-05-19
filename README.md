@@ -9,6 +9,15 @@ Introduction
 [Arkaflow][2] is an action game developed using [Cocos2d-x](http://www.cocos2d-x.org/), which is a multi-platform framework for building 2d games that works on Android, iOS, Windows Phone, OS X, Windows and Linux.
 
 
+Screenshots
+------------------------
+![Welcome](/Screenshots/ios/5.5/promo_screenshots_ios_1.png?raw=true "Welcome")
+![Beautiful](/Screenshots/ios/5.5/promo_screenshots_ios_2.png?raw=true "Beautiful")
+![Challenging](/Screenshots/ios/5.5/promo_screenshots_ios_3.png?raw=true "Challenging")
+![Simple](/Screenshots/ios/5.5/promo_screenshots_ios_4.png?raw=true "Simple")
+![Customizable](/Screenshots/ios/5.5/promo_screenshots_ios_5.png?raw=true "Customizable")
+
+
 Downloading
 ------------------------
 Arkaflow can be obtained in many different ways. See details [here][3]:  
@@ -35,6 +44,7 @@ Contact
 ------------------------
 * CharmySoft: [*http://www.CharmySoft.com/*][1]  
 * About: [*http://www.CharmySoft.com/about.htm*][4]  
+
 
 [1]: http://www.CharmySoft.com/ "CharmySoft"
 [2]: http://www.CharmySoft.com/app/arkaflow.htm "Arkaflow"
