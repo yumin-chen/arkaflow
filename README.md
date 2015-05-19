@@ -11,11 +11,11 @@ Introduction
 
 Screenshots
 ------------------------
-![Welcome](/Screenshots/ios/5.5/promo_screenshots_ios_1.png?raw=true "Welcome")
-![Beautiful](/Screenshots/ios/5.5/promo_screenshots_ios_2.png?raw=true "Beautiful")
-![Challenging](/Screenshots/ios/5.5/promo_screenshots_ios_3.png?raw=true "Challenging")
-![Simple](/Screenshots/ios/5.5/promo_screenshots_ios_4.png?raw=true "Simple")
-![Customizable](/Screenshots/ios/5.5/promo_screenshots_ios_5.png?raw=true "Customizable")
+![Welcome](/Screenshots/ios/5.5/promo_screenshots_ios_1.png?raw=true =180x "Welcome")
+![Beautiful](/Screenshots/ios/5.5/promo_screenshots_ios_2.png?raw=true =180x "Beautiful")
+![Challenging](/Screenshots/ios/5.5/promo_screenshots_ios_3.png?raw=true =180x "Challenging")
+![Simple](/Screenshots/ios/5.5/promo_screenshots_ios_4.png?raw=true =180x "Simple")
+![Customizable](/Screenshots/ios/5.5/promo_screenshots_ios_5.png?raw=true =180x "Customizable")
 
 
 Downloading
