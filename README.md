@@ -11,11 +11,16 @@ Introduction
 
 Screenshots
 ------------------------
-![Welcome](/Screenshots/ios/5.5/promo_screenshots_ios_1.png?raw=true =180x "Welcome")
-![Beautiful](/Screenshots/ios/5.5/promo_screenshots_ios_2.png?raw=true =180x "Beautiful")
-![Challenging](/Screenshots/ios/5.5/promo_screenshots_ios_3.png?raw=true =180x "Challenging")
-![Simple](/Screenshots/ios/5.5/promo_screenshots_ios_4.png?raw=true =180x "Simple")
-![Customizable](/Screenshots/ios/5.5/promo_screenshots_ios_5.png?raw=true =180x "Customizable")
+<img alt="Welcome" src="http://raw.github.com/CharmySoft/arkaflow/master/Screenshots/ios/5.5/promo_screenshots_ios_1.png" width="180"/>
+&nbsp;&nbsp;
+<img alt="Beautiful" src="http://raw.github.com/CharmySoft/arkaflow/master/Screenshots/ios/5.5/promo_screenshots_ios_2.png" width="180"/>
+&nbsp;&nbsp;
+<img alt="Challenging" src="http://raw.github.com/CharmySoft/arkaflow/master/Screenshots/ios/5.5/promo_screenshots_ios_3.png" width="180"/>
+&nbsp;&nbsp;
+<img alt="Simple" src="http://raw.github.com/CharmySoft/arkaflow/master/Screenshots/ios/5.5/promo_screenshots_ios_4.png" width="180"/>
+&nbsp;&nbsp;
+<img alt="Customizable" src="http://raw.github.com/CharmySoft/arkaflow/master/Screenshots/ios/5.5/promo_screenshots_ios_5.png" width="180"/>
+&nbsp;&nbsp;
 
 
 Downloading
