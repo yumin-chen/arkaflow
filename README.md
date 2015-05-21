@@ -1,4 +1,4 @@
-<img src="http://raw.github.com/CharmySoft/arkaflow/master/Images/icon.png" width="48"/>Arkaflow
+<img src="http://raw.github.com/CharmySoft/arkaflow/master/Images/icon.png" width="48"/>&nbsp;&nbsp;**Arkaflow**
 ========================
 Details of this project can be found on the [Arkaflow app project page][2] under:  
 [*http://www.CharmySoft.com/app/arkaflow.htm*][2]
