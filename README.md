@@ -1,3 +1,5 @@
+
+
 <img src="http://raw.github.com/CharmySoft/arkaflow/master/Images/icon.png" width="48"/>&nbsp;&nbsp;**Arkaflow**
 ========================
 Details of this project can be found on the [Arkaflow app project page][2] under:  
@@ -31,7 +33,7 @@ Arkaflow can be obtained in many different ways. See details [here][3]:
 
 Instruction
 ------------------------
-To build [Arkaflow][2], you will need to setup cocos2d-x environment. This version is built with cocos2d-x V3.5, which can be obtained from [Cocos2d-x offical website](http://www.cocos2d-x.org/filedown/cocos2d-x-3.5.zip).
+To build [Arkaflow][2], you will need to setup cocos2d-x environment. This version is built with cocos2d-x V3.5, which can be obtained from [Cocos2d-x official website](http://www.cocos2d-x.org/filedown/cocos2d-x-3.5.zip).
 
 
 Licensing
